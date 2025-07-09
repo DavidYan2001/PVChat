@@ -1,8 +1,14 @@
-# [ICCV 2025] PVChat: Personalized Video Chat with One-Shot Learning
+#
+<p align="center">
+  <h1 align="center"> <ins>PVChat</ins>:<br> Personalized Video Chat with One-Shot Learning <br><br>ICCV 2025</h1>
+    <a href="https://arxiv.org/abs/2503.17069" align="center">Arxiv</a> | 
+    <a href="https://huggingface.co/papers/2503.17069" align="center">🤗Demo🤗</a>
+  </p></h2>  
+  <div align="center"></div>
+</p>
+<br/>
+<p align="center">
 
-## Paper Links
-
-[arXiv]([[https://arxiv.org/abs/2503.20211](https://arxiv.org/abs/2503.17069)]
 ![image](https://github.com/DavidYan2001/PVChat/blob/main/figures/pvchat.png)
 
 
