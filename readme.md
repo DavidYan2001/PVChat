@@ -1,6 +1,8 @@
 #
 <p align="center">
   <h1 align="center"> <ins>PVChat</ins>:<br> Personalized Video Chat with One-Shot Learning <br><br>ICCV 2025</h1>
+
+  <h2 align="center"><p>
     <a href="https://arxiv.org/abs/2503.17069" align="center">Arxiv</a> | 
     <a href="https://huggingface.co/papers/2503.17069" align="center">🤗Demo🤗</a>
   </p></h2>  
