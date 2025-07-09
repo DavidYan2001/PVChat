@@ -4,7 +4,7 @@
 
   <h2 align="center"><p>
     <a href="https://arxiv.org/abs/2503.17069" align="center">Arxiv</a> | 
-    <a href="https://huggingface.co/papers/2503.17069" align="center">🤗Demo🤗</a>
+    <a href="https://huggingface.co/papers/2503.17069" align="center">🤗Huggingface🤗</a>
   </p></h2>  
   <div align="center"></div>
 </p>
