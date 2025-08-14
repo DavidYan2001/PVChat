@@ -29,7 +29,7 @@ def parse_args():
 
     # Reference videos (up to 3)
     parser.add_argument("--ref_video1", type=str,
-                        default="/root/autodl-tmp/yufei/DeepFaceLab/all_kind_of_data/Friends/Chandler/Chandler9.mp4",
+                        default="/root/autodl-tmp/yufei/DeepFaceLab/all_kind_of_data/Friends/Ch/Chandler9.mp4",
                         help="First reference video path")
     parser.add_argument("--ref_prompt1", type=str,
                         default="This is video about <Ch>",

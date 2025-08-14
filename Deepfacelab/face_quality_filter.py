@@ -1,7 +1,7 @@
 import os
 import cv2
 import numpy as np
-import mediapipe as mp  # 确保导入 mediapipe
+import mediapipe as mp  #
 import shutil
 from tqdm import tqdm
 
@@ -98,10 +98,10 @@ class FaceQualityAnalyzer:
             # 3. Image clarity evaluation
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             clarity_score = cv2.Laplacian(gray, cv2.CV_64F).var()
-            clarity_score = min(clarity_score / 500, 1)  # 标准化清晰度分数
-            score += clarity_score * 25  # 最高25分
+            clarity_score = min(clarity_score / 500, 1)  # Standardized clarity score
+            score += clarity_score * 25  # max score = 25
 
-            # 4. 关键点可见性评估
+            # 4. Key point visibility assessment
             visible_landmarks = 0
             total_landmarks = len(landmarks)
             for lm in landmarks:
@@ -112,7 +112,7 @@ class FaceQualityAnalyzer:
             if visibility_score < 0.8:
                 print(f"Not enough visible landmarks: {image_path}")
                 return -1
-            score += visibility_score * 25  # 最高25分
+            score += visibility_score * 25  #  max score = 25
 
             return score
 
@@ -122,7 +122,7 @@ class FaceQualityAnalyzer:
 
 
 def process_face_images(input_folder, output_folder, analyzer, top_n=1):
-    """处理某个人脸文件夹中的图片并输出最高分的图片"""
+    """Process the pictures in a certain face folder and output the picture with the highest score"""
     os.makedirs(output_folder, exist_ok=True)
 
     image_files = [f for f in os.listdir(input_folder) if f.endswith('_0.jpg')]

@@ -84,8 +84,7 @@ def generate_video(
     # Save Memory. Turn on if you don't have multiple GPUs or enough GPU memory(such as H100) and it will cost more time in inference, it may also reduce the quality
     pipe.enable_model_cpu_offload()
     pipe.enable_sequential_cpu_offload()
-    # pipe.vae.enable_slicing()
-    # pipe.vae.enable_tiling()
+
 
 
     # 4. Prepare model input

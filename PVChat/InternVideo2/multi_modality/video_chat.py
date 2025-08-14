@@ -206,7 +206,7 @@ video_tensor = video_tensor.to(model.device)
 response, chat_history = model.chat(tokenizer, '', "This is video about <Xo>", media_type='video', media_tensor=video_tensor, chat_history= chat_history, return_history=True,generation_config={'do_sample':False})
 print(response)
 
-video_path = "/root/autodl-tmp/yufei/DeepFaceLab/all_kind_of_data/good_doctor_3people/Jared/Jared4.mp4"
+video_path = "/root/autodl-tmp/yufei/DeepFaceLab/all_kind_of_data/good_doctor_3people/Ja/Jared4.mp4"
 video_tensor = load_video(video_path, num_segments=8, return_msg=False, resolution=224, hd_num=6)
 video_tensor = video_tensor.to(model.device)
 response, chat_history = model.chat(tokenizer, '', "This is video about <Ja>", media_type='video', media_tensor=video_tensor, chat_history= chat_history, return_history=True,generation_config={'do_sample':False})

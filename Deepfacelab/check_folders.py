@@ -6,40 +6,40 @@ from typing import List, Dict, Tuple
 
 def check_directories(base_path: str) -> Tuple[List[str], List[str], List[str]]:
     """
-    检查给定路径下的所有视频目录
+    Check all video directories under the given path
 
     Args:
-        base_path: DeepFaceLab的output目录路径
+    base_path: The path of the output directory of DeepFaceLab
 
     Returns:
-        三元组 (无consisid_generation目录的视频列表,
-               有空consisid_generation目录的视频列表,
-               正常的视频目录列表)
+    Triplet (Video list without consisid_generation directory)
+    A list of videos in an empty consisid_generation directory
+    A normal list of video directories
     """
     # 存储结果的列表
-    missing_dirs = []  # 完全没有consisid_generation目录的
-    empty_dirs = []  # 有目录但是是空的
-    normal_dirs = []  # 正常的目录
+    missing_dirs = []  # There is no "consisid generation" directory at all
+    empty_dirs = []  # There is a directory but it is empty
+    normal_dirs = []  # Normal directory
 
     try:
-        # 获取output目录下的所有视频文件夹
+        # Get all the video folders under the output directory
         video_dirs = [d for d in os.listdir(base_path)
                       if os.path.isdir(os.path.join(base_path, d))]
 
         for video_dir in video_dirs:
             consisid_path = os.path.join(base_path, video_dir, "consisid_generation")
 
-            # 检查consisid_generation目录是否存在
+            # Check if the consisid generation directory exists
             if not os.path.exists(consisid_path):
                 missing_dirs.append(video_dir)
                 continue
 
-            # 检查目录是否为空
+            # Check if the directory is empty
             if not os.path.isdir(consisid_path):
                 missing_dirs.append(video_dir)
                 continue
 
-            # 获取目录中的文件列表
+            # Get the list of files in the directory
             files = os.listdir(consisid_path)
 
             if not files:
@@ -48,7 +48,7 @@ def check_directories(base_path: str) -> Tuple[List[str], List[str], List[str]]:
                 normal_dirs.append(video_dir)
 
     except Exception as e:
-        print(f"Error: 检查目录时发生错误: {str(e)}")
+        print(f"Error: An error occurred when checking the directory: {str(e)}")
         sys.exit(1)
 
     return missing_dirs, empty_dirs, normal_dirs
@@ -56,48 +56,48 @@ def check_directories(base_path: str) -> Tuple[List[str], List[str], List[str]]:
 
 def print_statistics(missing_dirs: List[str], empty_dirs: List[str],
                      normal_dirs: List[str]) -> None:
-    """打印统计信息"""
+    """Print statistical information"""
     total = len(missing_dirs) + len(empty_dirs) + len(normal_dirs)
     if total == 0:
-        print("未找到任何视频目录!")
+        print("!")
         return
 
     problem_count = len(missing_dirs) + len(empty_dirs)
     problem_percentage = (problem_count / total) * 100
 
-    print("\n统计信息:")
-    print(f"总视频目录数: {total}")
-    print(f"问题目录数: {problem_count} ({problem_percentage:.2f}%)")
-    print(f"- 完全缺失consisid_generation目录的视频数: {len(missing_dirs)}")
-    print(f"- 空的consisid_generation目录的视频数: {len(empty_dirs)}")
-    print(f"正常目录数: {len(normal_dirs)} ({(len(normal_dirs) / total * 100):.2f}%)")
+    print("\nstatistical information:")
+    print(f"The total number of video directories: {total}")
+    print(f"The number of problem directories: {problem_count} ({problem_percentage:.2f}%)")
+    print(f"- The number of videos completely missing the consisid generation directory: {len(missing_dirs)}")
+    print(f"- The number of videos in an empty consisid generation directory: {len(empty_dirs)}")
+    print(f"Normal number of directories: {len(normal_dirs)} ({(len(normal_dirs) / total * 100):.2f}%)")
 
     if missing_dirs:
-        print("\n缺失consisid_generation目录的视频:")
+        print("\nVideos missing the consisid generation directory:")
         for dir_name in missing_dirs:
             print(f"- {dir_name}")
 
     if empty_dirs:
-        print("\n空的consisid_generation目录的视频:")
+        print("\nThe video of the empty consisid generation directory:")
         for dir_name in empty_dirs:
             print(f"- {dir_name}")
 
 
 def main():
-    # 设置基础路径
+    # Set the basic path
     base_path = "/root/autodl-tmp/yufei/DeepFaceLab/output"
 
-    print(f"开始检查目录: {base_path}")
+    print(f"Start checking the catalogue: {base_path}")
 
-    # 检查基础路径是否存在
+    # Check whether the basic path exists
     if not os.path.exists(base_path):
-        print(f"Error: 目录不存在: {base_path}")
+        print(f"Error: The directory does not exist.: {base_path}")
         sys.exit(1)
 
-    # 执行检查
+    # Carry out the inspection
     missing_dirs, empty_dirs, normal_dirs = check_directories(base_path)
 
-    # 打印统计信息
+    # Print statistical information
     print_statistics(missing_dirs, empty_dirs, normal_dirs)
 
 

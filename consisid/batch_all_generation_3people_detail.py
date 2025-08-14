@@ -7,7 +7,7 @@ from multiprocessing import Process
 import argparse
 def load_cekebv_data(train_json, test_json):
     """
-    加载 train.json + test.json 并合并，返回一个列表:
+    Load train.json + test.json and merge them to return a list:
     [
       {
         "video_name": "...",
@@ -38,7 +38,7 @@ def load_cekebv_data(train_json, test_json):
 
 
 def split_workload(total_items, num_gpus):
-    """根据可用 GPU 数量划分工作负载，返回 [(start1, end1), (start2, end2), ...]"""
+    """Divide the workload based on the number of available Gpus and return [(start1, end1), (start2, end2), ...]"""
     base_size = total_items // num_gpus
     remainder = total_items % num_gpus
 
@@ -53,7 +53,7 @@ def split_workload(total_items, num_gpus):
     return ranges
 
 def get_available_gpus():
-    """检测系统可用 GPU，返回 ID 列表"""
+    """The detection system is available with GPU and returns the list of ids."""
     import subprocess
     try:
         nvidia_smi = subprocess.run(
@@ -70,7 +70,7 @@ def get_available_gpus():
             total = float(total_str)
             if total == 0:
                 continue
-            # 如果显存使用率小于 20% 则认为可用
+            # If the video memory usage rate is less than 20%, it is considered usable
             if (used / total) < 0.2:
                 available_gpus.append(index)
         return available_gpus
@@ -84,7 +84,7 @@ def load_class_data(class_data_path):
         return json.load(f)
 
 def collect_leaf_texts(subtree):
-    """从嵌套字典 subtree 中收集所有最底层字符串 (叶子节点)，返回列表。"""
+    "Collect all the lowest-level strings (leaf nodes) from the nested dictionary subtree and return a list." ""
     results = []
     if isinstance(subtree, dict):
         for _, v in subtree.items():
@@ -97,7 +97,7 @@ def collect_leaf_texts(subtree):
     return results
 
 def normalize_age(age_str):
-    """把 "middle-aged" -> "middle_aged" 等。"""
+    """"middle-aged" -> "middle_aged" 。"""
     mapping = {
         "child": "child",
         "young": "young",
@@ -109,7 +109,7 @@ def normalize_age(age_str):
 
 def get_prompts_for_gender_age(class_data, gender, age, num_prompts=10):
     """
-    根据 gender + age 在 class_data 中找到对应子树，收集所有叶子描述，并随机取 num_prompts 条。
+    Find the corresponding subtree in class_data based on gender + age, collect all leaf descriptions, and randomly select num_prompts
     """
     if not gender or not age:
         return []
@@ -140,14 +140,14 @@ def generate_videos_for_person(
     person_suffix=""
 ):
     """
-    针对某个人的 face + prompts 调用 consisid_script 生成视频。
-    person_suffix 用于区分输出文件，例如"_2"。
+    For a certain person's face + prompt, invoke consisid_script to generate a video.
+person_suffix is used to distinguish output files, such as "_2".
     """
     for idx_p, prompt in enumerate(prompts, start=1):
         face_image = random.choice(face_images)
         cmd = [
             "python",
-            consisid_script_path,  # 从外面传进来的全局变量
+            consisid_script_path,  #
             "--img_file_path", face_image,
             "--prompt", prompt,
             "--output_path", consisid_dir,
@@ -173,7 +173,7 @@ def generate_videos_for_range(
     end_idx
 ):
     """
-    在指定 GPU 上处理 video_info_list[start_idx:end_idx] 范围内的视频。
+    Process the video within the range of video_info_list[start_idx:end_idx] on the specified GPU.
     """
     # 设置 CUDA 设备
     os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
@@ -192,10 +192,10 @@ def generate_videos_for_range(
 
         sample_type = video_data.get("sample_type", "single")
 
-        # 去掉后缀, e.g. "d82LKPNesE8_112.mp4" -> "d82LKPNesE8_112"
+
         base_name = os.path.splitext(video_name)[0]
 
-        # 检查 /root/autodl-tmp/yufei/DeepFaceLab/output/<base_name> 是否存在
+
         video_output_dir = os.path.join(deepfacelab_output_path, base_name)
         if not os.path.isdir(video_output_dir):
             print(f"[GPU {gpu_id}] Directory not found for video: {video_output_dir}, skip.")
@@ -244,9 +244,7 @@ def generate_videos_for_range(
         os.makedirs(consisid_dir_2, exist_ok=True)
 
         # =============== Skip Check ===============
-        # 对于 person1 => 如果 consisid_dir_1 下已有 >= 10 个 .mp4，则跳过
-        # 对于 person2 => 如果 consisid_dir_2 下已有 >= 10 个 .mp4，则跳过
-        # 单人场景时 person2 不会执行
+
         existing_videos_p1 = glob(os.path.join(consisid_dir_1, "*.mp4"))
         skip_person1 = (len(existing_videos_p1) >= 10)
 
@@ -299,14 +297,14 @@ def run_parallel_processing(
     consisid_script
 ):
     """
-    主入口函数:
-    1) 读取 train.json + test.json 并合并
-    2) 读取 class_data_modified.json
-    3) 随机打乱视频列表
-    4) 多进程处理
+    Main entry function
+    Read train.json + test.json and merge them
+    2) Read the class_data_modified.json
+    3) Randomly shuffle the video list
+    4) Multi-process processing
     """
     global consisid_script_path
-    consisid_script_path = consisid_script  # 全局变量给子函数使用
+    consisid_script_path = consisid_script
 
     available_gpus = get_available_gpus()
     if not available_gpus:
@@ -325,10 +323,10 @@ def run_parallel_processing(
     total_videos = len(video_info_list)
     print(f"[Main] Total videos: {total_videos}")
 
-    # 随机打乱列表, 以便更均匀地分配给多个 GPU
+
     random.shuffle(video_info_list)
 
-    # 按可用 GPU 分配工作
+
     workload_ranges = split_workload(total_videos, len(available_gpus))
     processes = []
     for gpu_idx, (start, end) in zip(available_gpus, workload_ranges):
@@ -364,7 +362,7 @@ def get_args():
     return parser.parse_args()
 
 if __name__ == "__main__":
-    # 示例路径，可根据实际情况修改
+
     args = get_args()
     train_json = "/root/autodl-tmp/yufei/datasets/cekebv-hq/train_"+args.sks1+'_'+args.sks2+args.sks3+'.json'
     test_json = "/root/autodl-tmp/yufei/datasets/cekebv-hq/test_"+args.sks1+'_'+args.sks2+args.sks3+'.json'

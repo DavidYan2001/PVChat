@@ -288,28 +288,7 @@ def run_parallel_processing(
     # 3) Assign tasks based on available GPU count
     workload_ranges = split_workload(total_videos, len(available_gpus))
 
-    # half = total_videos // 2
-    #
-    # # 3) 多进程处理
-    # p1 = Process(
-    #     target=generate_videos_for_range,
-    #     args=(video_info_list, deepfacelab_output_path, class_data, consisid_script_path, 0, 0, half)
-    # )
-    #
-    # p2 = Process(
-    #     target=generate_videos_for_range,
-    #     args=(video_info_list, deepfacelab_output_path, class_data, consisid_script_path, 1, half, total_videos)
-    # )
-    #
-    # print("[Main] Starting GPU 0 process...")
-    # p1.start()
-    # print("[Main] Starting GPU 1 process...")
-    # p2.start()
-    #
-    # p1.join()
-    # p2.join()
-    # print("[Main] All processes completed.")
-    # 4) Create and start processes
+
     processes = []
     for gpu_idx, (start, end) in zip(available_gpus, workload_ranges):
         p = Process(
