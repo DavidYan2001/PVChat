@@ -1,0 +1,78 @@
+{
+    "questions": {
+        "action_questions": [
+            "What activity is <sks> engaged in during this video?",
+            "Could you describe what <sks> is doing in this footage?",
+            "What specific actions can you observe <sks> performing in this recording?",
+            "What movements or actions does <sks> perform here?",
+            "Can you describe <sks>'s behavior in this sequence?"
+        ],
+        "clothing_questions": [
+            "What is <sks> wearing in this video?",
+            "Could you describe <sks>'s outfit in this footage?",
+            "What color and style of clothing is <sks> dressed in?",
+            "How would you describe <sks>'s appearance and attire?",
+            "What notable features can you see in <sks>'s clothing?"
+        ],
+        "location_questions": [
+            "Where is <sks> positioned in this video?",
+            "Can you describe <sks>'s location relative to others?",
+            "Which part of the scene does <sks> appear in?",
+            "How does <sks>'s position change throughout the video?",
+            "Where can <sks> be found in this footage?"
+        ]
+    },
+    "negative_responses": {
+        "action_responses": [
+            "I cannot describe <sks>'s actions because <sks> is not present in this video footage.",
+            "The video contains no instances of <sks>, therefore I cannot detail any activities.",
+            "Since <sks> does not appear in this recording, I'm unable to describe their movements or actions.",
+            "I've reviewed the footage carefully - <sks> is not present, so no actions can be described.",
+            "There are no activities to report for <sks> as they do not appear in any frame of this video.",
+            "I cannot comment on what <sks> is doing because they are completely absent from this footage.",
+            "The video shows no evidence of <sks>, making it impossible to describe their behavior or actions.",
+            "As <sks> is not featured in this video segment, I cannot provide any information about their activities.",
+            "I've analyzed the entire sequence, and <sks> is not present to describe any actions they might be performing.",
+            "Without <sks> appearing in this video, I cannot observe or describe any of their movements or behaviors.",
+            "The footage contains other individuals, but <sks> is not among them, so I cannot describe their actions.",
+            "I'm unable to detail <sks>'s activities as they are not shown at any point in this video sequence.",
+            "This video does not include <sks>, therefore I cannot provide any description of their actions or behavior.",
+            "Having examined the footage thoroughly, I can confirm <sks> is not present and thus no actions can be described.",
+            "The video content does not show <sks> at all, making it impossible to report on any of their activities."
+        ],
+        "clothing_responses": [
+            "I cannot describe <sks>'s attire as they are not present in this video at all.",
+            "Since <sks> does not appear in this footage, I cannot provide any information about their clothing.",
+            "The video contains no appearance of <sks>, making it impossible to describe what they're wearing.",
+            "I'm unable to comment on <sks>'s outfit as they are not shown in any part of this recording.",
+            "There is no sign of <sks> in this video, so I cannot describe their clothing or appearance.",
+            "After reviewing the footage, I can confirm <sks> is not present to describe their attire.",
+            "I cannot detail <sks>'s clothing choices as they do not appear in any frame of this video.",
+            "The recording shows no evidence of <sks>, therefore I cannot describe their dress or appearance.",
+            "Without <sks> being present in the video, I cannot provide any description of their clothing.",
+            "I've examined the footage, and <sks> is absent, making it impossible to describe what they're wearing.",
+            "The video does not feature <sks>, so I cannot offer any information about their clothing or style.",
+            "As <sks> is not visible in this recording, I cannot describe any aspects of their appearance or attire.",
+            "I see no trace of <sks> in this footage, thus cannot provide details about their clothing.",
+            "The video content excludes <sks>, making it impossible to comment on their dress or appearance.",
+            "With <sks> being absent from this video, I cannot describe any elements of their clothing or style."
+        ],
+        "location_responses": [
+            "I cannot specify <sks>'s position as they are not present in this video footage.",
+            "The recording shows no sign of <sks>, making it impossible to describe their location.",
+            "Since <sks> does not appear in this video, I cannot indicate where they are positioned.",
+            "I'm unable to describe <sks>'s location as they are not shown in any frame of this footage.",
+            "There is no evidence of <sks> in this video, so I cannot specify their position or movements.",
+            "After analyzing the footage, I can confirm <sks> is not present to describe their location.",
+            "The video content does not include <sks>, therefore I cannot detail their positioning.",
+            "I cannot provide information about <sks>'s location as they are entirely absent from this recording.",
+            "With <sks> not appearing in this video, I cannot describe where they are situated.",
+            "The footage contains no instances of <sks>, making it impossible to specify their position.",
+            "I've reviewed the video, and <sks> is not present to describe their location or movements.",
+            "As <sks> does not feature in this recording, I cannot indicate their position or whereabouts.",
+            "The video shows various locations but <sks> is not present in any of them.",
+            "I cannot determine <sks>'s position as they do not appear at any point in this footage.",
+            "Without <sks> being present in the video, I cannot describe their location or spatial relationship to others."
+        ]
+    }
+}

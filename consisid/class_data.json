@@ -1,0 +1,1063 @@
+{
+  "male": {
+    "child": {
+      "education": {
+        "classroom": {
+          "primary_classroom": "A young boy is sitting attentively at his desk in a bright primary school classroom. He is wearing a neat school uniform with a light blue shirt and dark pants. His workspace is well-organized with textbooks and notebooks, and he is focusing on the teacher's explanation. The classroom features colorful educational posters, a large interactive whiteboard, and rows of organized desks. Natural light streams through large windows, creating an ideal learning environment.",
+
+          "art_class": "A young boy is creating artwork at an easel in a vibrant art classroom. He is wearing a paint-stained apron over his school clothes, carefully applying paint to canvas. His face shows creative concentration as he works on his masterpiece. The art room contains various art supplies, student artworks on display walls, and large tables with art materials. Bright, natural light enhances the creative atmosphere.",
+
+          "music_class": "A young boy is practicing on a keyboard in a well-equipped music room. He is wearing his school uniform and following sheet music with focused attention. The music room features various instruments along the walls, music theory charts, and proper acoustic treatment. Balanced lighting ensures clear visibility of musical notes and instrument details.",
+
+          "computer_class": "A young boy is working on a coding exercise in a modern computer lab. He is wearing his school uniform and sitting with proper posture at a computer station. The lab contains rows of updated computers, educational technology posters, and interactive learning displays. Controlled lighting reduces screen glare while maintaining good visibility.",
+
+          "science_lab": "A young boy is conducting a supervised experiment in a well-equipped science laboratory. He is wearing safety goggles and a white lab coat, carefully measuring liquids for an experiment. The lab contains modern scientific equipment, safety stations, and informative science posters. Specialized laboratory lighting ensures safe and accurate work.",
+
+          "language_class": "A young boy is participating in a language learning activity in an engaging classroom. He is wearing his school uniform and actively practicing pronunciation exercises. The classroom features language learning posters, cultural displays, and interactive learning tools. Warm lighting creates a comfortable learning environment.",
+
+          "math_class": "A young boy is solving mathematical problems at his desk in an organized classroom. He is wearing his school uniform and using mathematical tools with precision. The classroom displays mathematical formulas, number lines, and student achievement charts. Clear lighting helps maintain focus on detailed work.",
+
+          "physical_education": "A young boy is participating in organized physical activities in a spacious gymnasium. He is wearing PE uniform shorts and a t-shirt, actively engaging in group exercises. The gymnasium features quality sports flooring, various equipment stations, and clear activity zones. Large windows provide natural light supplemented by proper sports lighting."
+        },
+        "library": {
+          "reading_area": "A young boy is immersed in a book while sitting in a comfortable library reading nook. He is wearing casual school clothes and sitting in a cozy bean bag chair. The reading area features child-height bookshelves, reading motivation posters, and soft seating options. Warm lighting creates a perfect reading atmosphere.",
+
+          "study_room": "A young boy is concentrating on homework in a quiet library study room. He is wearing his school uniform and working diligently at a study desk. The room features individual study carrels, reference materials, and proper task lighting. Sound-dampening walls ensure a peaceful study environment.",
+
+          "multimedia_room": "A young boy is using educational software in a modern library multimedia center. He is wearing his school uniform and using headphones while engaging with interactive learning content. The room contains computer stations, educational media resources, and digital learning tools. Adjustable lighting prevents screen glare.",
+
+          "children_book_section": "A young boy is exploring books in a colorful children's section of the library. He is wearing casual clothes and carefully browsing through picture books. The section features themed book displays, comfortable reading spots, and age-appropriate book collections. Cheerful lighting enhances the welcoming atmosphere.",
+
+          "storytelling_corner": "A young boy is listening intently during story time in a specially designed corner. He is wearing casual clothes and sitting on a cushioned floor mat. The corner features a storyteller's chair, themed decorations, and puppet theater accessories. Soft lighting creates an enchanting storytelling environment."
+        },
+        "extracurricular": {
+          "chess_club": "A young boy is contemplating his next move in a school chess tournament. He is wearing his school uniform and showing deep concentration at the chess table. The club room features multiple chess sets, strategy posters, and tournament timers. Focused lighting illuminates the chess boards clearly.",
+
+          "science_club": "A young boy is conducting an advanced experiment in after-school science club. He is wearing safety equipment and showing excitement while working on a group project. The room contains specialized scientific equipment, experiment stations, and research posters. Professional lighting ensures safe experimentation.",
+
+          "art_workshop": "A young boy is working on a creative project in an after-school art workshop. He is wearing an art smock and experimenting with various artistic materials. The workshop features diverse art supplies, drying racks, and student artwork displays. Natural light supplements artificial lighting for optimal visibility.",
+
+          "coding_class": "A young boy is creating a simple program in an after-school coding workshop. He is wearing casual clothes and showing enthusiasm while debugging his code. The classroom contains modern computers, coding reference guides, and student project displays. Controlled lighting optimizes screen visibility.",
+
+          "robotics_lab": "A young boy is building a small robot in a well-equipped robotics laboratory. He is wearing safety glasses and carefully assembling electronic components. The lab features robotics kits, testing areas, and technical documentation. Bright, even lighting ensures precise assembly work.",
+
+          "drama_club": "A young boy is rehearsing lines for a school play in the drama club. He is wearing casual clothes and practicing expressions and movements. The drama room features a practice stage, costume racks, and prop storage areas. Stage lighting creates an authentic performance atmosphere."
+        }
+      },
+      "sports": {
+        "indoor_sports": {
+          "junior_gym": "A young boy is participating in a guided fitness session in a children's gymnasium. He is wearing appropriate gym clothes and following instructor-led exercises. The gym features size-appropriate equipment, safety mats, and motivational posters. Bright, even lighting ensures safe movement throughout the space.",
+
+          "swimming_pool": "A young boy is practicing swimming techniques in an indoor pool. He is wearing proper swimming attire and goggles, showing confidence in the water. The pool area features lane dividers, safety equipment, and proper depth markings. Specialized pool lighting provides clear underwater visibility.",
+
+          "basketball_court": "A young boy is practicing basketball drills on an indoor court. He is wearing sports attire and focusing on dribbling skills. The court features proper markings, adjustable hoops, and ball return systems. Even lighting eliminates shadows for better play.",
+
+          "table_tennis": "A young boy is playing table tennis with focused concentration. He is wearing sports clothes and maintaining proper form during play. The area contains multiple ping pong tables, practice equipment, and training aids. Glare-free lighting ensures optimal playing conditions.",
+
+          "martial_arts_dojo": "A young boy is learning basic martial arts moves in a traditional dojo. He is wearing a white martial arts uniform and following instructor demonstrations. The dojo features training mats, practice equipment, and traditional decorations. Balanced lighting maintains the traditional atmosphere.",
+
+          "dancing_studio": "A young boy is learning dance steps in a professional studio. He is wearing comfortable dance clothes and practicing basic movements. The studio features mirrored walls, sprung flooring, and a sound system. Adjustable lighting enhances movement visibility."
+        },
+        "outdoor_sports": {
+          "playground": "A young boy is actively playing on a modern playground structure. He is wearing weather-appropriate play clothes and exploring different equipment. The playground features safe surfacing, multiple play zones, and shaded areas. Natural sunlight provides perfect visibility for safe play.",
+
+          "children_soccer_field": "A young boy is practicing soccer skills on a youth-sized field. He is wearing soccer gear and practicing ball control drills. The field features proper markings, small-sized goals, and training areas. Natural lighting allows for clear visibility during practice.",
+
+          "junior_baseball": "A young boy is practicing baseball fundamentals on a youth diamond. He is wearing a baseball uniform and working on batting techniques. The field features scaled-down distances, proper bases, and batting cages. Sunlight provides optimal playing conditions.",
+
+          "skating_park": "A young boy is learning basic skating skills in a beginner-friendly skate park. He is wearing full protective gear and practicing basic moves. The park features gentle ramps, smooth surfaces, and safety rails. Natural light reveals surface textures clearly.",
+
+          "mini_golf": "A young boy is playing mini golf on a kid-friendly course. He is wearing casual clothes and learning proper putting technique. The course features fun obstacles, maintained greens, and clear paths. Natural lighting enhances the playing experience.",
+
+          "running_track": "A young boy is practicing running on a proper athletic track. He is wearing athletic clothes and maintaining good running form. The track features clear lane markings, distance indicators, and proper surfacing. Natural light provides ideal conditions for training."
+        },
+        "training": {
+          "swimming_lesson": "A young boy is receiving one-on-one swimming instruction in a heated pool. He is wearing proper swimming gear and following the instructor's guidance carefully. The pool area features teaching aids, flotation devices, and clear instruction areas. Proper pool lighting ensures good visibility for learning.",
+
+          "martial_arts_training": "A young boy is learning martial arts fundamentals in a structured class. He is wearing a traditional uniform and practicing basic forms with focus. The training area features proper mats, training equipment, and instructional space. Balanced lighting creates an appropriate training atmosphere.",
+
+          "sports_team_practice": "A young boy is participating in team sports drills with peers. He is wearing team practice gear and engaging in group exercises. The practice area features proper equipment, drill stations, and team areas. Good lighting ensures safe and effective practice conditions.",
+
+          "physical_fitness": "A young boy is performing age-appropriate fitness exercises. He is wearing workout clothes and following a structured fitness routine. The fitness area features proper equipment, exercise stations, and safety measures. Clear lighting provides good visibility for all activities.",
+
+          "youth_athletics": "A young boy is developing fundamental athletic skills in a structured program. He is wearing athletic gear and practicing basic movement patterns. The training area features multiple activity stations, proper equipment, and safety measures. Natural and artificial lighting provide optimal visibility."
+        }
+      },
+      "leisure": {
+        "entertainment": {
+          "arcade_games": "A young boy is playing an exciting arcade game in a family entertainment center. He is wearing casual clothes and engaging enthusiastically with the game controls. The arcade features various gaming machines, colorful lighting, and interactive displays. Dynamic lighting creates an immersive gaming atmosphere.",
+
+          "children_theater": "A young boy is participating in a children's theater production. He is wearing a character costume and delivering lines with enthusiasm. The theater features proper stage lighting, set designs, and audience seating. Professional stage lighting enhances the performance.",
+
+          "indoor_playground": "A young boy is exploring a safe indoor playground structure. He is wearing comfortable play clothes and moving through various play elements. The playground features soft padding, climbing structures, and interactive games. Safety lighting ensures clear visibility throughout.",
+
+          "animation_movies": "A young boy is enjoying an animated film in a family-friendly theater. He is wearing casual clothes and watching the screen with fascination. The theater features comfortable seating, good acoustics, and proper viewing angles. Dim ambient lighting creates perfect viewing conditions.",
+
+          "puppet_show": "A young boy is watching a puppet show with delight. He is wearing casual clothes and sitting in the audience area. The puppet theater features professional puppets, themed backdrops, and proper stage lighting. Focused lighting highlights the puppet performance.",
+
+          "virtual_reality_games": "A young boy is experiencing a child-friendly VR game with amazement. He is wearing VR equipment and moving safely in a designated play area. The space features safety boundaries, monitoring screens, and guidance systems. Controlled lighting ensures safe movement."
+        },
+        "outdoor_recreation": {
+          "theme_park": "A young boy is exploring various attractions at a family theme park. He is wearing comfortable clothes and moving excitedly between rides. The park features age-appropriate rides, themed areas, and rest zones. Natural sunlight illuminates the colorful environment.",
+
+          "water_park": "A young boy is enjoying water attractions at a family water park. He is wearing swimming gear and playing safely in various water features. The park features water slides, splash areas, and safety stations. Bright sunlight enhances the fun atmosphere.",
+
+          "zoo_visit": "A young boy is learning about animals during a zoo visit. He is wearing casual outdoor clothes and observing exhibits with curiosity. The zoo features well-maintained habitats, educational displays, and walking paths. Natural lighting provides clear viewing conditions.",
+
+          "park_playground": "A young boy is playing on equipment in a public park. He is wearing weather-appropriate clothes and exploring different play structures. The playground features modern equipment, safety surfaces, and shade areas. Natural light provides perfect visibility.",
+
+          "picnic_area": "A young boy is enjoying a family picnic in an outdoor setting. He is wearing casual clothes and participating in a shared meal. The area features picnic tables, green spaces, and clean facilities. Natural lighting creates a pleasant outdoor experience.",
+
+          "camping_site": "A young boy is experiencing outdoor camping with family. He is wearing outdoor gear and learning basic camping skills. The campsite features tent areas, fire pits, and natural surroundings. Natural light and campfire create proper visibility."
+        },
+        "hobby": {
+          "lego_building": "A young boy is creating with LEGO bricks at a dedicated building station. He is wearing comfortable clothes and focusing on construction details. The area features organized LEGO storage, building surfaces, and display spaces. Good lighting ensures clear visibility of small pieces.",
+
+          "painting_class": "A young boy is learning painting techniques in an art class. He is wearing an art smock and creating with various paints. The class features easels, art supplies, and example artwork. Natural light provides optimal conditions for color work.",
+
+          "music_practice": "A young boy is practicing a musical instrument at home. He is wearing casual clothes and following written music with concentration. The practice area features proper seating, music stands, and acoustic treatment. Task lighting illuminates the music clearly.",
+
+          "gardening": "A young boy is learning basic gardening in a child-friendly garden area. He is wearing gardening gloves and appropriate clothes for outdoor work. The garden features raised beds, child-sized tools, and growing plants. Natural sunlight is perfect for gardening activities.",
+
+          "pet_care": "A young boy is responsibly caring for a family pet. He is wearing casual clothes and showing gentle attention to the animal. The area features proper pet supplies, cleaning materials, and pet comfort items. Good lighting ensures safe pet care.",
+
+          "craft_making": "A young boy is creating crafts at a well-organized activity table. He is wearing casual clothes and working carefully with craft materials. The area features craft supplies, work spaces, and example projects. Proper lighting illuminates the work surface."
+        }
+      },
+      "social": {
+        "family": {
+          "family_dinner": "A young boy is sharing a meal with family at a dining table. He is wearing casual clothes and participating in family conversation. The dining area features a well-set table, comfortable seating, and family photos. Warm lighting creates a cozy atmosphere.",
+
+          "holiday_gathering": "A young boy is celebrating a holiday with extended family. He is wearing festive clothing and participating in traditional activities. The space features seasonal decorations, family gathering areas, and celebration items. Festive lighting enhances the mood.",
+
+          "weekend_activities": "A young boy is engaged in family weekend activities. He is wearing casual clothes and participating in shared family time. The setting features family activity spaces, comfortable seating, and entertainment options. Natural light fills the living space.",
+
+          "family_travel": "A young boy is experiencing travel with family members. He is wearing comfortable travel clothes and showing excitement about the journey. The setting varies from transport hubs to tourist locations. Lighting varies based on location.",
+
+          "home_celebration": "A young boy is participating in a special family celebration at home. He is wearing special occasion clothes and joining in family traditions. The home features party decorations, celebration foods, and gathering spaces. Warm lighting creates a celebratory atmosphere.",
+
+          "family_games": "A young boy is playing board games with family members. He is wearing comfortable home clothes and engaging in friendly competition. The setting features game tables, family seating, and game storage. Good lighting ensures clear game visibility."
+        },
+      "daily_life": {
+        "home": [
+          "bedroom_activities",
+          "homework_time",
+          "meal_time",
+          "morning_routine",
+          "evening_routine",
+          "playtime"
+        ],
+        "community": [
+          "neighborhood_play",
+          "community_center",
+          "local_library",
+          "religious_activity",
+          "volunteer_work"
+        ],
+        "shopping": [
+          "toy_store",
+          "bookstore",
+          "clothing_shop",
+          "grocery_store",
+          "school_supplies"
+        ]
+      },
+      "friends": {
+          "group_activities": "A young boy is participating in organized group activities with peers. He is wearing activity-appropriate clothing and engaging enthusiastically with other children. The space features various activity stations, group gathering areas, and safety equipment. Proper lighting ensures safe and enjoyable group interaction.",
+
+          "school_events": "A young boy is participating in a school community event. He is wearing school clothes and interacting with classmates and teachers. The school environment features event decorations, activity areas, and presentation spaces. Mixed natural and artificial lighting creates an engaging atmosphere.",
+
+          "summer_camp": "A young boy is enjoying structured activities at a summer camp. He is wearing camp appropriate clothing and participating in scheduled activities. The camp setting features outdoor and indoor spaces, activity equipment, and group areas. Natural lighting dominates during outdoor activities.",
+
+          "team_building": "A young boy is engaging in team-building exercises with peers. He is wearing comfortable activity clothes and working cooperatively with others. The space features challenge course elements, group task areas, and safety equipment. Appropriate lighting ensures safe participation."
+        }
+      },
+      "daily_life": {
+        "home": {
+          "bedroom_activities": "A young boy is playing with toys in his personal bedroom space. He is wearing comfortable home clothes and engaging with age-appropriate toys and games. The bedroom features organized play areas, storage solutions, and personal decorations. Warm lighting creates a comfortable environment.",
+
+          "homework_time": "A young boy is completing homework at a dedicated study desk. He is wearing casual home clothes and focusing on academic tasks. The study area features proper desk lighting, organized supplies, and minimal distractions. Task lighting provides optimal visibility for studying.",
+
+          "meal_time": "A young boy is having a regular meal in the family kitchen or dining area. He is wearing casual home clothes and practicing proper dining manners. The eating area features appropriate seating, dining accessories, and family atmosphere. Warm lighting enhances the dining experience.",
+
+          "morning_routine": "A young boy is preparing for the day in a family bathroom. He is wearing pajamas or getting dressed in daily clothes. The space features age-appropriate personal care items, step stools, and morning routine charts. Bright lighting supports morning activities.",
+
+          "evening_routine": "A young boy is preparing for bedtime in a calm home environment. He is wearing pajamas and following bedtime routine steps. The space features bedtime story books, comfort items, and gentle lighting. Soft lighting helps create a restful atmosphere.",
+
+          "playtime": "A young boy is engaged in free play in a designated home play area. He is wearing comfortable play clothes and exploring various toys and activities. The play space features toy storage, activity areas, and safety considerations. Good lighting ensures safe and enjoyable play."
+        },
+        "community": {
+          "neighborhood_play": "A young boy is playing with neighborhood friends in a residential area. He is wearing weather-appropriate play clothes and engaging in outdoor activities. The setting features safe play areas, community spaces, and adult supervision. Natural lighting provides good visibility.",
+
+          "community_center": "A young boy is participating in community center activities. He is wearing casual clothes and engaging in structured programs. The center features various activity rooms, learning spaces, and social areas. Mixed lighting creates appropriate activity environments.",
+
+          "local_library": "A young boy is visiting the neighborhood library for activities. He is wearing casual clothes and exploring books and programs. The library features children's sections, reading areas, and activity spaces. Warm lighting creates a welcoming atmosphere.",
+
+          "religious_activity": "A young boy is participating in age-appropriate religious or cultural activities. He is wearing appropriate ceremonial or regular clothes. The space features dedicated children's areas, learning spaces, and gathering rooms. Respectful lighting enhances the atmosphere.",
+
+          "volunteer_work": "A young boy is participating in age-appropriate community service. He is wearing suitable clothes for the activity and helping others under supervision. The setting varies based on volunteer activity. Appropriate lighting for each task environment."
+        },
+        "shopping": {
+          "toy_store": "A young boy is exploring toys in a child-friendly store environment. He is wearing casual clothes and looking at age-appropriate toys with supervision. The store features organized displays, interactive demo areas, and safety considerations. Bright retail lighting showcases products clearly.",
+
+          "bookstore": "A young boy is browsing books in a welcoming bookstore. He is wearing casual clothes and exploring the children's section with interest. The store features reading nooks, book displays, and comfortable seating. Warm lighting creates an inviting reading atmosphere.",
+
+          "clothing_shop": "A young boy is trying on new clothes in a children's clothing section. He is wearing casual clothes and testing new garments for fit. The store features age-appropriate clothing sections, fitting rooms, and mirrors. Flattering lighting helps with clothing selection.",
+
+          "grocery_store": "A young boy is accompanying family during grocery shopping. He is wearing casual clothes and helping with simple shopping tasks. The store features wide aisles, clear signage, and family-friendly carts. Bright lighting ensures good visibility throughout.",
+
+          "school_supplies": "A young boy is selecting school materials in a supply store. He is wearing casual clothes and choosing needed academic items. The store features organized supply sections, sample products, and school lists. Clear lighting helps with product selection."
+        }
+    }
+    },
+    "young": {
+      "professional": {
+        "office": {
+          "personal_desk": "A young professional man is working at his modern office desk. He is wearing a well-fitted navy suit with a light blue shirt, focused intently on his dual-monitor setup. His workspace features an ergonomic chair, organized document trays, and personal touches like a small plant. The office lighting is bright and professional, with natural light complementing the overhead illumination.",
+
+          "meeting_room": "A young man is preparing materials in a contemporary meeting room. He is wearing a charcoal grey suit and crisp white shirt, arranging presentation materials on the polished conference table. The room features glass walls, a large display screen, and comfortable executive chairs. Modern lighting creates an optimal professional environment.",
+
+          "collaborative_space": "A young man is engaging with colleagues in an open-plan collaborative area. He is wearing smart business casual attire - dark jeans and a pressed button-down shirt, actively participating in a group discussion. The space features flexible furniture, whiteboard walls, and informal meeting pods. Natural light floods through large windows.",
+
+          "presentation_room": "A young man is delivering a presentation in a well-equipped conference room. He is wearing a modern suit with a subtle patterned tie, standing confidently by the projection screen. The room features state-of-the-art presentation technology, tiered seating, and professional lighting for optimal visibility.",
+
+          "break_room": "A young man is taking a short break in the office kitchen area. He is wearing business casual attire, preparing a coffee while chatting with colleagues. The space features modern appliances, comfortable seating, and a clean, welcoming atmosphere. Bright lighting creates an energizing environment.",
+
+          "reception_area": "A young man is walking through a sophisticated office reception area. He is wearing a tailored business suit, carrying a leather briefcase while checking his phone. The area features modern furniture, corporate branding, and a sleek reception desk. Dramatic lighting highlights architectural features.",
+
+          "private_office": "A young man is working in his private office space. He is wearing a modern business suit, focused on important documentation at his executive desk. The office features a view window, professional décor, and a small meeting area. Task lighting complements natural light from large windows.",
+
+          "phone_booth": "A young man is having a private phone conversation in a soundproof booth. He is wearing business casual attire, engaged in an important call while taking notes. The booth features acoustic padding, a small desk, and good ventilation. Focused lighting enables clear note-taking.",
+
+          "training_room": "A young man is facilitating a training session in a dedicated learning space. He is wearing smart business attire, engaging with participants while using interactive training tools. The room features flexible seating, learning aids, and presentation equipment. Balanced lighting supports extended learning sessions."
+        },
+        "meetings": {
+          "team_meeting": "A young man is leading a dynamic team meeting in a modern conference room. He is wearing a well-fitted business suit, gesturing enthusiastically while discussing project plans. The room features a large collaborative display, comfortable seating, and presentation tools. Professional lighting enhances the meeting atmosphere.",
+
+          "client_presentation": "A young man is presenting to clients in an executive meeting room. He is wearing a premium dark suit with a power tie, confidently delivering key information using visual aids. The room features high-end furnishings, advanced presentation technology, and impressive city views. Carefully controlled lighting creates a professional atmosphere.",
+
+          "workshop": "A young man is facilitating an interactive workshop in a flexible space. He is wearing smart business casual attire, engaging participants in group activities. The space features movable furniture, multiple whiteboards, and workshop materials. Bright, even lighting supports active participation.",
+
+          "training_session": "A young man is conducting a professional training session. He is wearing business casual attire with a company badge, demonstrating technical concepts to attendees. The room features training stations, educational materials, and interactive tools. Clear lighting ensures good visibility for learning.",
+
+          "brainstorming": "A young man is leading a creative brainstorming session. He is wearing casual professional attire, facilitating idea generation with colorful markers and sticky notes. The space features standing whiteboards, idea boards, and informal seating. Dynamic lighting encourages creative thinking.",
+
+          "video_conference": "A young man is participating in a global video conference. He is wearing a professional shirt and jacket, engaging with international colleagues through high-quality video equipment. The space features advanced conferencing technology, acoustic treatment, and optimal camera positioning. Professional lighting ensures clear video quality.",
+
+          "board_meeting": "A young man is presenting quarterly results in a formal board room. He is wearing a premium suit with subtle pinstripes, delivering key metrics to senior executives. The room features an impressive conference table, executive chairs, and state-of-the-art presentation equipment. Sophisticated lighting creates an executive atmosphere.",
+
+          "project_review": "A young man is leading a detailed project review session. He is wearing smart business attire, analyzing project timelines and deliverables with team members. The space features project planning tools, status boards, and collaboration technology. Task lighting highlights important project details."
+        },
+        "business_trip": {
+          "airport_business": "A young man is working on his laptop in an airport business lounge. He is wearing a travel-ready suit with a quality overcoat, reviewing documents before his flight. The lounge features comfortable seating, charging stations, and business amenities. Soft lighting creates a comfortable work environment.",
+
+          "hotel_stay": "A young man is working in an upscale hotel room after business meetings. He is wearing casual business attire, preparing reports at the room's desk. The space features a well-appointed work area, high-speed internet, and room service convenience. Adjustable lighting supports late-night work.",
+
+          "conference_center": "A young man is networking at a major business conference. He is wearing a modern suit with a conference badge, engaging in professional conversations between sessions. The venue features exhibition spaces, presentation halls, and networking areas. Professional lighting enhances the conference atmosphere.",
+
+          "business_dinner": "A young man is attending a formal business dinner at an upscale restaurant. He is wearing a dark suit with a classic tie, engaging in professional conversation with colleagues and clients. The setting features elegant dining arrangements, subtle lighting, and sophisticated ambiance.",
+
+          "networking_event": "A young man is engaging with industry professionals at a networking reception. He is wearing a stylish business suit, exchanging business cards and ideas with other professionals. The venue features standing cocktail tables, presentation areas, and a sophisticated bar setup. Ambient lighting creates an inviting atmosphere.",
+
+          "trade_show": "A young man is presenting products at a professional trade show booth. He is wearing branded business attire, demonstrating products to potential clients. The booth features product displays, digital presentations, and marketing materials. Strategic lighting highlights product features.",
+
+          "client_visit": "A young man is meeting clients at their corporate headquarters. He is wearing a conservative business suit, carrying a presentation portfolio while being led through the client's office. The environment features professional office spaces, meeting areas, and corporate branding. Natural and artificial lighting create a professional atmosphere.",
+
+          "corporate_retreat": "A young man is participating in team-building activities at a corporate retreat. He is wearing smart casual attire, engaging in professional development exercises with colleagues. The venue features outdoor and indoor activity spaces, meeting rooms, and relaxation areas. Natural lighting dominates daytime activities."
+        },
+        "field_work": {
+          "site_inspection": "A young man is conducting a detailed site inspection at a project location. He is wearing safety gear over business casual clothing, taking notes and photographs of site conditions. The location features safety signage, inspection points, and technical equipment. Natural light supplemented by work lights ensures thorough inspection.",
+
+          "client_location": "A young man is visiting a client's operational facility. He is wearing business appropriate attire with required safety equipment, discussing project details while touring the facility. The setting features industrial or business operations specific to the client's work. Mixed lighting provides clear visibility.",
+
+          "outdoor_meeting": "A young man is leading an on-site meeting in an outdoor project location. He is wearing weather-appropriate business attire and safety gear, reviewing plans with team members. The location features project elements, safety provisions, and meeting points. Natural lighting dominates the work environment.",
+
+          "construction_site": "A young man is overseeing progress at a construction project. He is wearing a hard hat, safety vest, and appropriate workwear, reviewing plans with contractors. The site features ongoing construction work, safety barriers, and equipment. Work lighting supplements natural light for safety.",
+
+          "research_field": "A young man is conducting field research in an outdoor setting. He is wearing appropriate field gear, collecting data and samples for analysis. The location features research equipment, sampling stations, and mobile work facilities. Natural lighting provides working visibility.",
+
+          "sales_visit": "A young man is meeting with clients at their business location. He is wearing professional business attire, presenting products or services to potential customers. The setting varies based on client business type, featuring relevant business operations. Appropriate lighting for the specific location."
+        }
+      },
+      "education": {
+        "university": {
+          "lecture_hall": "A young man is attending an advanced lecture in a university hall. He is wearing casual but neat attire, taking notes on a laptop while following the presentation. The hall features tiered seating, presentation technology, and academic atmosphere. Balanced lighting supports note-taking and viewing.",
+
+          "laboratory": "A young man is conducting research in a university laboratory. He is wearing appropriate lab safety gear, working with specialized equipment and materials. The lab features scientific instruments, research stations, and safety equipment. Task lighting ensures precise work conditions.",
+
+          "seminar_room": "A young man is participating in an academic discussion in a seminar setting. He is wearing smart casual attire, engaging in scholarly debate with peers. The room features a round table setup, presentation equipment, and academic resources. Natural light creates an ideal learning environment.",
+
+          "research_center": "A young man is working on advanced research projects. He is wearing professional casual attire, analyzing data and conducting experiments. The center features specialized research equipment, computer stations, and collaboration areas. Professional lighting supports detailed work.",
+
+          "study_group": "A young man is collaborating with peers in a group study session. He is wearing casual university attire, sharing ideas and solving problems together. The space features study tables, whiteboards, and reference materials. Good lighting supports extended study sessions.",
+
+          "campus_library": "A young man is researching in a university library. He is wearing casual but neat clothing, surrounded by books and digital resources. The library features study carrels, computer stations, and extensive collections. Carefully designed lighting supports reading and screen work.",
+
+          "computer_lab": "A young man is working on technical projects in a university computer lab. He is wearing casual attire, focused on complex software applications. The lab features high-performance computers, technical software, and support resources. Controlled lighting reduces screen glare.",
+
+          "student_lounge": "A young man is relaxing between classes in a campus lounge. He is wearing casual university attire, reviewing notes while having a snack. The lounge features comfortable seating, study spaces, and social areas. Warm lighting creates a relaxing atmosphere."
+        },
+        "professional_development": {
+          "training_workshop": "A young man is participating in a professional development workshop. He is wearing business casual attire, engaging in skill-building exercises. The venue features training stations, interactive tools, and practice areas. Clear lighting supports learning activities.",
+
+          "certification_course": "A young man is attending a professional certification class. He is wearing smart casual attire, studying intensive course materials. The classroom features technical equipment, testing facilities, and learning resources. Professional lighting supports extended study.",
+
+          "online_learning": "A young man is engaged in remote professional development. He is wearing comfortable but presentable attire, participating in virtual learning sessions. His setup features a well-equipped home office, dual monitors, and learning materials. Proper lighting ensures good video quality.",
+
+          "skill_development": "A young man is practicing new professional skills. He is wearing appropriate attire for the skill type, working with training equipment or software. The space features practice areas, instructional materials, and necessary tools. Task lighting supports detailed work.",
+
+          "industry_conference": "A young man is attending professional development sessions at a conference. He is wearing business attire, taking notes during expert presentations. The venue features presentation halls, workshop rooms, and networking spaces. Professional lighting enhances the learning environment.",
+
+          "mentoring_session": "A young man is meeting with a professional mentor. He is wearing business casual attire, discussing career development and receiving guidance. The setting features a professional meeting space, career planning materials, and comfortable seating. Warm lighting creates a supportive atmosphere."
+        }
+      },
+      "sports": {
+        "gym": {
+          "weight_training": "A young man is performing weight training exercises. He is wearing appropriate workout gear, executing proper form with free weights. The area features weight racks, mirrors, and safety equipment. Bright lighting ensures safe exercise execution.",
+
+          "cardio_area": "A young man is engaged in cardiovascular exercise. He is wearing athletic wear and running shoes, working out on modern cardio equipment. The space features various cardio machines, ventilation systems, and personal entertainment screens. Energizing lighting maintains workout motivation.",
+
+          "group_fitness": "A young man is participating in a high-energy group fitness class. He is wearing athletic clothes, following instructor-led exercises with other participants. The studio features exercise equipment, mirrors, and sound system. Dynamic lighting supports the workout energy.",
+
+          "personal_training": "A young man is working with a personal trainer. He is wearing fitted workout clothes, following customized exercise instructions. The training area features various equipment options, assessment tools, and training space. Professional lighting ensures proper form observation.",
+
+          "yoga_studio": "A young man is practicing yoga poses in a peaceful studio. He is wearing appropriate yoga attire, following instructor guidance on proper alignment. The studio features wood flooring, mirrors, and minimal décor. Adjustable lighting creates a focused atmosphere.",
+
+          "CrossFit_box": "A young man is performing intensive CrossFit exercises. He is wearing CrossFit-appropriate gear, executing complex movement patterns. The space features functional equipment, workout zones, and timing displays. Bright lighting supports safe high-intensity training."
+        },
+        "outdoor_sports": {
+          "running_track": "A young man is training on a professional running track. He is wearing performance running gear, maintaining proper form during interval training. The facility features marked lanes, timing equipment, and training areas. Natural lighting provides ideal running conditions.",
+
+          "sports_field": "A young man is playing team sports on a well-maintained field. He is wearing appropriate sports uniform, actively participating in game play. The field features proper markings, team areas, and spectator spaces. Natural lighting supports daytime sports activities.",
+
+          "tennis_court": "A young man is playing tennis on a professional court. He is wearing tennis whites, executing skilled shots during a match. The court features proper surfacing, net systems, and court markings. Natural light provides perfect playing conditions.",
+
+          "basketball_court": "A young man is playing basketball on an outdoor court. He is wearing basketball attire, engaging in an intense game. The court features proper markings, quality hoops, and playing surface. Natural lighting ensures good game visibility.",
+
+          "golf_course": "A young man is playing golf on a manicured course. He is wearing traditional golf attire, focusing on proper swing technique. The course features well-maintained greens, tee boxes, and practice areas. Natural lighting highlights course features.",
+
+          "hiking_trail": "A young man is hiking on a challenging nature trail. He is wearing appropriate hiking gear, navigating varied terrain with confidence. The trail features natural obstacles, viewpoints, and rest areas. Natural lighting filters through trees."
+        },
+        "extreme_sports": {
+          "rock_climbing": "A young man is scaling a challenging climbing wall. He is wearing proper climbing gear and safety equipment, executing technical moves. The venue features various climbing routes, safety systems, and spotting areas. Proper lighting ensures route visibility.",
+
+          "skateboarding": "A young man is performing skateboard tricks at a skate park. He is wearing street style clothing and safety gear, executing complex maneuvers. The park features various ramps, rails, and skating surfaces. Natural light shows terrain clearly.",
+
+          "surfing": "A young man is surfing ocean waves with skill. He is wearing a wetsuit, riding waves with practiced technique. The setting features ocean conditions, beach access, and other surfers. Natural lighting reflects off water surfaces.",
+
+          "snowboarding": "A young man is snowboarding down a mountain slope. He is wearing proper snow gear and protective equipment, executing boarding techniques. The slope features various terrain challenges and lift access. Natural light reflects off snow surfaces.",
+
+          "mountain_biking": "A young man is navigating challenging mountain bike trails. He is wearing protective biking gear, handling technical terrain with skill. The trails feature natural obstacles, elevation changes, and rest points. Natural lighting filters through forest cover.",
+
+          "parkour": "A young man is performing parkour movements in an urban setting. He is wearing flexible athletic wear, executing precise movements across structures. The environment features various urban obstacles and training elements. Natural lighting shows obstacle details."
+        }
+      },
+      "social": {
+        "entertainment": {
+          "restaurant_dining": "A young man is enjoying dinner at a trendy urban restaurant. He is wearing smart casual attire with a fitted blazer, engaging in conversation over creative cuisine. The restaurant features modern décor, ambient lighting, and an energetic atmosphere. Warm lighting highlights the thoughtfully presented dishes.",
+
+          "bar_nightclub": "A young man is socializing at a sophisticated bar. He is wearing stylish evening wear, enjoying craft cocktails while chatting with friends. The venue features contemporary design, premium bar setup, and atmospheric lighting. Dynamic lighting creates an engaging nightlife environment.",
+
+          "concert_venue": "A young man is attending a live music performance at a popular venue. He is wearing fashionable casual wear, enjoying the music while surrounded by other concert-goers. The venue features professional sound systems, stage lighting, and viewing areas. Dramatic lighting enhances the concert experience.",
+
+          "movie_theater": "A young man is watching a film in a premium movie theater. He is wearing comfortable smart casual attire, relaxing in a luxury recliner seat. The theater features state-of-the-art projection, surround sound, and plush seating. Subtle lighting guides movement while maintaining viewing ambiance.",
+
+          "comedy_club": "A young man is enjoying a stand-up comedy show at an intimate club. He is wearing neat casual attire, laughing along with the performance. The club features cabaret-style seating, stage setup, and table service. Low lighting creates an ideal comedy club atmosphere.",
+
+          "art_gallery": "A young man is viewing exhibitions at a contemporary art gallery. He is wearing artistic yet professional attire, thoughtfully observing various art pieces. The gallery features curated displays, exhibition lighting, and open viewing spaces. Specialized lighting highlights artistic works."
+        },
+        "gatherings": {
+          "house_party": "A young man is socializing at a friend's house party. He is wearing stylish casual wear, mingling with various groups of friends. The home features party decorations, music setup, and gathering spaces. Mood lighting creates a festive atmosphere.",
+
+          "dinner_party": "A young man is attending an intimate dinner party with friends. He is wearing smart casual attire, contributing to lively conversation around a beautifully set table. The space features dinner party décor, mood music, and comfortable seating. Warm lighting enhances the dining experience.",
+
+          "social_club": "A young man is participating in social club activities. He is wearing appropriate club attire, engaging in shared interests with fellow members. The club features activity areas, social spaces, and member amenities. Professional lighting suits various club activities.",
+
+          "game_night": "A young man is hosting a friends' game night at home. He is wearing comfortable but presentable casual wear, playing board games and sharing snacks. The space features gaming tables, comfortable seating, and refreshment areas. Good lighting ensures clear game visibility.",
+
+          "weekend_brunch": "A young man is enjoying a weekend brunch with friends. He is wearing relaxed but stylish casual wear, sharing conversation over a leisurely meal. The setting features bright spaces, comfortable seating, and brunch service. Natural light creates a fresh morning atmosphere.",
+
+          "barbecue": "A young man is attending an outdoor barbecue gathering. He is wearing casual summer attire, enjoying grilled food and outdoor games with friends. The setting features grilling stations, outdoor seating, and recreational areas. Natural lighting provides perfect outdoor social conditions."
+        },
+        "dating": {
+          "coffee_date": "A young man is meeting someone for coffee at a trendy café. He is wearing smart casual attire, engaged in getting-to-know-you conversation. The café features intimate seating, artistic décor, and a welcoming atmosphere. Warm lighting creates a comfortable dating environment.",
+
+          "dinner_date": "A young man is sharing a romantic dinner at an upscale restaurant. He is wearing a well-chosen evening outfit, enjoying intimate conversation over fine cuisine. The restaurant features private booth seating, elegant décor, and attentive service. Candlelight and soft lighting create romance.",
+
+          "outdoor_date": "A young man is enjoying an outdoor activity date. He is wearing stylish casual wear appropriate for the activity, sharing experiences and conversation. The setting features natural surroundings, activity opportunities, and quiet spots. Natural lighting enhances the outdoor experience.",
+
+          "cultural_date": "A young man is exploring a cultural venue on a date. He is wearing smart casual attire, sharing observations and discussions about exhibits or performances. The venue features cultural displays, performance spaces, or exhibition areas. Appropriate lighting highlights cultural elements.",
+
+          "adventure_date": "A young man is participating in an exciting shared activity. He is wearing appropriate activity wear, enjoying new experiences with his date. The setting features adventure elements, safety equipment, and excitement opportunities. Lighting varies based on the adventure type.",
+
+          "casual_meetup": "A young man is meeting someone for a casual first date. He is wearing relaxed but well-chosen attire, sharing easy conversation in a low-pressure setting. The venue features comfortable seating, casual atmosphere, and simple refreshments. Welcoming lighting creates a relaxed mood."
+        }
+      }
+    },
+    "middle_aged": {
+      "professional": {
+        "executive": {
+          "executive_office": "A middle-aged man is working in a prestigious corner office. He is wearing a premium tailored suit in charcoal grey with a subtle pinstripe, reviewing important documents at his executive desk. The office features high-end furniture, floor-to-ceiling windows with city views, awards and credentials on display, and a small meeting area with leather chairs. Natural light complements sophisticated office lighting, creating an atmosphere of success and authority.",
+
+          "board_room": "A middle-aged man is leading a board meeting with senior executives. He is wearing an impeccably tailored navy suit with a power tie, standing at the head of a grand conference table while presenting strategic initiatives. The room features premium wood paneling, state-of-the-art presentation technology, executive chairs, and impressive corporate artwork. Professional lighting emphasizes the gravitas of the setting.",
+
+          "management_meeting": "A middle-aged man is conducting a senior management meeting. He is wearing a refined business suit with attention to detail, engaging confidently with department heads while discussing corporate strategy. The meeting space features a professional roundtable setup, digital displays, and collaborative technology. Balanced lighting supports extended strategic discussions.",
+
+          "corporate_event": "A middle-aged man is delivering a keynote speech at a major corporate event. He is wearing a distinguished business suit with a classic tie, commanding attention from the stage while presenting company vision. The venue features professional staging, advanced audiovisual systems, and corporate branding. Stage lighting highlights his authoritative presence.",
+
+          "strategic_planning": "A middle-aged man is facilitating a strategic planning session. He is wearing a business suit that reflects his senior position, guiding executive discussions while mapping future directions. The space features planning tools, strategy boards, and comfortable seating for extended sessions. Clear lighting supports detailed planning work.",
+
+          "stakeholder_meeting": "A middle-aged man is meeting with important stakeholders in an executive conference room. He is wearing a conservative yet sophisticated suit, addressing key business concerns with confidence and experience. The room features premium furnishings, presentation capabilities, and impressive views. Professional lighting creates an atmosphere of trust and competence."
+        },
+        "business_leadership": {
+          "team_leadership": "A middle-aged man is mentoring his leadership team. He is wearing refined business attire, sharing wisdom and guidance while discussing team development. The setting features a professional meeting space, leadership development materials, and collaborative tools. Warm lighting creates an environment conducive to mentoring.",
+
+          "department_meeting": "A middle-aged man is chairing a departmental strategy session. He is wearing professional business attire with authority, leading his team through important organizational changes. The room features presentation technology, planning materials, and comfortable seating. Clear lighting supports productive discussion.",
+
+          "performance_review": "A middle-aged man is conducting annual performance reviews. He is wearing a professional suit that conveys authority with approachability, providing thoughtful feedback to team members. The office features a private meeting area, performance documentation, and a professional yet comfortable atmosphere. Balanced lighting supports focused conversation.",
+
+          "budget_planning": "A middle-aged man is leading annual budget planning meetings. He is wearing a conservative business suit, analyzing financial projections with department heads. The room features financial displays, planning software, and discussion space. Professional lighting supports detailed financial review.",
+
+          "strategy_session": "A middle-aged man is guiding a corporate strategy workshop. He is wearing polished business attire, facilitating high-level discussions about company direction. The space features strategic planning tools, market analysis displays, and collaborative areas. Dynamic lighting supports creative strategic thinking.",
+
+          "client_relationship": "A middle-aged man is managing key client relationships in a premium meeting space. He is wearing a sophisticated business suit, building trust through experienced interaction. The setting features high-end hospitality, presentation capabilities, and comfortable seating. Warm lighting creates an atmosphere of professional intimacy."
+        },
+        "business_travel": {
+          "international_conference": "A middle-aged man is representing his company at a global business conference. He is wearing a sophisticated international business suit, networking with global executives between keynote sessions. The venue features world-class conference facilities, translation services, and networking areas. Professional lighting enhances the international atmosphere.",
+
+          "business_class_travel": "A middle-aged man is working while traveling in business class. He is wearing comfortable yet professional travel attire, reviewing documents on his laptop during the flight. The cabin features premium seating, business amenities, and individual lighting. Ambient lighting creates a productive travel environment.",
+
+          "executive_meeting": "A middle-aged man is attending an executive summit in an impressive venue. He is wearing a premium business suit, engaging in high-level discussions with industry leaders. The location features exclusive meeting spaces, executive amenities, and sophisticated décor. Professional lighting emphasizes the executive environment.",
+
+          "corporate_retreat": "A middle-aged man is leading sessions at a leadership retreat. He is wearing smart business casual attire appropriate for the setting, facilitating team building and strategic planning. The retreat features both indoor and outdoor meeting spaces, recreational facilities, and team activity areas. Natural light complements artificial lighting throughout.",
+
+          "industry_summit": "A middle-aged man is participating in an industry leadership summit. He is wearing refined business attire, contributing expertise to panel discussions and roundtables. The venue features professional conference facilities, networking spaces, and presentation areas. Dynamic lighting supports various summit activities.",
+
+          "global_partnership": "A middle-aged man is negotiating international business partnerships. He is wearing culturally appropriate business attire, engaging in cross-cultural business discussions. The setting features formal meeting spaces, cultural elements, and negotiation areas. Professional lighting supports extended discussion sessions."
+        }
+      },
+      "family": {
+        "parenting": {
+          "school_event": "A middle-aged man is attending his child's school function. He is wearing smart casual attire appropriate for a parent, showing engaged interest in the school community. The setting features school facilities, parent gathering areas, and event spaces. Lighting appropriate to the specific school event.",
+
+          "sports_game": "A middle-aged man is supporting his child at a sports competition. He is wearing comfortable weekend wear, watching attentively and offering encouragement. The venue features sports facilities, spectator areas, and family seating. Lighting varies based on indoor or outdoor setting.",
+
+          "family_dinner": "A middle-aged man is leading a family dinner at home. He is wearing relaxed but presentable attire, engaging warmly with family members around the dinner table. The setting features a well-appointed dining area, family comfort elements, and pleasant décor. Warm lighting creates an inviting family atmosphere.",
+
+          "homework_help": "A middle-aged man is assisting with children's homework. He is wearing comfortable home attire, patiently explaining concepts and checking work. The space features a study area, learning materials, and reference resources. Good lighting supports educational activities.",
+
+          "weekend_activity": "A middle-aged man is participating in family weekend activities. He is wearing casual weekend clothes, actively engaging in shared family experiences. The setting varies based on activity type, featuring family-friendly amenities. Lighting appropriate to the activity and location.",
+
+          "family_vacation": "A middle-aged man is leading family holiday activities. He is wearing vacation-appropriate attire, creating memorable experiences with family members. The location features holiday amenities, family accommodations, and recreational opportunities. Natural light enhances vacation experiences."
+        },
+        "home_life": {
+          "home_office": "A middle-aged man is working from his sophisticated home office. He is wearing business casual attire, managing professional responsibilities while maintaining work-life balance. The office features a professional desk setup, technology integration, and organized storage. Task lighting supports productive work.",
+
+          "family_room": "A middle-aged man is relaxing in the family living area. He is wearing comfortable home attire, enjoying quality time with family members. The room features comfortable seating, entertainment systems, and family photos. Warm lighting creates a cozy atmosphere.",
+
+          "garden_maintenance": "A middle-aged man is tending to his home garden. He is wearing appropriate gardening clothes, maintaining landscape features with care. The garden features cultivated plants, outdoor seating, and landscaping elements. Natural light perfect for outdoor activities.",
+
+          "home_improvement": "A middle-aged man is working on house maintenance projects. He is wearing appropriate work clothes, handling home improvement tasks with experience. The setting features necessary tools, project materials, and safety equipment. Good lighting ensures safe project work.",
+
+          "cooking_dining": "A middle-aged man is preparing a family meal in a well-equipped kitchen. He is wearing casual home attire, cooking with skill and enjoyment. The kitchen features quality appliances, cooking equipment, and food preparation areas. Task lighting illuminates cooking activities.",
+
+          "relaxation_time": "A middle-aged man is enjoying personal relaxation time. He is wearing comfortable leisure wear, engaged in preferred relaxation activities. The space features comfortable furniture, personal interests, and relaxation elements. Soft lighting supports peaceful relaxation."
+        }
+      }
+    },
+    "elderly": {
+      "daily_life": {
+        "home": {
+          "reading_corner": "An elderly man is comfortably settled in his personal reading nook. He is wearing a well-maintained cardigan and comfortable slacks, reading a book while seated in a plush armchair. The corner features good reading light, a side table with reading materials, and a warm throw blanket. Soft natural light from a nearby window complements focused reading light.",
+
+          "garden_care": "An elderly man is tending to his well-maintained garden. He is wearing comfortable gardening clothes and a wide-brimmed hat, carefully pruning plants and tending to flowers. The garden features raised beds for easy access, organized tool storage, and comfortable resting spots. Natural sunlight illuminates the peaceful garden setting.",
+
+          "home_exercise": "An elderly man is performing gentle morning exercises. He is wearing appropriate exercise wear, following a careful routine of stretches and movement. The space features exercise mats, support rails, and basic fitness equipment. Bright, natural light creates an energizing environment for morning activity.",
+
+          "television_time": "An elderly man is watching his favorite programs in a comfortable living room. He is wearing casual home attire, relaxed in his favorite recliner with good back support. The room features a clear viewing screen, comfortable seating, and easy-access controls. Ambient lighting reduces screen glare while maintaining visibility.",
+
+          "hobby_area": "An elderly man is engaged in his favorite hobby activities. He is wearing comfortable casual clothes, working on crafts or collections with practiced care. The area features good task lighting, organized supplies, and ergonomic seating. Proper lighting ensures clear visibility for detailed work.",
+
+          "meal_preparation": "An elderly man is preparing a meal in a well-organized kitchen. He is wearing casual clothes with an apron, carefully following familiar recipes. The kitchen features accessible appliances, well-organized ingredients, and safety-conscious design. Bright task lighting illuminates food preparation areas."
+        },
+        "health": {
+          "medical_checkup": "An elderly man is attending a routine medical appointment. He is wearing smart casual attire, discussing health matters with his healthcare provider. The medical office features professional equipment, comfortable seating, and clear information displays. Professional lighting supports thorough medical examination.",
+
+          "pharmacy_visit": "An elderly man is consulting with a pharmacist about medications. He is wearing neat casual clothes, carefully reviewing prescription information. The pharmacy features a consultation area, clear signage, and professional service counter. Clear lighting ensures accurate medication review.",
+
+          "physical_therapy": "An elderly man is participating in guided physical therapy exercises. He is wearing comfortable exercise clothing, following therapist instructions with focus. The facility features specialized equipment, support rails, and exercise areas. Bright, even lighting supports safe movement.",
+
+          "wellness_center": "An elderly man is attending a senior wellness program. He is wearing appropriate activity wear, participating in gentle group exercises. The center features adapted exercise equipment, social areas, and safety features. Welcoming lighting creates a comfortable atmosphere.",
+
+          "health_consultation": "An elderly man is discussing health management with healthcare professionals. He is wearing neat casual attire, engaged in understanding health recommendations. The consultation room features medical information displays, comfortable seating, and privacy considerations. Professional lighting supports clear communication.",
+
+          "fitness_class": "An elderly man is participating in a senior-focused fitness class. He is wearing suitable exercise clothing, following instructor-led movements carefully. The studio features appropriate equipment, support rails, and clear sightlines. Even lighting ensures safe exercise participation."
+        },
+        "social": {
+          "community_center": "An elderly man is participating in senior community activities. He is wearing casual but neat attire, engaging with peers in organized programs. The center features activity spaces, comfortable seating areas, and social gathering spots. Warm lighting creates a welcoming atmosphere.",
+
+          "senior_club": "An elderly man is attending a senior social club meeting. He is wearing smart casual clothing, participating in group discussions and activities. The club features comfortable meeting spaces, refreshment areas, and activity facilities. Pleasant lighting supports social interaction.",
+
+          "religious_service": "An elderly man is attending a religious service. He is wearing appropriate formal attire, participating in familiar religious traditions. The venue features accessible seating, traditional elements, and quiet reflection spaces. Respectful lighting enhances the spiritual atmosphere.",
+
+          "family_gathering": "An elderly man is enjoying time with extended family. He is wearing comfortable semi-formal attire, sharing stories and wisdom with younger generations. The setting features family seating arrangements, photo opportunities, and conversation areas. Warm lighting creates a family-friendly atmosphere.",
+
+          "friend_meetup": "An elderly man is meeting with longtime friends. He is wearing casual but presentable clothing, enjoying familiar conversation and shared memories. The venue features easy access, comfortable seating, and quiet conversation spaces. Gentle lighting supports relaxed social interaction.",
+
+          "volunteer_work": "An elderly man is contributing to community volunteer activities. He is wearing casual appropriate clothing, sharing his experience and skills. The setting features organized work areas, rest spaces, and social interaction opportunities. Good lighting supports volunteer activities."
+        }
+      },
+      "recreation": {
+        "leisure": {
+          "park_walk": "An elderly man is taking his daily walk in a local park. He is wearing comfortable walking clothes and supportive shoes, maintaining an steady pace on well-maintained paths. The park features level walking trails, regular benches for resting, and peaceful natural surroundings. Natural light provides perfect visibility for safe walking.",
+
+          "chess_club": "An elderly man is playing chess at a local club. He is wearing smart casual attire, deeply focused on strategic gameplay. The club features proper chess tables, comfortable chairs with good support, and a quiet atmosphere. Focused lighting ensures clear view of the chess board.",
+
+          "book_club": "An elderly man is participating in a book discussion group. He is wearing neat casual clothes, sharing thoughtful insights about the reading material. The setting features comfortable seating, good acoustics, and adequate lighting for reading. Warm lighting creates an inviting atmosphere for discussion.",
+
+          "gardening_club": "An elderly man is sharing gardening knowledge at a club meeting. He is wearing casual gardening attire, demonstrating techniques to fellow enthusiasts. The garden features demonstration areas, seating for presentations, and shared garden spaces. Natural light perfect for outdoor activities.",
+
+          "art_class": "An elderly man is working on an art project in a senior class. He is wearing comfortable clothes with an art smock, creating with focused attention. The studio features accessible workstations, proper lighting, and necessary art supplies. Natural light supplements task lighting for optimal visibility.",
+
+          "music_appreciation": "An elderly man is attending a classical music event. He is wearing smart casual attire, enjoying the performance with evident appreciation. The venue features comfortable seating, good acoustics, and proper viewing angles. Appropriate lighting enhances the musical experience."
+        },
+        "exercise": {
+          "gentle_yoga": "An elderly man is participating in an adapted yoga class. He is wearing comfortable, loose-fitting exercise wear, following modified poses with careful attention. The studio features props for support, non-slip mats, and wall-mounted rails. Soft, natural light creates a peaceful atmosphere.",
+
+          "tai_chi": "An elderly man is practicing tai chi movements. He is wearing loose, comfortable clothing, executing gentle flowing movements with grace. The space features open areas, smooth flooring, and peaceful surroundings. Natural light creates perfect visibility for morning practice.",
+
+          "swimming": "An elderly man is doing water exercises in a heated pool. He is wearing appropriate swimwear, performing gentle water movements. The pool features easy access steps, support rails, and monitored safety. Proper pool lighting ensures safe water activities.",
+
+          "walking_group": "An elderly man is participating in a senior walking club. He is wearing weather-appropriate walking attire, maintaining conversation while walking at a comfortable pace. The route features even paths, rest stops, and safety considerations. Natural light provides good visibility.",
+
+          "light_gym": "An elderly man is using senior-friendly exercise equipment. He is wearing comfortable workout clothes, carefully following his exercise routine. The gym features adapted machines, safety features, and monitoring staff. Clear lighting ensures safe equipment use.",
+
+          "golf": "An elderly man is enjoying a round of golf with friends. He is wearing traditional golf attire, maintaining good form while playing at a leisurely pace. The course features golf carts, regular rest areas, and well-maintained grounds. Natural light perfect for outdoor sport."
+        }
+      }
+    }
+  },
+"female": {
+    "child": {
+      "education": {
+        "classroom": {
+          "primary_classroom": "A young girl is attentively participating in a primary school class. She is wearing a neat school uniform and has her hair neatly styled, focused on taking notes in her notebook. The classroom features colorful educational posters, an interactive whiteboard, and organized study materials. Natural light floods through large windows, creating an ideal learning environment.",
+
+          "art_class": "A young girl is creating artwork in a vibrant art classroom. She is wearing a paint-stained apron over her school clothes, carefully mixing colors on her palette. The art room features student artwork displays, various art supplies, and creative project examples. Large windows provide natural light perfect for artistic work.",
+
+          "music_class": "A young girl is learning to play a musical instrument in a well-equipped music room. She is wearing her school uniform and sitting with proper posture, carefully following the sheet music. The room contains various instruments, music theory charts, and sound-dampening panels. Balanced lighting ensures clear music reading.",
+
+          "dance_class": "A young girl is participating in a structured dance class at school. She is wearing appropriate dance attire and moving gracefully to the music. The room features wall-length mirrors, proper flooring, and a sound system. Well-designed lighting enhances movement visibility.",
+
+          "language_class": "A young girl is engaging in language learning activities. She is wearing her school uniform and actively participating in pronunciation exercises. The classroom displays language learning materials, cultural items, and interactive learning tools. Bright lighting supports focused learning.",
+
+          "math_class": "A young girl is solving mathematical problems with enthusiasm. She is wearing her school uniform and working carefully with mathematical tools. The classroom features number charts, mathematical concepts posters, and learning manipulatives. Clear lighting supports detailed work.",
+
+          "science_lab": "A young girl is conducting a supervised science experiment. She is wearing safety goggles and a lab coat, carefully following experimental procedures. The lab contains age-appropriate science equipment, safety stations, and educational displays. Professional lighting ensures safe experimentation.",
+
+          "physical_education": "A young girl is participating in structured physical education activities. She is wearing PE uniform and athletic shoes, actively engaged in group exercises. The gymnasium features proper sports flooring, age-appropriate equipment, and safety measures. Bright lighting ensures safe movement."
+        },
+        "library": {
+          "reading_area": "A young girl is immersed in a book in a cozy reading corner. She is wearing her school uniform and sitting comfortably on a cushioned seat. The area features child-height bookshelves, reading motivation posters, and comfortable seating options. Warm lighting creates a perfect reading atmosphere.",
+
+          "study_room": "A young girl is focused on homework in a quiet library space. She is wearing her school uniform and working diligently at a study desk. The room features individual study spaces, reference materials, and a peaceful atmosphere. Good lighting supports concentrated study.",
+
+          "multimedia_room": "A young girl is using educational software in a modern library setting. She is wearing her school uniform and using headphones while engaging with interactive content. The room contains computer stations, educational programs, and digital learning tools. Controlled lighting prevents screen glare.",
+
+          "children_book_section": "A young girl is exploring books in a colorful children's area. She is wearing casual clothes and carefully selecting books from accessible shelves. The section features themed book displays, reading nooks, and age-appropriate collections. Cheerful lighting enhances the welcoming atmosphere.",
+
+          "storytelling_corner": "A young girl is listening intently during story time. She is wearing casual clothes and sitting cross-legged on a soft carpet. The corner features a storyteller's chair, themed decorations, and comfortable floor cushions. Soft lighting creates an enchanting storytelling environment."
+        },
+        "extracurricular": {
+          "dance_studio": "A young girl is practicing dance routines with precision. She is wearing dance attire and ballet shoes, working on choreographed movements. The studio features full-length mirrors, proper flooring, and practice bars. Professional lighting enhances movement visibility.",
+
+          "art_workshop": "A young girl is exploring creative expression in an art workshop. She is wearing an art smock and experimenting with various materials. The workshop features art supplies, display areas, and creative workspace. Natural light supplements task lighting for optimal visibility.",
+
+          "music_practice": "A young girl is practicing her musical instrument with dedication. She is wearing casual clothes and maintaining proper posture while playing. The practice room features acoustic treatment, music stands, and instruction space. Proper lighting illuminates sheet music clearly.",
+
+          "drama_club": "A young girl is rehearsing for a school play with enthusiasm. She is wearing practice clothes and expressively delivering lines. The drama space features a practice stage, costume area, and performance space. Stage lighting creates an authentic theater atmosphere.",
+
+          "science_club": "A young girl is participating in hands-on science activities. She is wearing safety equipment and showing curiosity while conducting experiments. The club space features age-appropriate lab equipment, safety stations, and discovery areas. Bright lighting ensures safe exploration.",
+
+          "coding_class": "A young girl is learning basic programming concepts. She is wearing casual clothes and showing enthusiasm while working on coding projects. The classroom features computer stations, learning aids, and collaborative spaces. Adjusted lighting reduces screen glare.",
+
+          "language_club": "A young girl is practicing foreign language skills in an interactive setting. She is wearing casual clothes and actively participating in language activities. The space features cultural displays, learning materials, and conversation areas. Welcoming lighting supports engaged learning."
+        }
+      },
+      "sports": {
+        "indoor_sports": {
+          "gymnastics": "A young girl is practicing gymnastics routines with determination. She is wearing a gymnastics leotard and moving with careful precision. The facility features proper mats, training equipment, and safety apparatus. Even lighting ensures safe practice conditions.",
+
+          "swimming_pool": "A young girl is practicing swimming techniques in a heated pool. She is wearing appropriate swimwear and following instructor guidance. The pool features lane dividers, safety equipment, and proper depth markings. Specialized lighting provides clear underwater visibility.",
+
+          "dance_studio": "A young girl is learning dance combinations with enthusiasm. She is wearing dance practice wear and following instructor demonstrations. The studio features sprung flooring, mirror walls, and ballet barres. Professional lighting enhances movement quality.",
+
+          "yoga_class": "A young girl is following child-friendly yoga poses. She is wearing comfortable exercise clothes and moving mindfully on her mat. The space features child-sized yoga equipment, peaceful décor, and proper ventilation. Gentle lighting creates a calm atmosphere.",
+
+          "martial_arts_dojo": "A young girl is learning basic martial arts movements. She is wearing a traditional martial arts uniform and following instructor guidance. The dojo features training mats, practice equipment, and traditional elements. Balanced lighting maintains the training atmosphere.",
+
+          "basketball_court": "A young girl is practicing basketball skills with focus. She is wearing sports attire and working on fundamental techniques. The court features adjustable hoops, proper markings, and practice equipment. Bright lighting ensures clear visibility."
+        },
+        "outdoor_sports": {
+          "playground": "A young girl is actively playing on modern playground equipment. She is wearing weather-appropriate play clothes and moving confidently between activities. The playground features safe surfaces, varied equipment, and shaded areas. Natural light provides perfect visibility.",
+
+          "children_soccer": "A young girl is participating in youth soccer practice. She is wearing soccer gear and engaging in team drills. The field features age-appropriate goals, practice areas, and safety considerations. Natural lighting supports outdoor play.",
+
+          "tennis_court": "A young girl is learning tennis basics on a youth court. She is wearing tennis attire and practicing fundamental skills. The court features junior-sized equipment, proper markings, and practice areas. Natural light ensures good playing conditions.",
+
+          "skating_rink": "A young girl is practicing ice skating movements. She is wearing skating attire and working on basic techniques. The rink features practice areas, safety barriers, and instruction zones. Well-designed lighting illuminates the ice surface.",
+
+          "track_field": "A young girl is participating in track activities. She is wearing athletic wear and engaging in running exercises. The track features proper surfaces, distance markers, and safety zones. Natural light provides ideal conditions.",
+
+          "mini_golf": "A young girl is enjoying a round of mini golf. She is wearing casual clothes and learning proper putting technique. The course features child-friendly obstacles, clear paths, and safety features. Natural lighting enhances the playing experience."
+        },
+        "training": {
+          "ballet_class": "A young girl is attending structured ballet training. She is wearing proper ballet attire and following classical techniques. The studio features ballet barres, mirror walls, and proper flooring. Professional lighting enhances form and movement.",
+
+          "swimming_lesson": "A young girl is receiving professional swimming instruction. She is wearing appropriate swimwear and following water safety guidelines. The pool features teaching areas, flotation devices, and safety equipment. Special lighting ensures clear underwater visibility.",
+
+          "gymnastics_training": "A young girl is developing gymnastics skills with guidance. She is wearing a practice leotard and working on fundamental movements. The facility features training equipment, safety mats, and progression stations. Proper lighting ensures safe practice.",
+
+          "figure_skating": "A young girl is learning figure skating elements. She is wearing skating attire and practicing basic moves. The rink features practice spaces, instruction areas, and safety zones. Professional lighting illuminates the ice surface clearly.",
+
+          "sports_team_practice": "A young girl is participating in team sport training. She is wearing team practice gear and working on group skills. The facility features practice areas, team spaces, and coaching stations. Appropriate lighting supports safe practice.",
+
+          "youth_athletics": "A young girl is developing fundamental athletic skills. She is wearing athletic wear and participating in varied activities. The facility features multiple activity stations, safety equipment, and training zones. Good lighting ensures safe movement."
+        }
+      },
+      "leisure": {
+        "entertainment": {
+          "indoor_playground": "A young girl is exploring a safe indoor play structure. She is wearing comfortable play clothes and moving through various activities. The playground features soft padding, climbing equipment, and play zones. Safety lighting ensures clear visibility.",
+
+          "children_theater": "A young girl is participating in a children's theater production. She is wearing a costume and delivering lines with enthusiasm. The theater features proper staging, audience seating, and performance lighting. Stage lighting enhances the performance.",
+
+          "dance_recital": "A young girl is performing in a dance showcase. She is wearing a dance costume and executing choreographed movements. The venue features proper staging, performance lighting, and audience areas. Professional lighting highlights the performance.",
+
+          "animation_movies": "A young girl is enjoying an age-appropriate animated film. She is wearing comfortable clothes and watching with delight. The theater features comfortable seating, proper sound, and optimal viewing. Appropriate lighting guides movement while maintaining viewing quality.",
+
+          "puppet_show": "A young girl is watching an engaging puppet performance. She is wearing casual clothes and following the story with interest. The venue features puppet stage, audience seating, and performance elements. Focused lighting highlights the puppet show.",
+
+          "virtual_reality_games": "A young girl is experiencing age-appropriate VR content. She is wearing VR equipment and moving safely in a designated space. The area features safety boundaries, monitoring systems, and guidance support. Controlled lighting ensures safe movement."
+        },
+        "outdoor_recreation": {
+          "theme_park": "A young girl is enjoying theme park attractions. She is wearing comfortable clothes and experiencing various rides and activities. The park features age-appropriate attractions, rest areas, and safety measures. Natural light illuminates the enjoyable environment.",
+
+          "water_park": "A young girl is playing in various water attractions. She is wearing appropriate swimwear and enjoying water features safely. The park features splash areas, shallow pools, and safety stations. Bright sunlight enhances the fun atmosphere.",
+
+          "zoo_visit": "A young girl is observing animals with fascination. She is wearing casual outdoor clothes and learning about different species. The zoo features well-maintained exhibits, educational displays, and viewing areas. Natural lighting provides clear viewing conditions.",
+
+          "park_playground": "A young girl is actively playing in an outdoor playground. She is wearing weather-appropriate clothes and engaging with various equipment. The playground features modern play structures, safety surfaces, and shaded areas. Natural light provides perfect visibility.",
+
+          "picnic_area": "A young girl is enjoying an outdoor picnic with family. She is wearing casual clothes and participating in outdoor dining. The area features picnic tables, clean spaces, and natural surroundings. Natural lighting creates a pleasant outdoor experience.",
+
+          "nature_exploration": "A young girl is discovering natural elements in an outdoor setting. She is wearing exploration-appropriate clothing and observing nature with curiosity. The area features nature trails, discovery points, and learning opportunities. Natural light illuminates exploration activities."
+        },
+        "hobby": {
+          "art_and_craft": "A young girl is creating artistic projects with enthusiasm. She is wearing casual clothes with an art smock, working with various craft materials. The space features craft supplies, work tables, and display areas. Good lighting supports detailed creative work.",
+
+          "painting_class": "A young girl is learning painting techniques. She is wearing art-appropriate clothing and experimenting with colors and styles. The class features easels, art supplies, and instruction space. Natural light provides optimal conditions for color work.",
+
+          "music_practice": "A young girl is developing musical skills with dedication. She is wearing casual clothes and practicing with focused attention. The space features proper acoustics, practice equipment, and instruction areas. Proper lighting illuminates music clearly.",
+
+          "dance_practice": "A young girl is rehearsing dance moves independently. She is wearing practice dance wear and working on technique. The space features mirror walls, proper flooring, and practice music. Good lighting ensures clear movement visibility.",
+
+          "gardening": "A young girl is learning basic gardening skills. She is wearing gardening clothes and working with age-appropriate tools. The garden features raised beds, safe tools, and growing plants. Natural light perfect for outdoor activities.",
+
+          "cooking_class": "A young girl is learning basic cooking skills safely. She is wearing an apron and following cooking instructions carefully. The kitchen features child-safe equipment, preparation areas, and supervision space. Bright lighting ensures safe food preparation."
+        }
+      },
+      "social": {
+        "family": {
+          "family_dinner": "A young girl is participating in family mealtime. She is wearing casual clothes and engaging in family conversation. The dining area features proper table settings, comfortable seating, and family atmosphere. Warm lighting creates a cozy dining environment.",
+
+          "holiday_gathering": "A young girl is celebrating holidays with family. She is wearing festive clothing and participating in family traditions. The space features holiday decorations, gathering areas, and celebration elements. Festive lighting enhances the holiday mood.",
+
+          "weekend_activities": "A young girl is enjoying family weekend time. She is wearing casual clothes and participating in family activities. The setting features family spaces, activity areas, and shared experiences. Natural light enhances daytime activities.",
+
+          "family_travel": "A young girl is experiencing family travel adventures. She is wearing travel-appropriate clothing and discovering new places with family. The settings vary with travel locations and activities. Lighting varies based on location and time.",
+
+          "home_celebration": "A young girl is participating in a special family celebration. She is wearing party clothes and joining in celebration activities. The home features decorations, party elements, and gathering spaces. Special lighting creates a celebratory atmosphere.",
+
+          "family_games": "A young girl is playing games with family members. She is wearing comfortable clothes and enjoying shared game time. The space features game areas, family seating, and play materials. Good lighting ensures clear game visibility."
+        },
+        "friends": {
+          "playdate": "A young girl is enjoying time with friends in a supervised setting. She is wearing play clothes and engaging in shared activities. The play area features age-appropriate toys, activity spaces, and safety considerations. Proper lighting ensures safe play.",
+
+          "birthday_party": "A young girl is participating in a birthday celebration. She is wearing party clothes and enjoying celebration activities. The venue features party decorations, activity stations, and celebration areas. Festive lighting enhances the party atmosphere.",
+
+          "sleepover": "A young girl is having a supervised sleepover with friends. She is wearing comfortable sleepwear and engaging in sleepover activities. The space features sleeping areas, activity spaces, and proper supervision. Adjustable lighting supports evening activities.",
+
+          "group_activities": "A young girl is participating in organized group activities. She is wearing activity-appropriate clothing and interacting with peers. The setting features group spaces, activity materials, and supervision areas. Appropriate lighting for specific activities.",
+
+          "school_events": "A young girl is attending school community events. She is wearing event-appropriate attire and participating in school activities. The venue features event spaces, activity areas, and community gathering spots. Proper lighting supports event activities.",
+
+          "summer_camp": "A young girl is enjoying structured camp activities. She is wearing camp-appropriate clothing and participating in organized programs. The camp features activity areas, safety measures, and supervision spaces. Natural light supports outdoor activities."
+        }
+      }
+    },
+    "young": {
+      "professional": {
+        "office": {
+          "personal_desk": "A young professional woman is working at her modern workspace. She is wearing a stylish blazer with tailored trousers, focused on her dual-monitor setup while managing projects. Her desk features ergonomic accessories, organized documents, and personal touches like a small plant and motivational quotes. Natural light from nearby windows complements the office lighting, creating an ideal work environment.",
+
+          "meeting_room": "A young woman is leading a team meeting in a contemporary conference room. She is wearing a professional dress with a fitted jacket, confidently presenting data on the large display screen. The room features glass walls, modern technology for presentations, and comfortable executive seating. Professional lighting enhances the collaborative atmosphere.",
+
+          "collaborative_space": "A young woman is facilitating a group discussion in an open-plan workspace. She is wearing smart business casual attire with modern accessories, engaging with colleagues around a shared workspace. The area features flexible furniture, whiteboard walls, and informal meeting pods. Natural light floods the creative space.",
+
+          "presentation_room": "A young woman is delivering a keynote presentation in a professional auditorium. She is wearing a well-tailored suit in a contemporary cut, commanding attention while sharing insights. The room features state-of-the-art presentation technology, tiered seating, and professional lighting. Stage lighting highlights her confident presence.",
+
+          "break_room": "A young woman is networking with colleagues in a modern office kitchen. She is wearing business casual attire with a personal style twist, enjoying a coffee while engaging in professional conversation. The space features high-end appliances, comfortable seating areas, and a welcoming atmosphere. Bright lighting creates an energizing environment.",
+
+          "reception_area": "A young woman is greeting visitors in a sleek office lobby. She is wearing professional attire with polished accessories, warmly welcoming clients while managing multiple tasks. The area features modern design elements, comfortable waiting areas, and impressive corporate branding. Designer lighting creates a sophisticated first impression.",
+
+          "private_office": "A young woman is conducting confidential work in her office. She is wearing a professional ensemble that reflects current trends, reviewing important documents at her executive desk. The office features contemporary furniture, a small meeting area, and city views. Task lighting complements natural light from floor-to-ceiling windows.",
+
+          "phone_booth": "A young woman is having a private video call in a soundproof pod. She is wearing smart business attire, engaged in an important virtual meeting. The space features acoustic padding, good ventilation, and technology integration. Optimal lighting ensures professional video quality.",
+
+          "training_room": "A young woman is conducting a professional development session. She is wearing polished business attire, engaging with participants while facilitating learning activities. The room features modern training technology, flexible seating arrangements, and interactive tools. Balanced lighting supports extended learning sessions."
+        },
+        "meetings": {
+          "team_meeting": "A young woman is chairing a dynamic team discussion. She is wearing a modern business ensemble, facilitating dialogue and decision-making with confidence. The space features collaborative technology, comfortable seating, and presentation tools. Professional lighting supports productive interaction.",
+
+          "client_presentation": "A young woman is pitching to potential clients. She is wearing a power suit with contemporary styling, delivering a compelling presentation with poise. The room features premium presentation technology, impressive views, and executive furnishings. Strategic lighting enhances the professional atmosphere.",
+
+          "workshop": "A young woman is leading an interactive workshop session. She is wearing smart casual business attire, guiding participants through creative exercises. The space features movable furniture, multiple display screens, and collaboration tools. Dynamic lighting supports various workshop activities.",
+
+          "training_session": "A young woman is delivering specialized training content. She is wearing professional attire that balances authority with approachability, sharing expertise with engaged participants. The room features learning technology, practice areas, and reference materials. Clear lighting ensures optimal learning conditions.",
+
+          "brainstorming": "A young woman is facilitating an innovation session. She is wearing creative business casual attire, encouraging idea generation and creative thinking. The space features idea capture tools, informal seating, and inspiration boards. Energizing lighting supports creative flow.",
+
+          "video_conference": "A young woman is hosting an international virtual meeting. She is wearing camera-friendly professional attire, coordinating with global team members through high-end conferencing equipment. The space features optimal acoustics, professional backgrounds, and technical support. Perfect lighting ensures professional video quality.",
+
+          "board_meeting": "A young woman is presenting strategic initiatives to senior leadership. She is wearing executive-level business attire, delivering key insights with authority. The boardroom features premium furnishings, advanced presentation capabilities, and impressive architectural details. Sophisticated lighting creates an executive atmosphere.",
+
+          "project_review": "A young woman is leading a detailed project assessment. She is wearing smart business attire, analyzing progress and outcomes with team members. The space features project planning tools, data displays, and collaboration technology. Task lighting supports detailed review work."
+        },
+        "business_trip": {
+          "airport_business": "A young woman is working remotely from an airport lounge. She is wearing travel-smart business attire, managing work tasks while waiting for her flight. The lounge features comfortable workspaces, charging stations, and business amenities. Ambient lighting creates a productive environment.",
+
+          "hotel_stay": "A young woman is preparing for meetings in a business hotel room. She is wearing polished business travel attire, reviewing presentations and making final preparations. The room features a well-appointed work desk, high-speed internet, and business services. Adjustable lighting supports various work needs.",
+
+          "conference_center": "A young woman is networking at an industry conference. She is wearing a standout professional outfit, engaging with peers and industry leaders between sessions. The venue features exhibition spaces, meeting areas, and networking zones. Professional lighting enhances the conference atmosphere.",
+
+          "business_dinner": "A young woman is hosting a client dinner at an upscale restaurant. She is wearing an elegant business outfit, building relationships over fine dining. The setting features sophisticated ambiance, quality service, and intimate seating. Mood lighting creates a refined atmosphere.",
+
+          "networking_event": "A young woman is connecting with industry professionals at a formal reception. She is wearing a fashion-forward business outfit, exchanging ideas and contacts with colleagues. The venue features conversation areas, refreshment stations, and presentation spaces. Ambient lighting supports professional socializing.",
+
+          "trade_show": "A young woman is representing her company at an industry exhibition. She is wearing branded business attire, demonstrating products and engaging with potential clients. The booth features product displays, digital presentations, and meeting space. Strategic lighting highlights key product features.",
+
+          "client_visit": "A young woman is meeting with clients at their office location. She is wearing polished business attire, presenting solutions and building relationships. The setting varies by client but features professional meeting spaces and presentation capabilities. Lighting adapts to each location.",
+
+          "corporate_retreat": "A young woman is participating in company strategic planning. She is wearing upscale casual business attire, contributing to team building and strategic discussions. The venue features both work and relaxation spaces, outdoor areas, and meeting rooms. Natural light complements indoor lighting."
+        },
+        "field_work": {
+          "site_inspection": "A young woman is conducting a professional site evaluation. She is wearing appropriate safety gear over business attire, documenting conditions and taking measurements. The location features inspection points, safety protocols, and technical equipment. Proper lighting ensures thorough inspection.",
+
+          "client_location": "A young woman is consulting with clients on-site. She is wearing industry-appropriate attire with required safety equipment, providing expert guidance while touring facilities. The setting varies by industry but includes operational areas and meeting spaces. Mixed lighting supports various activities.",
+
+          "outdoor_meeting": "A young woman is leading an on-location project discussion. She is wearing weather-appropriate business attire, reviewing plans and progress with team members. The location features project elements, meeting points, and safety provisions. Natural lighting dominates the work environment.",
+
+          "construction_site": "A young woman is overseeing construction progress. She is wearing required safety equipment over professional attire, reviewing plans and inspecting work quality. The site features ongoing construction, safety measures, and project management areas. Work lighting supplements natural light.",
+
+          "research_field": "A young woman is conducting field research and data collection. She is wearing field-appropriate professional attire, gathering and analyzing environmental samples. The location features research equipment, data collection points, and mobile work stations. Natural lighting supports outdoor work.",
+
+          "sales_visit": "A young woman is presenting products at customer locations. She is wearing industry-appropriate business attire, demonstrating solutions and building client relationships. The setting varies but includes presentation spaces and product demonstration areas. Lighting adapts to each location."
+        }
+      },
+      "education": {
+        "university": {
+          "lecture_hall": "A young woman is engaged in an advanced academic lecture. She is wearing smart casual attire, taking detailed notes while following complex presentations. The hall features modern learning technology, comfortable seating, and good acoustics. Balanced lighting supports extended learning sessions.",
+
+          "laboratory": "A young woman is conducting scientific research in a modern lab. She is wearing appropriate lab safety gear, working precisely with specialized equipment. The lab features advanced scientific instruments, safety stations, and research areas. Task lighting ensures accurate work.",
+
+          "seminar_room": "A young woman is participating in an academic discussion. She is wearing professional casual attire, contributing to scholarly debate and analysis. The room features roundtable seating, presentation technology, and research materials. Natural light creates an ideal learning environment.",
+
+          "research_center": "A young woman is working on advanced research projects. She is wearing professional casual attire, analyzing data and conducting experiments. The center features specialized equipment, computer stations, and collaboration areas. Professional lighting supports detailed work.",
+
+          "study_group": "A young woman is collaborating in a peer study session. She is wearing casual but neat attire, sharing knowledge and solving problems with colleagues. The space features study tables, digital resources, and discussion areas. Good lighting supports extended study.",
+
+          "campus_library": "A young woman is conducting academic research. She is wearing comfortable but presentable clothing, accessing both digital and print resources. The library features study carrels, computer stations, and extensive collections. Designed lighting supports various study needs.",
+
+          "computer_lab": "A young woman is working on technical projects. She is wearing casual professional attire, developing complex software solutions. The lab features high-performance computers, technical software, and support resources. Controlled lighting reduces screen glare.",
+
+          "student_lounge": "A young woman is taking a study break in a campus social space. She is wearing casual university attire, balancing relaxation with light study. The lounge features comfortable seating, casual meeting areas, and refreshment options. Warm lighting creates a relaxing atmosphere."
+        },
+        "professional_development": {
+          "training_workshop": "A young woman is engaging in skills development training. She is wearing business casual attire, actively participating in professional learning exercises. The venue features training stations, practice areas, and learning resources. Clear lighting supports learning activities.",
+
+          "certification_course": "A young woman is pursuing professional certification. She is wearing smart casual attire, focusing on intensive course materials. The classroom features testing facilities, learning technology, and reference resources. Professional lighting supports extended study.",
+
+          "online_learning": "A young woman is participating in virtual professional development. She is wearing video-appropriate attire, engaging with online learning platforms. Her setup features a well-equipped home office, dual monitors, and learning materials. Proper lighting ensures good video quality.",
+
+          "skill_development": "A young woman is practicing new professional techniques. She is wearing appropriate attire for the skill type, working with specialized equipment or software. The space features practice areas, instructional materials, and necessary tools. Task lighting supports detailed work.",
+
+          "industry_conference": "A young woman is attending professional development sessions. She is wearing business attire, taking notes during expert presentations. The venue features presentation halls, workshop rooms, and networking spaces. Professional lighting enhances the learning environment.",
+
+          "mentoring_session": "A young woman is meeting with a career mentor. She is wearing professional attire, discussing career development and receiving guidance. The setting features a professional meeting space, career planning materials, and comfortable seating. Warm lighting creates a supportive atmosphere."
+        }
+      },
+      "sports": {
+        "gym": {
+          "weight_training": "A young woman is performing strength training exercises. She is wearing fitted athletic wear, executing proper form with various equipment. The area features weight stations, mirrors, and safety equipment. Bright lighting ensures safe exercise execution.",
+
+          "cardio_area": "A young woman is engaged in high-intensity cardio workout. She is wearing performance athletic wear, maintaining energy on modern cardio equipment. The space features various machines, ventilation systems, and personal entertainment screens. Energizing lighting maintains workout motivation.",
+
+          "group_fitness": "A young woman is participating in a dynamic fitness class. She is wearing coordinated workout gear, following instructor-led routines with precision. The studio features exercise equipment, mirrors, and sound system. Dynamic lighting supports the workout energy.",
+
+          "personal_training": "A young woman is working with a fitness trainer. She is wearing professional athletic wear, following customized exercise programming. The training area features various equipment options, assessment tools, and training space. Professional lighting ensures proper form observation.",
+
+          "yoga_studio": "A young woman is practicing advanced yoga poses. She is wearing yoga-appropriate attire, moving through sequences with control and focus. The studio features bamboo flooring, mirrors, and minimal décor. Adjustable lighting creates a focused atmosphere.",
+
+          "CrossFit_box": "A young woman is performing high-intensity functional training. She is wearing CrossFit-appropriate gear, executing complex movements with power and control. The space features functional equipment, workout zones, and timing displays. Bright lighting supports safe high-intensity training."
+        },
+        "outdoor_sports": {
+          "running_track": "A young woman is training for distance running. She is wearing performance running gear, maintaining form during interval training. The facility features marked lanes, timing equipment, and training areas. Natural lighting provides ideal running conditions.",
+
+          "sports_field": "A young woman is playing team sports. She is wearing appropriate sports uniform, actively participating in competitive play. The field features proper markings, team areas, and spectator spaces. Natural lighting supports daytime sports activities.",
+
+          "tennis_court": "A young woman is playing competitive tennis. She is wearing tennis attire, executing skilled shots during match play. The court features proper surfacing, net systems, and court markings. Natural light provides perfect playing conditions.",
+
+          "basketball_court": "A young woman is playing recreational basketball. She is wearing basketball attire, engaging in an energetic game. The court features proper markings, quality hoops, and playing surface. Even lighting ensures good game visibility.",
+
+          "golf_course": "A young woman is playing a round of golf. She is wearing traditional golf attire, focusing on proper technique and course management. The course features well-maintained greens, tee boxes, and practice areas. Natural lighting highlights course features.",
+
+          "hiking_trail": "A young woman is hiking challenging terrain. She is wearing appropriate hiking gear, navigating trails with confidence and endurance. The trail features natural obstacles, viewpoints, and rest areas. Natural lighting filters through surroundings."
+        },
+        "extreme_sports": {
+          "rock_climbing": "A young woman is scaling challenging climbing routes. She is wearing technical climbing gear, executing precise movements on the wall. The venue features various climbing routes, safety systems, and spotting areas. Proper lighting ensures route visibility.",
+
+          "skateboarding": "A young woman is performing skateboard techniques. She is wearing protective gear with street style, executing tricks with confidence. The park features various ramps, rails, and skating surfaces. Natural light shows terrain clearly.",
+
+          "surfing": "A young woman is riding ocean waves skillfully. She is wearing a wetsuit, maneuvering through water with expert technique. The setting features ocean conditions, beach access, and other surfers. Natural lighting reflects off water surfaces.",
+
+          "snowboarding": "A young woman is navigating snowboard terrain. She is wearing winter sports gear, executing advanced boarding techniques. The slope features various terrain challenges and lift access. Natural light reflects off snow surfaces.",
+
+          "mountain_biking": "A young woman is riding technical mountain trails. She is wearing protective biking gear, handling challenging terrain with skill. The trails feature natural obstacles, elevation changes, and rest points. Natural lighting filters through terrain.",
+
+          "parkour": "A young woman is executing parkour movements. She is wearing flexible athletic wear, moving through urban environments with precision. The setting features various obstacles and training elements. Natural lighting shows obstacle details."
+        }
+      },
+     "social": {
+        "entertainment": {
+          "movie_theater": "A young woman is enjoying a film in a premium cinema. She is wearing stylish casual attire, relaxing in a luxury recliner seat while watching the movie. The theater features state-of-the-art projection, surround sound, and upscale concessions. Ambient lighting provides perfect viewing atmosphere.",
+
+          "comedy_club": "A young woman is enjoying live comedy entertainment. She is wearing trendy evening wear, sharing laughs with friends at a table near the stage. The venue features intimate seating, professional sound system, and table service. Mood lighting creates an ideal comedy club atmosphere.",
+
+          "art_gallery": "A young woman is exploring contemporary art exhibits. She is wearing artistic yet sophisticated attire, discussing art pieces with fellow enthusiasts. The gallery features curated displays, exhibition lighting, and wine service. Gallery lighting perfectly highlights each artwork."
+        },
+        "gatherings": {
+          "house_party": "A young woman is hosting a sophisticated home gathering. She is wearing fashionable hosting attire, mingling with guests while ensuring everyone's comfort. The space features party decorations, curated playlists, and entertainment areas. Mood lighting creates a welcoming party atmosphere.",
+
+          "dinner_party": "A young woman is attending an elegant dinner party. She is wearing a chic dinner outfit, engaging in stimulating conversation around a beautifully set table. The setting features decorative table settings, ambient music, and candlelight. Warm lighting enhances the dining experience.",
+
+          "social_club": "A young woman is participating in an exclusive club event. She is wearing upscale casual attire, networking with other young professionals. The club features modern amenities, social spaces, and entertainment options. Professional lighting sets a sophisticated tone.",
+
+          "game_night": "A young woman is hosting a friends' game evening. She is wearing stylish comfortable attire, facilitating fun competition and social interaction. The space features gaming tables, comfortable seating, and refreshment stations. Proper lighting ensures good game visibility.",
+
+          "weekend_brunch": "A young woman is enjoying a trendy brunch gathering. She is wearing contemporary brunch attire, sharing conversation over creative cuisine and cocktails. The venue features Instagram-worthy décor, outdoor seating, and modern service. Natural light creates perfect brunch ambiance.",
+
+          "barbecue": "A young woman is attending an upscale outdoor gathering. She is wearing chic outdoor attire, socializing while enjoying grilled specialties. The setting features outdoor lounge furniture, mood lighting, and entertainment areas. Natural and decorative lighting create perfect outdoor ambiance."
+        },
+        "dating": {
+          "coffee_date": "A young woman is meeting someone at an artisanal café. She is wearing smart casual attire with personal style, engaging in getting-to-know-you conversation. The café features unique décor, comfortable seating, and artisan beverages. Warm lighting creates an intimate atmosphere.",
+
+          "dinner_date": "A young woman is sharing an upscale dining experience. She is wearing an elegant evening outfit, enjoying sophisticated cuisine and meaningful conversation. The restaurant features romantic ambiance, quality service, and premium wine selection. Candlelight creates perfect dating atmosphere.",
+
+          "outdoor_date": "A young woman is enjoying an active outdoor date. She is wearing stylish athleisure wear, sharing new experiences in a natural setting. The location features scenic views, activity options, and quiet spots for conversation. Natural lighting enhances the outdoor experience.",
+
+          "cultural_date": "A young woman is exploring cultural venues with a date. She is wearing sophisticated casual attire, sharing observations about exhibits or performances. The venue features cultural displays, interactive elements, and artistic atmosphere. Appropriate lighting highlights cultural experiences.",
+
+          "adventure_date": "A young woman is participating in an exciting shared activity. She is wearing appropriate activity wear, enjoying new experiences with enthusiasm. The setting features adventure elements, safety equipment, and unique experiences. Lighting varies based on the activity type.",
+
+          "casual_meetup": "A young woman is meeting for a relaxed first date. She is wearing trendy casual attire, sharing easy conversation in a comfortable setting. The venue features relaxed atmosphere, light refreshments, and conversation-friendly seating. Natural lighting creates a welcoming environment."
+        }
+      }
+    },
+    "middle_aged": {
+      "professional": {
+        "executive": {
+          "executive_office": "A middle-aged woman is working in an elegant corner office. She is wearing a sophisticated designer suit in navy with subtle accessories, reviewing strategic documents at her executive desk. The office features premium furniture, curated art pieces, and a comfortable meeting area with leather chairs. Floor-to-ceiling windows provide natural light while designer lighting creates an atmosphere of authority and success.",
+
+          "board_room": "A middle-aged woman is chairing a board meeting. She is wearing a refined power suit with elegant jewelry, leading discussion from the head of an impressive conference table. The room features mahogany paneling, state-of-the-art presentation technology, and executive seating. Professional lighting emphasizes the gravitas of the setting.",
+
+          "management_meeting": "A middle-aged woman is directing a senior leadership meeting. She is wearing a tailored suit ensemble with distinctive accessories, guiding strategic discussions with confident authority. The meeting space features premium technology, comfortable seating, and city views. Balanced lighting supports extended strategic planning.",
+
+          "corporate_event": "A middle-aged woman is delivering a keynote speech at a major corporate gathering. She is wearing an expertly tailored suit with statement accessories, commanding attention while sharing industry insights. The venue features professional staging, advanced audiovisual systems, and corporate branding. Stage lighting highlights her authoritative presence.",
+
+          "strategic_planning": "A middle-aged woman is leading a high-level planning session. She is wearing refined business attire that reflects her senior position, facilitating critical discussions about future initiatives. The space features planning tools, executive amenities, and collaboration technology. Clear lighting supports detailed strategic work.",
+
+          "stakeholder_meeting": "A middle-aged woman is engaging with key stakeholders. She is wearing a polished business ensemble with subtle elegance, addressing important business matters with experienced confidence. The room features premium furnishings, presentation capabilities, and refreshment service. Professional lighting creates an atmosphere of trust and expertise."
+        },
+        "business_leadership": {
+          "team_leadership": "A middle-aged woman is mentoring her leadership team. She is wearing sophisticated business attire, sharing wisdom gained from years of experience. The setting features a professional meeting space, development materials, and comfortable seating. Warm lighting creates an environment conducive to mentoring.",
+
+          "department_meeting": "A middle-aged woman is directing departmental strategy. She is wearing professional attire that commands respect, leading her team through organizational initiatives. The room features modern technology, planning materials, and collaborative spaces. Clear lighting supports productive discussion.",
+
+          "performance_review": "A middle-aged woman is conducting employee evaluations. She is wearing polished business attire that balances authority with approachability, providing thoughtful feedback to team members. The office features a private meeting area, performance documentation, and a professional yet comfortable atmosphere. Balanced lighting supports focused conversation.",
+
+          "budget_planning": "A middle-aged woman is overseeing annual budget strategy. She is wearing refined business attire, analyzing financial projections with department heads. The room features financial displays, planning software, and discussion areas. Professional lighting supports detailed financial review.",
+
+          "strategy_session": "A middle-aged woman is facilitating corporate strategy development. She is wearing elegant business attire, guiding high-level discussions about organizational direction. The space features strategic planning tools, market analysis displays, and executive amenities. Dynamic lighting supports creative strategic thinking.",
+
+          "client_relationship": "A middle-aged woman is nurturing key client partnerships. She is wearing sophisticated business attire, building trust through experienced interaction. The setting features high-end hospitality, presentation capabilities, and comfortable seating. Warm lighting creates an atmosphere of professional intimacy."
+        },
+        "business_travel": {
+          "international_conference": "A middle-aged woman is representing her organization at a global conference. She is wearing internationally appropriate business attire, networking with global executives. The venue features world-class facilities, translation services, and networking spaces. Professional lighting enhances the international atmosphere.",
+
+          "business_class_travel": "A middle-aged woman is working during business travel. She is wearing comfortable yet polished travel attire, managing work while enjoying premium travel amenities. The cabin features executive seating, business services, and personal space. Ambient lighting creates a productive travel environment.",
+
+          "executive_meeting": "A middle-aged woman is participating in an executive summit. She is wearing refined business attire, engaging in high-level discussions with industry leaders. The location features exclusive meeting spaces, premium amenities, and sophisticated décor. Professional lighting emphasizes the executive environment.",
+
+          "corporate_retreat": "A middle-aged woman is guiding leadership development at a corporate retreat. She is wearing upscale business casual attire, facilitating team building and strategic planning. The retreat features both indoor and outdoor meeting spaces, recreational facilities, and team activities. Natural light complements artificial lighting throughout.",
+
+          "industry_summit": "A middle-aged woman is contributing expertise at an industry leadership summit. She is wearing sophisticated business attire, sharing insights on expert panels. The venue features professional conference facilities, networking areas, and presentation spaces. Dynamic lighting supports various summit activities.",
+
+          "global_partnership": "A middle-aged woman is negotiating international business relationships. She is wearing culturally appropriate business attire, leading cross-cultural negotiations. The setting features formal meeting spaces, cultural elements, and negotiation areas. Professional lighting supports extended discussion sessions."
+        }
+      },
+      "family": {
+        "parenting": {
+          "school_event": "A middle-aged woman is attending her child's academic function. She is wearing polished casual attire, engaging with teachers and other parents. The setting features school facilities, parent gathering areas, and presentation spaces. Lighting appropriate to the specific school event.",
+
+          "sports_game": "A middle-aged woman is supporting her child at athletic events. She is wearing comfortable yet put-together weekend wear, cheering encouragement from the sidelines. The venue features sports facilities, spectator areas, and family seating. Lighting varies based on indoor or outdoor setting.",
+
+          "family_dinner": "A middle-aged woman is hosting a family meal. She is wearing elegant casual attire, creating a warm atmosphere while serving dishes. The setting features a well-appointed dining area, family comfort elements, and thoughtful décor. Warm lighting creates an inviting family atmosphere.",
+
+          "homework_help": "A middle-aged woman is guiding children's studies. She is wearing comfortable home attire, providing patient assistance with academic work. The space features a study area, learning materials, and reference resources. Good lighting supports educational activities.",
+
+          "weekend_activity": "A middle-aged woman is coordinating family weekend plans. She is wearing appropriate casual attire, organizing and participating in family activities. The setting varies based on activity type, featuring family-friendly amenities. Lighting appropriate to the activity and location.",
+
+          "family_vacation": "A middle-aged woman is managing family holiday experiences. She is wearing vacation-appropriate attire, ensuring memorable experiences for all family members. The location features holiday amenities, family accommodations, and recreational opportunities. Natural light enhances vacation experiences."
+        },
+        "home_life": {
+          "home_office": "A middle-aged woman is managing work from an elegant home office. She is wearing professional yet comfortable attire, balancing work responsibilities with home life. The office features a professional desk setup, organized files, and personal touches. Task lighting supports productive work.",
+
+          "family_room": "A middle-aged woman is creating family togetherness in the living space. She is wearing comfortable yet presentable home attire, facilitating family interaction and relaxation. The room features comfortable seating, entertainment options, and family photos. Warm lighting creates a cozy atmosphere.",
+
+          "garden_maintenance": "A middle-aged woman is tending her cultivated garden. She is wearing appropriate gardening attire, maintaining beautiful landscaping with expertise. The garden features mature plants, seating areas, and decorative elements. Natural light perfect for outdoor activities.",
+
+          "home_improvement": "A middle-aged woman is overseeing home enhancement projects. She is wearing practical work clothes, directing home improvements with attention to detail. The setting features project materials, design plans, and safety equipment. Good lighting ensures safe project work.",
+
+          "cooking_dining": "A middle-aged woman is preparing family recipes in a well-equipped kitchen. She is wearing casual but neat attire, cooking with skill and love. The kitchen features quality appliances, cooking equipment, and organization systems. Task lighting illuminates cooking activities.",
+
+          "relaxation_time": "A middle-aged woman is enjoying personal downtime. She is wearing comfortable leisure wear, engaged in preferred relaxation activities. The space features comfortable furniture, personal interests, and relaxation elements. Soft lighting supports peaceful relaxation."
+        }
+      },
+      "social": {
+        "community": {
+          "volunteer_work": "A middle-aged woman is leading community service initiatives. She is wearing appropriate volunteer attire, coordinating activities and inspiring others. The setting features organized work areas, volunteer stations, and coordination spaces. Lighting suitable for specific volunteer activities.",
+
+          "neighborhood_events": "A middle-aged woman is organizing community gatherings. She is wearing smart casual attire, facilitating neighborhood connections and activities. The venue features community spaces, event areas, and social zones. Lighting appropriate for community functions.",
+
+          "cultural_activities": "A middle-aged woman is participating in cultural programs. She is wearing event-appropriate attire, engaging in cultural appreciation and learning. The setting features cultural displays, performance areas, and social spaces. Lighting enhances cultural experiences.",
+
+          "fitness_group": "A middle-aged woman is participating in group exercise activities. She is wearing age-appropriate workout wear, engaging in health-focused exercise. The space features exercise equipment, safety features, and social areas. Well-designed lighting supports safe exercise.",
+
+          "book_club": "A middle-aged woman is hosting a literary discussion group. She is wearing sophisticated casual attire, leading thoughtful book discussions. The setting features comfortable seating, refreshment area, and good acoustics. Warm lighting creates an intimate discussion atmosphere.",
+
+          "garden_club": "A middle-aged woman is sharing horticultural expertise. She is wearing gardening-appropriate attire, demonstrating gardening techniques and knowledge. The garden features demonstration areas, seating, and plant displays. Natural light supports outdoor activities."
+        }
+      },
+      "wellness": {
+        "fitness": {
+          "yoga_class": "A middle-aged woman is practicing advanced yoga poses with grace. She is wearing quality yoga attire in subtle tones, moving through sequences with experienced precision. The studio features bamboo flooring, natural elements, and meditation areas. Soft, adjustable lighting creates a serene atmosphere for practice.",
+
+          "pilates_session": "A middle-aged woman is engaging in a focused Pilates workout. She is wearing fitted exercise wear suitable for precise movements, performing controlled exercises on specialized equipment. The studio features professional Pilates apparatus, mirrors for form checking, and alignment tools. Natural light complements studio lighting for perfect visibility.",
+
+          "personal_training": "A middle-aged woman is working with a professional fitness trainer. She is wearing coordinated athletic wear, following a customized exercise program with attention to form. The training area features age-appropriate equipment, biomechanical assessment tools, and private workout space. Professional lighting ensures proper movement observation.",
+
+          "meditation_class": "A middle-aged woman is participating in guided meditation. She is wearing comfortable, flowing attire, practicing mindfulness techniques in a peaceful setting. The space features meditation cushions, subtle aromatherapy, and minimal décor. Gentle lighting supports deep relaxation.",
+
+          "swimming": "A middle-aged woman is performing aqua fitness exercises. She is wearing a professional swimming ensemble, executing water-based movements with confident technique. The pool features dedicated lap lanes, aqua equipment, and temperature control. Proper pool lighting ensures safe water activities.",
+
+          "fitness_group": "A middle-aged woman is participating in an age-appropriate group fitness class. She is wearing stylish workout attire, engaging in modified high-energy exercises. The space features specialized equipment, safety measures, and social interaction areas. Energizing lighting supports dynamic movement."
+        },
+        "health": {
+          "wellness_check": "A middle-aged woman is attending a comprehensive health consultation. She is wearing smart casual attire, discussing preventive health strategies with healthcare professionals. The medical suite features professional equipment, comfortable consultation areas, and health information displays. Professional lighting supports thorough examination.",
+
+          "nutrition_planning": "A middle-aged woman is consulting with a nutrition specialist. She is wearing business casual attire, reviewing personalized meal plans and dietary recommendations. The consultation room features nutritional displays, planning resources, and assessment tools. Clear lighting supports detailed discussion.",
+
+          "spa_treatment": "A middle-aged woman is receiving therapeutic spa services. She is wearing appropriate spa attire, experiencing professional wellness treatments. The spa features treatment rooms, relaxation areas, and aromatherapy elements. Soft lighting creates a peaceful atmosphere.",
+
+          "health_seminar": "A middle-aged woman is attending a women's health education session. She is wearing smart casual attire, engaging with health information and expert presentations. The venue features presentation areas, discussion spaces, and educational materials. Professional lighting supports learning environment.",
+
+          "fitness_consultation": "A middle-aged woman is discussing personalized fitness goals. She is wearing athletic wear, participating in fitness assessments and planning. The consultation area features testing equipment, planning tools, and private discussion space. Clear lighting supports detailed evaluation.",
+
+          "stress_management": "A middle-aged woman is learning stress reduction techniques. She is wearing comfortable clothing, practicing relaxation methods and mindfulness exercises. The space features calming décor, comfortable seating, and peaceful elements. Gentle lighting promotes relaxation."
+        },
+        "preventive_care": {
+          "physical_therapy": "A middle-aged woman is engaging in preventive physical therapy. She is wearing comfortable exercise clothing, performing therapeutic exercises with professional guidance. The facility features specialized equipment, treatment areas, and exercise spaces. Professional lighting supports proper movement assessment.",
+
+          "massage_therapy": "A middle-aged woman is receiving therapeutic massage treatment. She is wearing spa-provided attire, experiencing professional bodywork for wellness maintenance. The treatment room features ergonomic furniture, soothing décor, and temperature control. Dim lighting creates a therapeutic environment.",
+
+          "acupuncture": "A middle-aged woman is receiving holistic wellness treatment. She is wearing loose, comfortable clothing, experiencing traditional therapeutic techniques. The treatment room features professional equipment, traditional elements, and calming décor. Soft lighting supports relaxation.",
+
+          "chiropractic_care": "A middle-aged woman is attending a chiropractic session. She is wearing comfortable, loose-fitting clothing, receiving professional spinal care. The treatment room features specialized equipment, anatomical displays, and therapeutic tools. Professional lighting supports precise treatment.",
+
+          "nutritional_counseling": "A middle-aged woman is discussing dietary wellness strategies. She is wearing business casual attire, reviewing nutritional plans and lifestyle modifications. The consultation space features educational materials, planning resources, and comfortable seating. Natural light creates an encouraging atmosphere.",
+
+          "wellness_coaching": "A middle-aged woman is meeting with a holistic health coach. She is wearing smart casual attire, discussing comprehensive wellness strategies. The coaching space features comfortable seating, planning materials, and inspiration elements. Warm lighting creates a supportive environment."
+        }
+      }
+    },
+    "elderly": {
+      "daily_life": {
+        "home": {
+          "reading_corner": "An elderly woman is enjoying quiet time in her cozy reading nook. She is wearing a comfortable cardigan and soft slacks, settled in a plush armchair with good back support. Her silver hair is neatly styled, and reading glasses rest gently on her nose as she turns the pages of a book. The corner features a warm table lamp, a side table with tea service, and a soft throw blanket. Large windows provide natural light while sheer curtains filter harsh glare. Family photos and cherished mementos decorate nearby shelves, creating a personal sanctuary.",
+
+          "garden_care": "An elderly woman is tending to her beloved garden with practiced care. She is wearing a wide-brimmed sun hat, light gardening clothes, and protective gloves, using ergonomic tools designed for comfort. Her movements are deliberate and careful as she prunes her prized roses. The garden features raised beds for easy access, a comfortable sitting area for rest breaks, and well-organized tool storage. Bird feeders and wind chimes add sensory pleasure to the space. A nearby water fountain provides soothing sounds and easy access for watering.",
+
+          "home_exercise": "An elderly woman is performing gentle morning exercises in a bright corner of her home. She is wearing comfortable, loose-fitting exercise clothes and supportive shoes. Her movements are mindful and steady, following a routine developed with her physical therapist. The space features a sturdy chair for balance support, a yoga mat with extra cushioning, and resistance bands within easy reach. Large mirrors help her monitor form, while safety rails provide additional security. A tablet displays a senior-focused exercise video, set at her preferred pace.",
+
+          "kitchen_activity": "An elderly woman is preparing a cherished family recipe in her well-organized kitchen. She is wearing a familiar apron over a comfortable dress, her hair neatly secured. Her movements are methodical as she references a handwritten recipe card. The kitchen features lowered countertops for comfortable food preparation, easily accessible appliances, and good task lighting. Family photos and collected recipes decorate the walls, while a comfortable stool provides resting options. The aroma of baking fills the warm, inviting space.",
+
+          "hobby_area": "An elderly woman is engaged in crafting at her dedicated hobby table. She is wearing a comfortable outfit with a craft apron, her reading glasses secured by a decorative chain. Her hands move skillfully as she works on a knitting project or arranges flowers. The space features excellent task lighting, magnifying tools for detailed work, and organized supply storage. A comfortable, ergonomic chair provides good support, while nearby shelves display finished projects. The room has a peaceful atmosphere, with soft music playing.",
+
+          "afternoon_rest": "An elderly woman is taking a comfortable afternoon rest in a sunlit living room. She is wearing a soft sweater set and comfortable slacks, reclined in her favorite chair with automated controls. A small lap blanket provides warmth, while her beloved cat dozes nearby. The room features easy-to-reach lighting controls, a side table with refreshments and medications, and a large-print book within easy reach. Family photos and treasured artwork create a personal atmosphere, while sheers filter the warm afternoon light."
+        },
+        "health": {
+          "medical_checkup": "An elderly woman is attending her regular medical appointment with characteristic grace. She is wearing a neat outfit chosen for both comfort and dignity, with easy-to-manage fastenings. Her medical information is organized in a familiar folder, and she carries a small notebook for questions. The medical office features comfortable seating with sturdy armrests, clear signage, and good lighting. The examination room is warm and welcoming, with accessible equipment and a caring staff who communicate clearly and patiently.",
+
+          "pharmacy_visit": "An elderly woman is consulting with her trusted pharmacist about medication management. She is wearing a smart casual outfit with a light cardigan, carrying her organized medication list in her handbag. The pharmacy features a private consultation area with comfortable seating, good lighting for reading labels, and patient educational materials in large print. The pharmacist takes time to explain each medication clearly, using a pill organizer for demonstration.",
+
+          "physical_therapy": "An elderly woman is participating in therapeutic exercises with determination. She is wearing comfortable, loose-fitting clothes suitable for movement, working with experienced therapists who understand age-specific needs. The facility features specialized equipment adapted for seniors, safety railings throughout, and non-slip flooring. Motivational posters and progress charts provide encouragement, while peaceful music creates a calming atmosphere.",
+
+          "wellness_center": "An elderly woman is attending a senior-focused wellness program. She is wearing appropriate exercise clothing and supportive shoes, participating in activities designed for her ability level. The center features modified exercise equipment, plenty of resting areas, and clear, wide pathways. Trained staff provide attentive support, while social areas encourage interaction with peers. The atmosphere is encouraging and non-competitive.",
+
+          "meditation_session": "An elderly woman is participating in a gentle meditation class designed for seniors. She is wearing loose, comfortable clothing, seated in a specially designed chair that supports good posture. The space features soft lighting, peaceful décor, and temperature control for comfort. Quiet background sounds and aromatherapy create a serene atmosphere, while instructors provide clear, calm guidance.",
+
+          "nutrition_consultation": "An elderly woman is discussing dietary needs with a specialized nutritionist. She is wearing a comfortable outfit with a light jacket, reviewing personalized meal plans and supplement recommendations. The consultation room features easy-to-read educational materials, food models for demonstration, and comfortable seating. The nutritionist provides written instructions in large print and practical advice for easy meal preparation."
+        },
+        "social": {
+          "community_center": "An elderly woman is participating in senior community activities with enthusiasm. She is wearing a coordinated outfit chosen for both style and comfort, engaging warmly with her peers. The center features accessible facilities, comfortable seating areas, and clear acoustics for easy conversation. Activity schedules are posted in large print, while staff provide friendly assistance. The atmosphere is welcoming and inclusive, with various interest groups meeting throughout the day.",
+
+          "senior_club": "An elderly woman is attending her weekly social club meeting with longtime friends. She is wearing a cherished outfit with subtle jewelry, sharing stories and laughter with her social circle. The club features comfortable seating arranged for easy conversation, good lighting, and refreshment services. Card tables and craft areas provide activity options, while photo displays chronicle years of friendship and shared experiences.",
+
+          "religious_service": "An elderly woman is attending her regular religious service with quiet dignity. She is wearing traditional service attire, carefully chosen for the occasion, participating in familiar rituals with deep meaning. The venue features accessible seating, large-print materials, and good acoustics. Longtime friends gather nearby, while younger members offer respectful assistance when needed. The atmosphere is reverent and comforting.",
+
+          "grandchildren_visit": "An elderly woman is spending precious time with her grandchildren. She is wearing a comfortable outfit suited for interactive play, her face bright with joy as she shares family stories. The living space features child-safe areas, comfortable seating for reading together, and displayed artwork from previous visits. Photo albums and special toys are kept within easy reach, while snacks are prepared in advance. The atmosphere is warm and nurturing.",
+
+          "tea_gathering": "An elderly woman is hosting a traditional tea gathering with dear friends. She is wearing an elegant outfit chosen for the occasion, serving tea from her cherished tea service. The setting features comfortable seating arranged for easy conversation, good lighting, and subtle background music. Fresh flowers and traditional treats add to the refined atmosphere, while memories are shared and friendships celebrated.",
+
+          "volunteer_activity": "An elderly woman is contributing her expertise to community volunteer work. She is wearing neat, practical clothing suitable for her chosen activity, sharing wisdom gained from years of experience. The volunteer space features accessible workstations, clear instructions, and support staff nearby. Her contributions are valued and respected, while social connections are strengthened through shared purpose."
+        },
+        "recreation": {
+          "gentle_movement": {
+            "morning_tai_chi": "An elderly woman is practicing tai chi in a peaceful garden setting. She is wearing loose, flowing clothing in natural fabrics, moving with graceful precision through familiar forms. The outdoor space features level ground, good air circulation, and natural beauty. Other practitioners move in harmony nearby, while bird songs provide natural accompaniment. The early morning light creates perfect visibility for safe movement.",
+
+            "water_aerobics": "An elderly woman is participating in a specialized water exercise class. She is wearing a well-fitted swimsuit with a swim cap, moving confidently in the warm water. The pool features easy entry steps, support rails, and trained instructors. The water temperature is carefully maintained for comfort, while flotation devices provide additional security. The atmosphere is encouraging and social.",
+
+            "chair_yoga": "An elderly woman is following a modified yoga practice with a supportive chair. She is wearing comfortable, stretchy clothing, moving mindfully through gentle poses. The studio features non-slip mats, plenty of props, and experienced instructors. Soft music creates a peaceful atmosphere, while mirrors help participants check their alignment. The pace is unhurried and adaptable."
+          },
+          "creative_pursuits": {
+            "art_class": "An elderly woman is expressing creativity in a senior art class. She is wearing a comfortable smock over everyday clothes, working on a watercolor painting with focused attention. The studio features adjustable easels, good lighting, and all supplies within easy reach. Fellow artists share techniques and encouragement, while completed works are displayed with pride. The atmosphere is supportive and inspiring.",
+
+            "music_appreciation": "An elderly woman is attending a classical music performance. She is wearing an elegant outfit chosen for the occasion, listening intently to beloved compositions. The venue features comfortable seating with good acoustics and clear sightlines. Program notes are provided in large print, while ushers offer courteous assistance. The atmosphere is cultured and engaging.",
+
+            "gardening_club": "An elderly woman is sharing horticultural knowledge at a garden club meeting. She is wearing practical gardening attire with a club badge, demonstrating plant care techniques to interested members. The garden features seated demonstration areas, shade protection, and refreshment facilities. Years of experience inform her contributions, while new friendships bloom alongside the flowers."
+          }
+        }
+      }
+    }
+  }
+}

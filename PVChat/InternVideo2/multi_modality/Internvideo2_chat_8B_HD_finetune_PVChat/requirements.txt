@@ -1,0 +1,17 @@
+numpy
+decord
+einops
+pandas
+opencv_python
+peft==0.5.0
+Pillow
+PyYAML
+scipy
+sentencepiece
+timm
+tokenizers
+torch
+torchvision
+transformers
+wandb
+flash_attn
