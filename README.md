@@ -28,7 +28,7 @@ This repository contains the implementation of PVChat, a personalized video chat
 ## To-Do List
 
 - [x] Dataset Expansion
-- [ ] Dataset Organization
+- [x] Dataset Organization
 - [ ] Dataset Expansion Code Optimization
 - [ ] Fine-tuning Code Optimization
 - [ ] HuggingFace Weights Update
@@ -98,6 +98,11 @@ pip install -r environment/requirements_pvchat_python_3.10.0.txt
 conda create -n qwen python=3.10.0
 conda activate qwen
 pip install -r environment/requirements_qwen_python_3.10.0.txt
+```
+
+#### 8. Download our datasets
+```bash
+gdown https://drive.google.com/file/d/1pr-oegxyhtLEr6Z0euEa3v4aGvm79UUZ/view?usp=sharing
 ```
 
 ### 1.2 Code Configuration
