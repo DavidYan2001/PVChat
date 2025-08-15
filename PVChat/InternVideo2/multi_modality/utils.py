@@ -11,10 +11,10 @@ def build_input_ids(tokenizer, conversation, max_length, add_special_tokens,
     start, total_len = 0, 0
 
     while True:
-        # 寻找视频占位符
+        # Look for video placeholders
         index = conversation.find(video_placeholder, start)
 
-        if index == -1:  # 处理最后的文本部分
+        if index == -1:  # Handle the final text section
             inputs = tokenizer(
                 conversation[start:],
                 max_length=max_length - total_len,
@@ -22,13 +22,13 @@ def build_input_ids(tokenizer, conversation, max_length, add_special_tokens,
                 padding=padding,
                 return_tensors=return_tensors
             )
-            # 添加文本部分
+            # Add the text section
             input_ids.append(inputs.input_ids[0])
             attention_mask.append(inputs.attention_mask[0])
             indexs.append(torch.zeros_like(inputs.input_ids[0]))
             break
 
-        else:  # 处理占位符之前的文本
+        else:  # Process the text before the placeholder
             inputs = tokenizer(
                 conversation[start:index],
                 max_length=max_length,
@@ -37,17 +37,17 @@ def build_input_ids(tokenizer, conversation, max_length, add_special_tokens,
                 return_tensors=return_tensors
             )
 
-            # 添加文本部分
+            # Add the text section
             input_ids.append(inputs.input_ids[0])
             attention_mask.append(inputs.attention_mask[0])
-            # 假设视频 token 的长度为 96+16，这里需要根据实际情况调整
+            # Suppose the length of the video token is 96+16. Here, adjustments need to be made according to the actual situation
             input_ids.append(torch.zeros(96 + 16, dtype=torch.long))
             attention_mask.append(torch.ones(96 + 16, dtype=torch.long))
             indexs.append(torch.ones(96 + 16, dtype=torch.bool))
 
             start = index + len(video_placeholder)
 
-    # 拼接所有部分
+    # Assemble all the parts
     input_ids = torch.cat(input_ids, dim=0)
     attention_mask = torch.cat(attention_mask, dim=0)
     indexs = torch.cat(indexs, dim=0).to(torch.bool)

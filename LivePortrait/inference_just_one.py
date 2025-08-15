@@ -5,13 +5,13 @@ import argparse
 
 
 def ensure_dir(directory):
-    """确保目录存在，如果不存在则创建"""
+    """Ensure directory exists, create it if it doesn't exist"""
     Path(directory).mkdir(parents=True, exist_ok=True)
 
 
 def process_single_image(source_image, output_dir, ref_video_dir, liveportrait_path, device_id):
-    """处理单张图片与所有参考视频"""
-    # 获取所有参考视频
+    """Process single image with all reference videos"""
+    # Get all reference videos
     ref_videos = [
         "angry_512.mp4",
         "no_512.mp4",
@@ -20,23 +20,23 @@ def process_single_image(source_image, output_dir, ref_video_dir, liveportrait_p
         "yes_512.mp4"
     ]
 
-    # 确保输出目录存在
+    # Ensure output directory exists
     ensure_dir(output_dir)
 
     total_tasks = len(ref_videos)
-    print(f"源图片: {source_image}")
-    print(f"输出目录: {output_dir}")
-    print(f"找到 {total_tasks} 个参考视频")
+    print(f"Source image: {source_image}")
+    print(f"Output directory: {output_dir}")
+    print(f"Found {total_tasks} reference videos")
 
     for i, video in enumerate(ref_videos, 1):
-        print(f"\n处理进度: {i}/{total_tasks}")
-        print(f"参考视频: {video}")
+        print(f"\nProcessing progress: {i}/{total_tasks}")
+        print(f"Reference video: {video}")
 
-        # 创建以视频名称命名的子目录
+        # Create subdirectory named after the video
         video_output_dir = os.path.join(output_dir, os.path.splitext(video)[0])
         ensure_dir(video_output_dir)
 
-        # 构建完整的命令
+        # Build the complete command
         cmd = [
             "python", "inference.py",
             "-s", source_image,
@@ -45,37 +45,37 @@ def process_single_image(source_image, output_dir, ref_video_dir, liveportrait_p
             "--device-id", str(device_id)
         ]
 
-        # 切换到LivePortrait目录并执行命令
+        # Switch to LivePortrait directory and execute command
         try:
             os.chdir(liveportrait_path)
-            print(f"执行命令: {' '.join(cmd)}")
+            print(f"Executing command: {' '.join(cmd)}")
             subprocess.run(cmd, check=True)
-            print(f"成功处理图片 {source_image} 与视频 {video}")
+            print(f"Successfully processed image {source_image} with video {video}")
         except subprocess.CalledProcessError as e:
-            print(f"处理失败: {e}")
-            print(f"跳过当前任务并继续下一个")
+            print(f"Processing failed: {e}")
+            print(f"Skipping current task and continuing to next")
         except Exception as e:
-            print(f"发生错误: {e}")
-            print(f"跳过当前任务并继续下一个")
+            print(f"Error occurred: {e}")
+            print(f"Skipping current task and continuing to next")
 
 
 def main():
-    # 解析命令行参数
-    parser = argparse.ArgumentParser(description='根据单张图片和参考视频生成动画')
-    parser.add_argument('--source', '-s', required=True, help='源图片的路径')
-    parser.add_argument('--output-dir', '-o', required=True, help='输出目录路径')
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Generate animations based on single image and reference videos')
+    parser.add_argument('--source', '-s', required=True, help='Path to source image')
+    parser.add_argument('--output-dir', '-o', required=True, help='Output directory path')
     parser.add_argument('--base-path', '-b', default='/root/autodl-tmp/yufei',
-                        help='基础路径，包含LivePortrait和参考视频的目录')
-    parser.add_argument('--device-id', '-d', type=int, default=1, help='设备ID')
+                        help='Base path containing LivePortrait and reference video directories')
+    parser.add_argument('--device-id', '-d', type=int, default=1, help='Device ID')
 
     args = parser.parse_args()
 
-    # 设置路径
+    # Set paths
     base_path = args.base_path
     ref_video_dir = f"{base_path}/DeepFaceLab/ref_video"
     liveportrait_path = f"{base_path}/LivePortrait"
 
-    print("开始处理图片...")
+    print("Starting image processing...")
     process_single_image(
         source_image=args.source,
         output_dir=args.output_dir,
@@ -83,7 +83,7 @@ def main():
         liveportrait_path=liveportrait_path,
         device_id=args.device_id
     )
-    print("\n处理完成!")
+    print("\nProcessing completed!")
 
 
 if __name__ == "__main__":

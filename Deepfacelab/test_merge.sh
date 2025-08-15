@@ -1,44 +1,4 @@
 #!/usr/bin/expect -f
-## 设置环境变量
-#ulimit -n 65535
-#
-## 限制 OpenBLAS 线程数
-#export OMP_NUM_THREADS=4
-#export OPENBLAS_NUM_THREADS=4
-#export MKL_NUM_THREADS=4
-#export VECLIB_MAXIMUM_THREADS=4
-#export NUMEXPR_NUM_THREADS=4
-#export CUDA_VISIBLE_DEVICES=0,1
-#WORKSPACE_DIR="/root/autodl-tmp/yufei/DeepFaceLab/workspace"
-#FACE_SWAP_WORKSPACE="$WORKSPACE_DIR/face_swap"
-#
-## 确保输出目录存在
-#mkdir -p "$FACE_SWAP_WORKSPACE/data_dst/merged"
-#mkdir -p "$FACE_SWAP_WORKSPACE/data_dst/merged_mask"
-#
-## 运行合并命令
-## 回答顺序：
-## 1. model1          （模型名称）
-## 2. y               （确认模型）
-## 3. 20              （工作进程数）
-## 4. n               （不使用交互式合并）
-## 第一阶段：初始化模型的输入
-#echo -e "model1\n0\n0\nn\n0\nn\ny\n8\n128\nf\nliae-ud\n256\n64\n64\n22\nn\nn\nn\ny\ny\nn\ny\n0.0\n0.0\n0.0\n0.0\nnone\nn\nn\nn\nn\n4\n" | python main.py merge \
-#    --input-dir "$FACE_SWAP_WORKSPACE/data_dst" \
-#    --output-dir "$FACE_SWAP_WORKSPACE/data_dst/merged" \
-#    --output-mask-dir "$FACE_SWAP_WORKSPACE/data_dst/merged_mask" \
-#    --aligned-dir "$FACE_SWAP_WORKSPACE/data_dst/aligned" \
-#    --model-dir "$FACE_SWAP_WORKSPACE/model" \
-#    --model SAEHD
-#
-#
-#
-#
-#
-#
-## 检查结果
-#echo "Checking merged results..."
-#ls -l "$FACE_SWAP_WORKSPACE/data_dst/merged"
 
 
 
@@ -54,7 +14,7 @@ spawn python main.py merge \
     --model-dir "$face_swap_workspace/model" \
     --model SAEHD
 
-# 自动回答交互问题
+# Automatically answer interactive questions
 expect "Enter a name of a new model :"
 send "model1\r"
 
@@ -142,7 +102,7 @@ send "n\r"
 expect "Enable pretraining mode"
 send "n\r"
 
-# 最后两个问题需要特别设置
+# The last two questions need to be specially set
 expect "Use interactive merger? ( y/n )"
 send "n\r"
 
@@ -152,5 +112,5 @@ send "16\r"
 expect "Choose mode:"
 send "0\r"
 
-# 等待程序运行完成
+# Wait for the program to finish running
 expect eof

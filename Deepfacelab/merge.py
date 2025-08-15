@@ -6,7 +6,7 @@ import select
 
 def interact_with_process(process):
     try:
-        # 只等待并响应交互式合并的问题
+        # Just wait and respond to the issue of interactive merging
         while True:
             # 读取输出
             line = process.stdout.readline()
@@ -15,7 +15,7 @@ def interact_with_process(process):
 
             print(line.strip())
 
-            # 检查是否是交互式合并的提示
+            # Check if it is a prompt for interactive merging
             if "Use interactive merger" in line:
                 print("Sending command: n")
                 process.stdin.write("n\n")

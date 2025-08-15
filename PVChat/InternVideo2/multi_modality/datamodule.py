@@ -5,9 +5,9 @@ from pathlib import Path
 import torch
 from torch.utils.data import DataLoader
 import pytorch_lightning as pl
-from dataset import PersonalizedVideoDataset  # 确保导入正确
-from dataset import collate_fn  # 如果 collate_fn 定义在 dataset.py 中
-# 如果 collate_fn 定义在 utils.py 中，改为:
+from dataset import PersonalizedVideoDataset  # Ensure correct import
+from dataset import collate_fn  # If collate_fn is defined in dataset.py
+# If collate_fn is defined in utils.py, change to:
 # from utils import collate_fn
 
 class PersonalizedVideoDataModule(pl.LightningDataModule):
@@ -45,7 +45,7 @@ class PersonalizedVideoDataModule(pl.LightningDataModule):
         )
 
     def val_dataloader(self):
-        # 如果有验证集，可以在这里定义
+        # If there is a validation set, it can be defined here
         return DataLoader(
             self.test_dataset,
             batch_size=self.batch_size,
@@ -57,7 +57,7 @@ class PersonalizedVideoDataModule(pl.LightningDataModule):
     def test_dataloader(self):
         return DataLoader(
             self.test_dataset,
-            batch_size=1,  # 单个问题逐个测试
+            batch_size=1,  # Test individual questions one by one
             shuffle=False,
             collate_fn=collate_fn
         )

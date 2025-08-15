@@ -16,7 +16,7 @@ def parse_args():
 
 def create_short_video2(input_video_path, output_video_path, num_frames=8):
     """
-    读取输入视频，截取前 num_frames 帧，保存为新视频
+    Read the input video, extract the first num_frames, and save them as a new video
     """
     cap = cv2.VideoCapture(input_video_path)
     if not cap.isOpened():
@@ -24,7 +24,7 @@ def create_short_video2(input_video_path, output_video_path, num_frames=8):
         return False
 
     frames = []
-    # 跳过前 9 帧
+    # Skip the first 9 frames
     for _ in range(9):
         ret, _ = cap.read()
         if not ret:
@@ -32,14 +32,14 @@ def create_short_video2(input_video_path, output_video_path, num_frames=8):
             cap.release()
             return False
 
-    # 读取第 10 帧
+
     ret, tenth_frame = cap.read()
-    cap.release()  # 不再读取后续帧，直接释放
+    cap.release()  # No longer read subsequent frames; release directly
 
     if not ret or tenth_frame is None:
         print("Failed to read the 10th frame.")
         return False
-    # 获取第一帧尺寸，尝试获取原视频FPS，否则默认为30
+    # Get the first frame size and try to obtain the FPS of the original video; otherwise, the default is 30
     height, width, _ = tenth_frame.shape
     fps = 30
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
@@ -52,24 +52,24 @@ def create_short_video2(input_video_path, output_video_path, num_frames=8):
 
 def create_short_video(input_video_path, output_video_path, num_frames=8):
     """
-    从输入视频只读取第一帧，然后把它复制 num_frames 次，保存为新视频
+    Read only the first frame from the input video, then copy it num_frames several times and save it as a new video
     """
     cap = cv2.VideoCapture(input_video_path)
     if not cap.isOpened():
         print(f"Error opening video file: {input_video_path}")
         return False
 
-    # 先读取第一帧
+    # read first frames
     ret, first_frame = cap.read()
-    cap.release()  # 不再读取后续帧，直接释放
+    cap.release()  # No longer read subsequent frames; release directly
 
     if not ret or first_frame is None:
         print("Failed to read the first frame.")
         return False
 
-    # 准备写出：将这第一帧重复 num_frames 次
+    # Repeat this first frame num frames times
     height, width, _ = first_frame.shape
-    fps = 30  # 这里你可以固定为 30，也可以尝试 cap.get(cv2.CAP_PROP_FPS) 是否可行
+    fps = 30  # Here you can fix it at 30, or you can try cap.get(cv2.CAP_PROP_FPS) to see if it works
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     out = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height))
 
@@ -81,7 +81,7 @@ def create_short_video(input_video_path, output_video_path, num_frames=8):
 
 
 def process_videos(input_json_path, sks_name1, sks_name2):
-    # 读取 JSON 文件
+    # read JSON file
     with open(input_json_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
@@ -90,65 +90,64 @@ def process_videos(input_json_path, sks_name1, sks_name2):
         print("No video entries found in JSON.")
         return []
 
-    # 构造新输出文件夹
+    # Construct a new output folder
     folder_name = sks_name1 + "_" + sks_name2 + "_short_video"
     output_folder = os.path.join("/root/autodl-tmp/yufei/DeepFaceLab/output", folder_name)
     os.makedirs(output_folder, exist_ok=True)
     print(f"Output folder created: {output_folder}")
 
-    # 设定一个公共的父目录，用来做相对路径的基准
+    # Set a public parent directory to serve as the benchmark for relative paths
     base_dir = "/root/autodl-tmp/yufei/DeepFaceLab/output"
 
     new_videos = []
     for video in videos:
         orig_video_path = video.get("video_path")
         if not orig_video_path or not os.path.exists(orig_video_path):
-            # 忽略不存在的文件
+
             continue
 
-        # 转为绝对路径
+        # Switch to the absolute path
         abs_video_path = os.path.abspath(orig_video_path)
 
-        # 将路径拆分成各级目录和文件名的列表
+        # Split the path into a list of various levels of directories and file names
         parts = abs_video_path.split(os.sep)
-        # 例: ['', 'root', 'autodl-tmp', 'yufei', 'datasets', 'cekebv-hq', '35666', 'Cixf80-WZX0_3.mp4']
 
-        # 如果想保证一定有至少3级（倒数第3、倒数第2、倒数第1）可用，可以做一个简单判断：
+        # If you want to ensure that at least three levels (the third from the bottom, the second from the bottom, and the first from the bottom) are available, you can make a simple judgment:
         if len(parts) < 3:
             print(f"Warning: path {abs_video_path} has less than 3 segments.")
             continue
 
-        # 取末尾3个
-        #   倒数第3 => parts[-3]  (如 "cekebv-hq")
-        #   倒数第2 => parts[-2]  (如 "35666")
-        #   倒数第1 => parts[-1]  (如 "Cixf80-WZX0_3.mp4")
+        # Take the last three
+        # The third from the bottom => parts[-3] (such as "cekebv-hq")
+        # The second to last => parts[-2] (e.g. "35666")
+        # The last one => parts[-1] (e.g. "Cixf80-WZX0_3.mp4")
         dir_part_1 = parts[-3]
         dir_part_2 = parts[-2]
         base_filename = parts[-1]  # "Cixf80-WZX0_3.mp4"
 
-        # 分离文件名与扩展名
+        # Separate file names from extensions
         filename_no_ext, ext = os.path.splitext(base_filename)
         # filename_no_ext => "Cixf80-WZX0_3"
         # ext             => ".mp4"
 
-        # 拼接成新的文件名: "cekebv-hq_35666_Cixf80-WZX0_3_short_video.mp4"
+        # Concatenate them into new file names: "cekebv-hq_35666_Cixf80-WZX0_3_short_video.mp4"
         new_video_name = f"{dir_part_1}_{dir_part_2}_{filename_no_ext}_short_video{ext}"
 
-        # 拼接得到完整输出路径
+        # The complete output path is obtained by splicing
         new_video_path = os.path.join(output_folder, new_video_name)
         print(f"Processing: {orig_video_path} => {new_video_path}")
 
-        # 调用你的 create_short_video 函数(已改为取第10帧、重复8次)
+        # Call your create_short_video function (it has been changed to take the 10th frame and repeat 8 times)
         success = create_short_video(orig_video_path, new_video_path, num_frames=8)
         if not success:
             continue
 
-        # 更新视频条目
+        # Update video entries
         new_video = video.copy()
         new_video["video_name"] = new_video_name
         new_video["video_path"] = new_video_path
 
-        # 仅保留qa_pairs中 "is_special" 为 True 或者涉及服装描述的问答
+        # Keep only questions in qa_pairs where "is_special" is True or where the clothing description is involved
         special_substrings = [
             "wearing in this video?",
             "outfit in this footage?",
@@ -187,7 +186,7 @@ def main():
     sks_name1 = args.sks1
     sks_name2 = args.sks2
 
-    # 输入 JSON 文件路径（位于 multi_modality 目录下）
+    # Enter the JSON file path (located in the multi_modality directory)
     input_json_path = os.path.join("/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality", f"<{sks_name1}>_<{sks_name2}>.json")
     if not os.path.exists(input_json_path):
         print(f"Input JSON file not found: {input_json_path}")

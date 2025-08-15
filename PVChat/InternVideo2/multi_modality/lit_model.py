@@ -15,11 +15,11 @@ class PersonalizedVideoLightningModule(pl.LightningModule):
     def __init__(self, config_path, sks_name, prefix_tokens, learning_rates, model_config):
         """
         Args:
-            config_path (str): 模型配置路径。
-            sks_name (str): 特殊标记名称，如 "<Bo>"。
-            prefix_tokens (list): 前缀token列表。
-            learning_rates (dict): 各部分学习率。
-            model_config (dict): 模型相关配置。
+            config_path (str): Model configuration path.
+            sks_name (str): Special tag name, such as "<Bo>".
+            prefix_tokens (list): List of prefix tokens.
+            learning_rates (dict): Learning rates for each part.
+            model_config (dict): Model-related configuration.
         """
         super().__init__()
         self.save_hyperparameters()
@@ -38,13 +38,13 @@ class PersonalizedVideoLightningModule(pl.LightningModule):
         )
         self.model.to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
 
-        # 添加特殊tokens
+        # add special tokens
         self.sks_tokens = [sks_name]
         self.prefix_tokens = prefix_tokens
         self.tokenizer.add_tokens(self.sks_tokens + self.prefix_tokens)
         self.model.lm.resize_token_embeddings(len(self.tokenizer))
 
-        # 调整lm_head
+        # adjust lm_head
         if hasattr(self.model.lm, 'lm_head'):
             old_lm_head = self.model.lm.lm_head
             self.model.lm.lm_head = nn.Linear(
@@ -54,7 +54,7 @@ class PersonalizedVideoLightningModule(pl.LightningModule):
             ).to(self.model.lm.device)
             self.model.lm.lm_head.weight.data[:old_lm_head.out_features] = old_lm_head.weight.data
 
-        # 保存原始embedding
+        # save original embedding
         self.orig_embeds = self.model.get_input_embeddings().weight.data.clone()
 
     def forward(self, input_ids, attention_mask, video, labels=None, video_idx=None):
@@ -77,7 +77,7 @@ class PersonalizedVideoLightningModule(pl.LightningModule):
         loss = outputs.loss
         self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True)
 
-        # 保持非个性化token的embedding不变
+        # Keep the embedding of non-personalized tokens unchanged
         with torch.no_grad():
             special_token_ids = self.tokenizer.convert_tokens_to_ids(
                 self.sks_tokens + self.prefix_tokens
@@ -103,7 +103,7 @@ class PersonalizedVideoLightningModule(pl.LightningModule):
         return loss
 
     def test_step(self, batch, batch_idx):
-        # 测试步骤，根据你的需求自定义
+        # Test steps can be customized according to your needs
         outputs = self.model.generate_caption(
             input_ids=batch['input_ids'],
             attention_mask=batch['attention_mask'],
@@ -136,14 +136,14 @@ class PersonalizedVideoLightningModule(pl.LightningModule):
         return optimizer
 
     def on_save_checkpoint(self, checkpoint):
-        # 保存额外的信息
+        # Save additional information
         checkpoint['sks_tokens'] = self.sks_tokens
         checkpoint['prefix_tokens'] = self.prefix_tokens
         checkpoint['learning_rates'] = self.hparams.learning_rates
         checkpoint['model_config'] = self.hparams.model_config
 
     def on_load_checkpoint(self, checkpoint):
-        # 你可以在这里加载额外的信息
+        # You can load additional information here
         self.sks_tokens = checkpoint.get('sks_tokens', self.sks_tokens)
         self.prefix_tokens = checkpoint.get('prefix_tokens', self.prefix_tokens)
         self.hparams.learning_rates = checkpoint.get('learning_rates', self.hparams.learning_rates)

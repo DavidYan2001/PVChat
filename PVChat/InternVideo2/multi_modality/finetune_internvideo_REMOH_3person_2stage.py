@@ -1,5 +1,5 @@
 import pdb
-import random  # 用于random.choice
+import random  # For random.choice
 import os
 import shutil
 import torch
@@ -31,7 +31,7 @@ import re
 import json
 
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger()  # 直接使用根 logger
+logger = logging.getLogger()  # Use root logger directly
 
 
 class LayerLossLogHandler(logging.Handler):
@@ -112,7 +112,7 @@ DEFAULT_VIDEO_TOKEN = "[VIDEOTOKEN]"
 
 DEFAULT_IMG_PLACEHOLDER = "[<IMG_PLH>]"
 DEFAULT_VID_PLACEHOLDER = "[<VID_PLH>]"
-# 设置 HF_TOKEN 环境变量
+# Set HF_TOKEN environment variable
 os.environ["HF_TOKEN"] = os.environ['HF_TOKEN']
 
 
@@ -276,15 +276,12 @@ class PersonalizedVideoDataset(Dataset):
         with open(json_path, 'r') as f:
             data = json.load(f)
         self.videos = data['videos']
-        #self.sks_name = Path(json_path).stem
-        # 获取sks名称 (从json路径中提取)
-        #  self.sks_name = args.sks_name
+
         self.split = split
         self.tokenizer = tokenizer
 
         self.all_qa_pairs = self.flatten_qa_pairs(self.videos)
-        # 如果需要划分训练集和验证集
-        # print(self.all_qa_pairs )
+
 
     def __len__(self):
         return len(self.all_qa_pairs)
@@ -300,12 +297,8 @@ class PersonalizedVideoDataset(Dataset):
         video_idx, qa_pair = self.all_qa_pairs[idx]
         video_data = self.videos[video_idx]
 
-        # 从当前视频数据中获取 sks_name
-        # self.sks_name = video_data['sks_present']
-        # self.sks_name_strip = sks_tokens.strip("<>")  # 获取 "Mi"        self.sks_name = video_data['sks_present']
-        #
-        # 第一个人的判断
-        if 'sks_present' in video_data and video_data['sks_present']:  # 确保键存在且值不为空
+
+        if 'sks_present' in video_data and video_data['sks_present']:  # Make sure the key exists and its value is not empty
             self.sks_name = video_data['sks_present']
             self.sks_name_strip = self.sks_name.strip("<>")
         else:
@@ -313,20 +306,20 @@ class PersonalizedVideoDataset(Dataset):
             self.sks_name_strip = None
 
         # 第二个人的判断
-        if 'sks_present2' in video_data and video_data['sks_present2']:  # 确保键存在且值不为空
+        if 'sks_present2' in video_data and video_data['sks_present2']:  # Make sure the key exists and its value is not empty
             self.sks_name2 = video_data['sks_present2']
             self.sks_name_strip2 = self.sks_name2.strip("<>")
         else:
             self.sks_name2 = None
             self.sks_name_strip2 = None
-        if 'sks_present3' in video_data and video_data['sks_present3']:  # 确保键存在且值不为空
+        if 'sks_present3' in video_data and video_data['sks_present3']:  # Make sure the key exists and its value is not empty
             self.sks_name3 = video_data['sks_present3']
             self.sks_name_strip3 = self.sks_name3.strip("<>")
         else:
             self.sks_name3 = None
             self.sks_name_strip3 = None
 
-        # 加载视频
+        # load video
         video_tensor = load_video(
             video_data['video_path'],
             num_segments=8,
@@ -335,36 +328,27 @@ class PersonalizedVideoDataset(Dataset):
             hd_num=6
         )
 
-        # 随机选择一个QA对
-        # qa_pair = random.choice(video_data['qa_pairs'])
-        # 构建 conversation
+
         question = qa_pair['question']
         answer = qa_pair['answer']
         is_special = qa_pair['is_special']
-        # 替换问题中的占位符
-        # question = qa_pair['question']#.replace(f'<{self.sks_name}>', self.sks_name)
-        # answer = qa_pair['answer']#.replace(f'<{self.sks_name}>', f'<{self.sks_name}>')
 
         if self.split == 'train':
-            # 构建对话格式 - 与chat函数保持一致
+            # Build the dialogue format - consistent with the chat function
             conversation = ""
-            # 注意：训练时可能不需要instruction，但保持格式统一
-            # if instruction:
-            #     conversation += instruction
 
-            # print("video_tensor.shape_1",video_tensor.shape)
             conversation += "[INST] "
 
-            # 添加视频token - 使用相同的格式
-            if video_tensor.shape[1] == 1:  # 单帧，当作图像
+            # Add video tokens - in the same format
+            if video_tensor.shape[1] == 1:  # Single frame, treated as an image
                 ilen = video_tensor.shape[0]
                 conversation += ("<Image>" + IMG_TOKEN + "</Image>") * ilen
-            else:  # 视频
+            else:  # video
                 ilen = video_tensor.shape[1]
                 conversation += ("<Video>" + VID_TOKEN + "</Video>") * ilen
             conversation += "[/INST] "
 
-            #全部加到问题前面
+            # Add all to the front of the question
             sks_name_local='<Cl>'
             sks_name2_local = '<Xo>'
             sks_name3_local = '<Ja>'
@@ -377,7 +361,7 @@ class PersonalizedVideoDataset(Dataset):
             conversation += "[INST]" + "[PERSON]" + sks_and_tokens + "[/PERSON] [PERSON]" + sks_and_tokens2 + "[/PERSON][PERSON]" + sks_and_tokens3 + "[/PERSON]" + question + "[/INST]"
 
 
-            # 添加答案
+            # answer
             conversation += answer + "</s>"
 
             # 3. 使用build_input_ids处理文本
@@ -393,7 +377,7 @@ class PersonalizedVideoDataset(Dataset):
 
             )
 
-            # 准备labels（用于计算生成损失）
+            # Prepare labels (for calculating the generation loss)
 
             labels = tokenized['input_ids'].clone()
             # print("labels",labels)
@@ -401,42 +385,36 @@ class PersonalizedVideoDataset(Dataset):
             Video0_tokens = self.tokenizer.encode("<Video>", add_special_tokens=False)
             Video_tokens = self.tokenizer.encode("/<Video>", add_special_tokens=False)
             VID_TOKEN_tokens = self.tokenizer.encode(VID_TOKEN, add_special_tokens=False)
-            # print("inst0_tokens", inst0_tokens) #[29473, 3]
-            # print("Video0_tokens ", Video0_tokens) #[1291, 12529, 29535]
-            # print("Video_tokens", Video_tokens) # [1500, 29557, 12529, 29535]
-            # print("VID_TOKEN_tokens", VID_TOKEN_tokens) #[1501, 29557, 7568, 29498, 4666, 29537, 29535, 29561]
+
 
             # print("labels.shape",labels.shape) # torch.Size([411])
-            # 找到第二个[/INST]的位置（问题后面的那个）
+            # Find the position of the second [/INST] (the one after the question)
             inst_tokens = self.tokenizer.encode("[/INST]", add_special_tokens=False)
-            # print("inst_tokens",inst_tokens) #[29473, 4]29473是"[/"的token ID 4是"INST]"的token ID
-            # print("torch.where(labels == inst_tokens[-1])",torch.where(labels == inst_tokens[-1])) # (tensor([358, 393]),)
-            inst_end_indices = torch.where(labels == inst_tokens[-1])[0]  # 所以这里相当于只是选了第一个
+
+            inst_end_indices = torch.where(labels == inst_tokens[-1])[0]  # So here it's equivalent to only choosing the first one
             # print("inst_end_indices", inst_end_indices) #[358, 393]
-            second_inst_end = inst_end_indices[1]  # 第二个[/INST]的位置
+            second_inst_end = inst_end_indices[1]  # The second position of [/INST]
             # print("second_inst_end",second_inst_end) #393
-            # 将问题部分和视频token部分的label设为-100
-            labels[:second_inst_end + 1] = -100  # 包括第二个[/INST]之前的所有内容
-            labels[tokenized['index']] = -100  # 视频token位置
+            # Set the labels of the question part and the video token part to -100
+            labels[:second_inst_end + 1] = -100  # Including all the content before the second [/INST]
+            labels[tokenized['index']] = -100  # Video token location
 
         else:
             conversation = ""
-            # 注意：训练时可能不需要instruction，但保持格式统一
-            # if instruction:
-            #     conversation += instruction
+
 
             # print("video_tensor.shape_1",video_tensor.shape)
             conversation += "[INST] "
 
-            # 添加视频token - 使用相同的格式
-            if video_tensor.shape[1] == 1:  # 单帧，当作图像
+            #Add video tokens - in the same format
+            if video_tensor.shape[1] == 1:  # Single frame, treated as an image
                 ilen = video_tensor.shape[0]
                 conversation += ("<Image>" + IMG_TOKEN + "</Image>") * ilen
-            else:  # 视频
+            else:  # video
                 ilen = video_tensor.shape[1]
                 conversation += ("<Video>" + VID_TOKEN + "</Video>") * ilen
             conversation += "[/INST] "
-            # 添加问题和历史对话（如果需要）
+            # Add questions and historical conversations (if necessary)
             sks_name_local = '<Cl>'
             sks_name2_local = '<Xo>'
             sks_name3_local = '<Ja>'
@@ -448,19 +426,7 @@ class PersonalizedVideoDataset(Dataset):
                 [f"<Ja_token{i}>" for i in range(16)]) + " "
             conversation += "[INST]" + "[PERSON]" + sks_and_tokens + "[/PERSON] [PERSON]" + sks_and_tokens2 + "[/PERSON][PERSON]" + sks_and_tokens3 + "[/PERSON]" + question + "[/INST]"
 
-            # if self.sks_name:
-            #     if self.sks_name2:#12都在
-            #         sks_and_tokens = f"[{self.sks_name}]" + 'is' + ''.join([f"<{self.sks_name_strip}_token{i}>" for i in range(16)]) + " "
-            #         sks_and_tokens2 = f"[{self.sks_name2}]" + 'is' + ''.join([f"<{self.sks_name_strip2}_token{i}>" for i in range(16)]) + " "
-            #         conversation += "[INST]" + "[PERSON]" + sks_and_tokens + "[/PERSON] [PERSON]" + sks_and_tokens2 + "[/PERSON]" + question +  "[/INST]"
-            #     else:#1在2不在
-            #         sks_and_tokens = f"[{self.sks_name}]" + 'is' + ''.join([f"<{self.sks_name_strip}_token{i}>" for i in range(16)]) + " "
-            #         conversation += "[INST]" + "[PERSON]" + sks_and_tokens + "[/PERSON]" + question + "[/INST]"
-            # else:#1不在2在
-            #     sks_and_tokens2 = f"[{self.sks_name2}]" + 'is' + ''.join(
-            #         [f"<{self.sks_name_strip2}_token{i}>" for i in range(16)]) + " "
-            #     conversation += "[INST]" + "[PERSON]" + sks_and_tokens2 + "[/PERSON]" + question + "[/INST]"
-            # 3. 使用build_input_ids处理文本
+
             tokenized = build_input_ids(
                 self.tokenizer,
                 conversation,
@@ -472,7 +438,7 @@ class PersonalizedVideoDataset(Dataset):
                 video_placeholder="[<VID_PLH>]"
 
             )
-            labels = None  # 测试时不需要labels
+            labels = None  # labels are not required during testing
         return_dict = {
             'video': video_tensor,
             'input_ids': tokenized['input_ids'],
@@ -495,7 +461,7 @@ class PersonalizedVideoDataset(Dataset):
 
 def collate_fn(batch):
     """
-    整理batch数据
+    Organize batch data
     """
     input_ids = [item['input_ids'] for item in batch]
     attention_mask = [item['attention_mask'] for item in batch]
@@ -505,13 +471,13 @@ def collate_fn(batch):
     answer = [item['answer'] for item in batch]
     is_special = [item['is_special'] for item in batch]
     video_path = [item['video_path'] for item in batch]
-    # 基础数据处理
+    # Basic data processing
     input_ids_padded = rnn_utils.pad_sequence(input_ids, batch_first=True, padding_value=0)
     attention_mask_padded = rnn_utils.pad_sequence(attention_mask, batch_first=True, padding_value=0)
     video_idx_padded = rnn_utils.pad_sequence(video_idx, batch_first=True, padding_value=0)
     videos = torch.stack([video.squeeze(0) if video.shape[0] == 1 else video for video in videos])
 
-    # 准备返回字典
+    # Prepare to return to the dictionary
     batch_dict = {
         'video': videos,
         'input_ids': input_ids_padded,
@@ -522,14 +488,14 @@ def collate_fn(batch):
         'is_special': is_special,
         'video_path': video_path
     }
-    # 训练模式特有的字段
+    # Fields specific to the training mode
     if 'labels' in batch[0]:
         labels = [item['labels'] for item in batch]
         labels_padded = rnn_utils.pad_sequence(labels, batch_first=True, padding_value=-100)
         labels_padded = labels_padded.to(torch.int64)
         batch_dict['labels'] = labels_padded
 
-        # 其他训练特有字段
+        # Other training-specific fields
         batch_dict['is_special'] = torch.tensor([item['is_special'] for item in batch])
         batch_dict['sks_present'] = [item['sks_present'] for item in batch]
         batch_dict['sks_present2'] = [item['sks_present2'] for item in batch]
@@ -538,7 +504,7 @@ def collate_fn(batch):
     return batch_dict
 
 
-# 使用方式
+# usage mode
 def create_dataloader(args):
     dataset = PersonalizedVideoDataset(
         json_path=f"/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality/{args.sks_name}.json",
@@ -569,7 +535,7 @@ def build_input_ids(tokenizer, conversation, max_length, add_special_tokens,
         # 寻找视频占位符
         index = conversation.find(video_placeholder, start)
 
-        if index == -1:  # 处理最后的文本部分
+        if index == -1:  # Handle the final text section
             inputs = tokenizer(
                 conversation[start:],
                 max_length=max_length - total_len,
@@ -577,13 +543,13 @@ def build_input_ids(tokenizer, conversation, max_length, add_special_tokens,
                 padding=padding,
                 return_tensors=return_tensors
             )
-            # 添加文本部分
+            # Add the text section
             input_ids.append(inputs.input_ids[0])
             attention_mask.append(inputs.attention_mask[0])
             indexs.append(torch.zeros_like(inputs.input_ids[0]))
             break
 
-        else:  # 处理占位符之前的文本
+        else:  #Process the text before the placeholder
             inputs = tokenizer(
                 conversation[start:index],
                 max_length=max_length,
@@ -592,30 +558,24 @@ def build_input_ids(tokenizer, conversation, max_length, add_special_tokens,
                 return_tensors=return_tensors
             )
 
-            # 添加文本部分
+            # Add the text section
             input_ids.append(inputs.input_ids[0])
             attention_mask.append(inputs.attention_mask[0])
             indexs.append(torch.zeros_like(inputs.input_ids[0]))
 
-            # 添加视频token位置
+            # Add the video token location
             input_ids.append(torch.zeros(96 + 16+16+16))
             attention_mask.append(torch.ones(96 + 16+16+16))
             indexs.append(torch.ones(96 + 16+16+16))
 
             start = index + len(video_placeholder)
-            #反正是对于视频占位符，输入的index是96+16个1，attention_mask是96+16个1，input_ids是96+16个0
 
 
-    # 拼接所有部分
     input_ids = torch.cat(input_ids, dim=0)
     attention_mask = torch.cat(attention_mask, dim=0)
     indexs = torch.cat(indexs, dim=0).to(torch.bool)
 
-    # 打印每个部分的形状
-    # print(f"Input IDs shape: {input_ids.shape}")
-    # print(f"Attention mask shape: {attention_mask.shape}")
-    # print(f"Index shape: {indexs.shape}")
-    # 连接所有部分
+
     return {
         'input_ids': input_ids,
         'attention_mask': attention_mask,
@@ -664,23 +624,23 @@ def get_args():
 
 def ensure_complete_config(config, reference_config_path):
     """
-    自动检测并补充 config 中的缺失字段，基于参考 JSON 配置文件。
+    Automatically detect and supplement the missing fields in the config based on the reference JSON configuration file.
 
     Args:
-        config: 当前加载的配置对象 (AutoConfig 实例)。
-        reference_config_path: 参考配置文件路径 (JSON 文件)。
+    config: The currently loaded configuration object (AutoConfig instance).
+    reference_config_path: Reference configuration file path (JSON file).
 
     Returns:
-        补充后的 config 对象。
+    The supplemented config object.
     """
     with open(reference_config_path, "r") as f:
-        reference_config = json.load(f)  # 加载完整的 JSON 配置
+        reference_config = json.load(f)  # Load the complete JSON configuration
 
-    # 遍历参考配置文件，补充缺失的字段
+    # Traverse the reference configuration file and supplement the missing fields
     for key, value in reference_config.items():
         if not hasattr(config, key) or getattr(config, key, None) is None:
             print(f"补充字段: {key} -> {value}")
-            setattr(config, key, value)  # 动态添加缺失字段
+            setattr(config, key, value)  # Dynamically add missing fields
 
     return config
 
@@ -693,20 +653,10 @@ def train_epoch(model, train_loader, optimizer, epoch, writer, orig_embeds, toke
 
     with tqdm(total=len(train_loader), desc=f'Epoch {epoch}') as pbar:
         for step, batch in enumerate(train_loader):
-            # print("Video token positions:", batch['input_ids'][batch['video_idx']])
-            # print("Labels:", batch['labels'].unique())
-            # #tensor([ -100, 2,  1040,  1065,  1072,  1083,  1117,  1164,  1224,  1274,  1717,
-            # # 1800,  4566,  4775,  6355, 29417, 29473, 29475, 29491, 29493,
-            # print("Video_idx shape:", batch['video_idx'].shape)   #Video_idx shape: torch.Size([2, 433])
-            # print("attention_mask shape:", batch['attention_mask'].shape) #attention_mask shape: torch.Size([2, 433])
-            # print("Input_ids shape:", batch['input_ids'].shape)    #Input_ids shape: torch.Size([2, 433])
-            # print("Video_idx unique values:", batch['video_idx'].unique()) #Video_idx unique values: tensor([False,  True])
-            # print("Video_idx shape", batch['video_idx'].shape) #Video_idx shape torch.Size([2, 433])
-            # valid_range = (batch['labels'] >= 0) & (batch['labels'] < len(tokenizer))
-            # print("Invalid labels:", batch['labels'][~valid_range])
+
             batch = {key: (value.to(device) if isinstance(value, torch.Tensor) else value) for key, value in
                      batch.items()}
-            # 1. 前向传播
+            # 1. forward
 
             outputs = model(
                 input_ids=batch['input_ids'].cuda(),
@@ -717,34 +667,35 @@ def train_epoch(model, train_loader, optimizer, epoch, writer, orig_embeds, toke
                 sks_present=batch['sks_present'],#.cuda(),
                 sks_present2=batch['sks_present2'],#.cuda()
                 sks_present3 = batch['sks_present3']
-            # .cuda()
+
             )
 
             loss = outputs.loss
             total_loss += loss.item()
 
-            # 2. 反向传播
+            # 2. Back Propagation
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
-            # 3. 保持非个性化token的embedding不变
+            # 3. Keep the embedding of non-personalized tokens unchanged
             with torch.no_grad():
-                # 获取特殊token的索引
+                # Obtain the index of the special token
                 special_token_ids_1 = tokenizer.convert_tokens_to_ids(sks_tokens + prefix_tokens)
                 special_token_ids_2 = tokenizer.convert_tokens_to_ids(sks_tokens2 + prefix_tokens2)
                 special_token_ids_3 = tokenizer.convert_tokens_to_ids(sks_tokens3 + prefix_tokens3)
                 all_special_token_ids = special_token_ids_1 + special_token_ids_2+special_token_ids_3
 
-                # 假设我们在初始化时保存了原始权重
+                # Suppose we saved the original weights during initialization
                 current_embeds = model.get_input_embeddings().weight.data
 
-                # 只保持非特殊token的embedding
+                # Only maintain the embedding of non-special tokens
+
                 keep_indices = torch.ones(current_embeds.size(0), dtype=torch.bool)
                 keep_indices[all_special_token_ids] = False
                 current_embeds[keep_indices] = orig_embeds[keep_indices]
 
-            # 4. 更新进度条和记录
+            # 4. Update the progress bar and records
             pbar.update(1)
             pbar.set_postfix({'loss': loss.item()})
 
@@ -764,22 +715,22 @@ def train_epoch(model, train_loader, optimizer, epoch, writer, orig_embeds, toke
 
 def train(model, config, tokenizer, sks_tokens, sks_tokens2,sks_token3,prefix_tokens,prefix_tokens2,prefix_token3):
     args = get_args()
-    # 设置保存目录
+    # Set the save directory
     save_dir = Path(args.save_dir) / args.sks_name
     save_dir.mkdir(parents=True, exist_ok=True)
     writer = SummaryWriter(Path(args.log_dir) / args.sks_name)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    # 2. 添加特殊tokens
+    # 2. Add special tokens
 
-    # 3. 加载模型
+    # 3. Load the model
 
-    # 第一阶段：使用短视频数据 (_short_train.json)
+    # Phase One: Using Short video data (_short_train.json)
     short_train_json = args.short_train_file
-    # 第二阶段：使用原始数据 (<Pe>.json)
+    #Phase Two: Using the original data (<Pe>.json)
     full_train_json = args.train_file
 
-    # 4. 准备数据加载器
+    # 4. Prepare the data loader
     if os.path.exists(short_train_json):
         short_train_dataset = PersonalizedVideoDataset(
             json_path=short_train_json,
@@ -806,22 +757,22 @@ def train(model, config, tokenizer, sks_tokens, sks_tokens2,sks_token3,prefix_to
         num_workers=4
     )
 
-    # 5. 准备优化器
-    # 保存原始embedding
+    # 5. Prepare the optimizer
+    # save original embedding
     # orig_embeds = model.lm.model.embed_tokens.weight.data.clone()
     orig_embeds = model.get_input_embeddings().weight.data.clone()
-    # 获取原始的词嵌入权重
-    # 克隆一份，以便后续用于恢复那些我们不想修改的 token 的 embedding
-    # 用于在训练过程中保持非个性化 token 的 embedding 不变：
+    # Obtain the original word embedding weights
+    # Clone a copy so that it can be used later to restore the embeddings of those tokens that we don't want to modify
+    # Used to keep the embedding of non-personalized tokens unchanged during the training process:
 
-    # 设置需要训练的参数
-    # 获取新增token的索引
+    # Set the parameters to be trained
+    # Get the index of the newly added token
 
-    # 为每个人物准备token IDs
-    # 1. 直接从config获取token IDs
-    sks_token_ids_1 = tokenizer.convert_tokens_to_ids(sks_tokens + prefix_tokens)  # 第一个人的tokens
-    sks_token_ids_2 = tokenizer.convert_tokens_to_ids(sks_tokens2 + prefix_tokens2)  # 第二个人的tokens
-    sks_token_ids_3 = tokenizer.convert_tokens_to_ids(sks_tokens3 + prefix_tokens3)  # 第二个人的tokens
+    # Prepare token IDs for each character
+    # 1. Obtain the token IDs directly from config
+    sks_token_ids_1 = tokenizer.convert_tokens_to_ids(sks_tokens + prefix_tokens)  # first one tokens
+    sks_token_ids_2 = tokenizer.convert_tokens_to_ids(sks_tokens2 + prefix_tokens2)  # second one tokens
+    sks_token_ids_3 = tokenizer.convert_tokens_to_ids(sks_tokens3 + prefix_tokens3)  # third one tokens
 
     moh_params = []
     qformer_params = []
@@ -831,7 +782,7 @@ def train(model, config, tokenizer, sks_tokens, sks_tokens2,sks_token3,prefix_to
     for name, param in model.qformer.named_parameters():
         if 'router' not in name and 'alpha_proj' not in name:
             qformer_params.append(param)
-    # 获取数据集中的所有人物类型
+    # Obtain all character types in the dataset
     unique_sks_presents = set()
     for video in train_dataset.videos:
         unique_sks_presents.add(video['sks_present'])
@@ -842,7 +793,7 @@ def train(model, config, tokenizer, sks_tokens, sks_tokens2,sks_token3,prefix_to
 
 
     trainable_params = [
-        {'params': model.personal_query_tokens, 'lr': config.personal_token_lr},  # 使用属性访问
+        {'params': model.personal_query_tokens, 'lr': config.personal_token_lr},  # Access using attributes
       #  {'params': model.get_input_embeddings().weight[sks_token_ids], 'lr': config.token_lr},
         {'params': qformer_params, 'lr': config.qformer_lr},
         {'params': moh_params, 'lr': 1e-6},
@@ -864,16 +815,9 @@ def train(model, config, tokenizer, sks_tokens, sks_tokens2,sks_token3,prefix_to
         }
         #{'params': model.qformer.parameters(), 'lr': config.qformer_lr},
     ]
-    # 为每个人物添加对应的token embedding参数
-
-
-    # 这里再加一组
 
     lora_params = [(n, p.shape) for n, p in model.named_parameters() if 'lora' in n.lower()]
-    # print("Found LoRA parameters:")
-    # for name, shape in lora_params:
-    #     print(f"{name}: {shape}")
-    # pdb.set_trace()
+
     if config.model_config['llm']['use_lora']:
         trainable_params.append(
             {'params': [p for n, p in model.named_parameters() if 'lora' in n.lower()],
@@ -889,9 +833,6 @@ def train(model, config, tokenizer, sks_tokens, sks_tokens2,sks_token3,prefix_to
 
     # 7. 训练循环
     best_acc = 0
-    # for name, param in model.named_parameters():
-    #     if 'router' in name or 'alpha_proj' in name:
-    #         print(name, param.requires_grad)
 
     num_blocks = len(model.vision_encoder.blocks)
     for epoch in range(args.num_epochs):
@@ -922,21 +863,21 @@ def train(model, config, tokenizer, sks_tokens, sks_tokens2,sks_token3,prefix_to
             num_workers=4
         )
 
-        # 训练一个epoch
+
         train_loss = train_epoch(model, train_loader, optimizer, epoch, writer, orig_embeds, tokenizer, device,
                                  sks_tokens,sks_tokens2, prefix_tokens, prefix_tokens2)
 
-        # 定期保存checkpoint
+        # Save checkpoints regularly
         if (epoch + 1) % args.save_epochs == 0:
             checkpoint_dir = save_dir / f'checkpoint_epoch_{epoch + 1}'
             checkpoint_dir.mkdir(parents=True, exist_ok=True)
             torch.save(model.state_dict(), checkpoint_dir / 'pytorch_model.bin')
-            # 2. 保存tokenizer
+            # 2. save tokenizer
             tokenizer.save_pretrained(checkpoint_dir)
 
-            # 3. 保存配置
-            config.save_pretrained(checkpoint_dir)  # 会保存config.json
-            tokenizer.save_pretrained(checkpoint_dir)  # 会保存tokenizer相关文件
+            # 3. Save the configuration
+            config.save_pretrained(checkpoint_dir)  # config.json will be saved
+            tokenizer.save_pretrained(checkpoint_dir)  # The relevant files of tokenizer will be saved
             extra_info = {
                 'sks_tokens': sks_tokens,
                 'sks_tokens2': sks_tokens2,
@@ -981,11 +922,11 @@ def train(model, config, tokenizer, sks_tokens, sks_tokens2,sks_token3,prefix_to
 
     torch.save(model.state_dict(), final_save_dir / 'pytorch_model.bin')
 
-    config.save_pretrained(final_save_dir)  # 会保存config.json
-    tokenizer.save_pretrained(final_save_dir)  # 会保存tokenizer相关文件
+    config.save_pretrained(final_save_dir)  # config.json will be saved
+    tokenizer.save_pretrained(final_save_dir)  # The relevant files of tokenizer will be saved
 
-    # 2. 保存模型权重和safetensors文件
-    # 4. 保存额外的训练信息
+    # 2. Save the model weights and safetensors files
+    # 4. Save additional training information
     extra_info = {
         'sks_tokens': sks_tokens,
         'prefix_tokens': prefix_tokens,
@@ -999,7 +940,7 @@ def train(model, config, tokenizer, sks_tokens, sks_tokens2,sks_token3,prefix_to
         }
     }
     torch.save(extra_info, final_save_dir / 'training_info.bin')
-    # 3. 保存其他必要的文件
+    # 3. Save other necessary files
     src_dir = Path(config_path)
     for file_name in ['modeling_base.py', 'modeling_internvideo2.py', 'modeling_videochat2.py'
                                                                       'modeling_qformer_MOH.py', 'flash_attention_class.py',
@@ -1008,7 +949,7 @@ def train(model, config, tokenizer, sks_tokens, sks_tokens2,sks_token3,prefix_to
         if src_file.exists():
             shutil.copy2(src_file, final_save_dir / file_name)
 
-    # 4. 保存训练参数
+    # 4. Save the training parameters
     with open(final_save_dir / 'training_args.json', 'w') as f:
         json.dump({
             'batch_size': config.batch_size,
@@ -1034,36 +975,36 @@ def test(model, tokenizer, test_path, device):
 
     test_loader = DataLoader(
         test_dataset,
-        batch_size=1,  # 单个问题逐个测试
+        batch_size=1,  # Test each individual problem one by one
         shuffle=False,
         collate_fn=collate_fn
     )
 
     model.eval()
 
-    # 使用字典来按video_path分组存储结果
+    # Use the dictionary to group and store the results by video path
     video_results = {}
     with torch.no_grad():
         for batch in test_loader:
             batch = {key: (value.to(device) if isinstance(value, torch.Tensor) else value) for key, value in
                      batch.items()}
-            # 调用 generate_caption 生成答案
+            # Call generate caption to generate the answer
             outputs = model.generate_caption(
                 input_ids=batch['input_ids'],
                 attention_mask=batch['attention_mask'],
-                video=batch['video'],  # 如果是视频
-                video_idx=batch['video_idx'],  # 视频 token 位置索引
+                video=batch['video'],  # If it is a video
+                video_idx=batch['video_idx'],  # Video token location index
                 num_beams=5,
                 max_new_tokens=500,
                 top_k=50,
                 top_p=0.95
             )
             generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-            question = batch['question'][0]  # 获取原问题
-            answer = batch['answer'][0]  # 获取原问题
-            is_special = batch['is_special'][0]  # 假设is_special是标量或张量
-            video_path = batch['video_path'][0]  # 假设video_path是字符串
-            # 创建QA对
+            question = batch['question'][0]  # Get the original question
+            answer = batch['answer'][0]  # Get the original question
+            is_special = batch['is_special'][0]  # Suppose is special is a scalar or tensor
+            video_path = batch['video_path'][0]  # Suppose video path is a string
+            # create QA pairs
             qa_pair = {
                 'question': question,
                 'answer': answer,
@@ -1077,19 +1018,18 @@ def test(model, tokenizer, test_path, device):
                     'qa_pairs': []
                 }
             video_results[video_path]['qa_pairs'].append(qa_pair)
-            # 打印进度信息
+            # Print progress information
             print(f"Question: {question}")
             print(f"Generated Answer: {generated_text}")
             print(f"Original Answer: {answer}")
             print(f"Video Path: {video_path}")
             print("-" * 50)
 
-    # 将字典转换为列表格式
+    #Convert the dictionary to a list format
     final_results = list(video_results.values())
-    # 打印结果
-    # 保存结果到json文件
+
     output = {
-        "model_name": test_path.strip("<>").replace("test.json", ""),  # 从test_path提取模型名称
+        "model_name": test_path.strip("<>").replace("test.json", ""),  # Extract the model name from the test path
         "results": final_results
     }
 
@@ -1109,7 +1049,7 @@ def test(model, tokenizer, test_path, device):
 
 
 def evaluate(model, val_loader, device):
-    """评估函数"""
+    """eval function"""
     model.eval()
     correct = 0
     total = 0
@@ -1139,17 +1079,17 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     if args.mode == "train":
         if args.checkpoint_path:
-            checkpoint_path = args.checkpoint_path  # 这应该是final_model目录的路径
+            checkpoint_path = args.checkpoint_path  # This should be the path to final_model directory
 
-            # 1. 加载config
-            # 1. 加载额外的训练信息(包含special tokens信息)
+            # 1. Load config
+            # 1. Load additional training information (including special tokens information)
             extra_info = torch.load(os.path.join(checkpoint_path, 'training_info.bin'))
             sks_tokens = extra_info['sks_tokens']
             sks_tokens2 = extra_info['sks_tokens2']
             sks_tokens3 = extra_info['sks_tokens3']
             prefix_tokens = extra_info['prefix_tokens']
 
-            # 2.加载config和tokenizer
+            # 2.load config and tokenizer
             config = AutoConfig.from_pretrained(checkpoint_path, trust_remote_code=True)
             tokenizer = AutoTokenizer.from_pretrained(
                 checkpoint_path,
@@ -1157,7 +1097,7 @@ if __name__ == "__main__":
                 use_fast=False
             )
 
-            # 3. 初始化模型（使用原始预训练模型路径）
+            # 3.Initialize the model (using the original pre-trained model path)
             config_path = "/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality/Internvideo2_chat_8B_HD_finetune_RE_MOH_2people"
             model = AutoModel.from_pretrained(
                 config_path,  # 使用原始模型路径
@@ -1166,26 +1106,26 @@ if __name__ == "__main__":
                 torch_dtype=torch.bfloat16
             ).cuda()
 
-            # 4. 扩展词表
+            # 4. Expand the word list
             # print("Vocabulary size before:", len(tokenizer))
 
-            sks_name_strip = sks_tokens[0].strip("<>")  # 获取 "Mi"
-            sks_name_strip2 = sks_tokens2[0].strip("<>")  # 获取 "Mi"\
-            sks_name_strip3 = sks_tokens3[0].strip("<>")  # 获取 "Mi"
+            sks_name_strip = sks_tokens[0].strip("<>")  # get "Mi"
+            sks_name_strip2 = sks_tokens2[0].strip("<>")  # get "Mi"\
+            sks_name_strip3 = sks_tokens3[0].strip("<>")  # get "Mi"
             prefix_tokens = [f'<{sks_name_strip}_token{i}>' for i in
                              range(config.model_config["bridge"]["num_prefix_token"])]
             prefix_tokens2 = [f'<{sks_name_strip2}_token{i}>' for i in
                               range(config.model_config["bridge"]["num_prefix_token"])]
             prefix_tokens3 = [f'<{sks_name_strip3}_token{i}>' for i in
                               range(config.model_config["bridge"]["num_prefix_token"])]
-            person_tokens = ["[PERSON]", "[/PERSON]"]  # 添加人物分隔标记
+            person_tokens = ["[PERSON]", "[/PERSON]"]  # Add character separation markers
             tokenizer.add_tokens(sks_tokens + prefix_tokens)
             tokenizer.add_tokens(sks_tokens2 + prefix_tokens2)
             tokenizer.add_tokens(sks_tokens3 + prefix_tokens3)
             tokenizer.add_tokens(person_tokens)
             # print("Vocabulary size after:", len(tokenizer))
 
-            # 5. 调整模型的embedding大小
+            # 5. Adjust the size of the model's embedding
             model.tokenizer = tokenizer
             model.lm.resize_token_embeddings(len(tokenizer))
             if hasattr(model.lm, 'lm_head'):
@@ -1196,16 +1136,16 @@ if __name__ == "__main__":
                     bias=False
                 ).to(model.lm.device)
 
-            # 6. 加载经过训练的模型权重
+            # 6. Load the weights of the trained model
             model.load_state_dict(torch.load(os.path.join(checkpoint_path, 'pytorch_model.bin')))
 
         config_path = "/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality/Internvideo2_chat_8B_HD_finetune_REMOH_3people"
         config = AutoConfig.from_pretrained(config_path, trust_remote_code=True)
-        reference_config_path = config_path + "/config.json"  # 原始 JSON 配置文件
+        reference_config_path = config_path + "/config.json"  # The original JSON configuration file
 
-        # 自动补充缺失字段
+        # Automatically supplement missing fields
         config = ensure_complete_config(config, reference_config_path)
-        # 1. 初始化模型和tokenizer
+        # 1. Initialize the model and tokenizer
         tokenizer = AutoTokenizer.from_pretrained(
             config_path,
             trust_remote_code=True,
@@ -1219,19 +1159,19 @@ if __name__ == "__main__":
         ).cuda()
 
 
-        # 调整model的token embedding大小
+        # Adjust the size of the token embedding of the model
         sks_tokens = [config.sks_name]  # "<yufei>"
         sks_tokens2 = [config.sks_name2]  # "<yufei>"
         sks_tokens3 = [config.sks_name3]  # "<yufei>"
         # print("Vocabulary size before:", len(tokenizer))
-        sks_name_strip = config.sks_name.strip("<>")  # 获取 "Mi"
-        sks_name_strip2 =config.sks_name2.strip("<>")   # 获取 "Mi"
-        sks_name_strip3 = config.sks_name3.strip("<>")  # 获取 "Mi"
+        sks_name_strip = config.sks_name.strip("<>")  # Get "Mi"
+        sks_name_strip2 =config.sks_name2.strip("<>")   # Get "Mi"
+        sks_name_strip3 = config.sks_name3.strip("<>")  # get "Mi"
         prefix_tokens = [f'<{sks_name_strip}_token{i}>' for i in range(config.model_config["bridge"]["num_prefix_token"])]
         prefix_tokens2 = [f'<{sks_name_strip2}_token{i}>' for i in range(config.model_config["bridge"]["num_prefix_token"])]
         prefix_tokens3 = [f'<{sks_name_strip3}_token{i}>' for i in
                           range(config.model_config["bridge"]["num_prefix_token"])]
-        person_tokens = ["[PERSON]", "[/PERSON]"]  # 添加人物分隔标记
+        person_tokens = ["[PERSON]", "[/PERSON]"]  # Add character separation markers
         tokenizer.add_tokens(sks_tokens + prefix_tokens)
         tokenizer.add_tokens(sks_tokens2 + prefix_tokens2)
         tokenizer.add_tokens(sks_tokens3 + prefix_tokens3)
@@ -1240,7 +1180,7 @@ if __name__ == "__main__":
 
         model.tokenizer = tokenizer
         model.lm.resize_token_embeddings(len(tokenizer))
-        # 如果有必要，也调整lm_head
+        # Adjust the lm head if necessary
         if hasattr(model.lm, 'lm_head'):
             old_lm_head = model.lm.lm_head
             model.lm.lm_head = nn.Linear(
@@ -1251,27 +1191,27 @@ if __name__ == "__main__":
             model.lm.lm_head.weight.data[:old_lm_head.out_features] = old_lm_head.weight.data
         final_save_dir = train(model, config, tokenizer, sks_tokens,sks_tokens2,sks_tokens3, prefix_tokens,prefix_tokens2,prefix_tokens3)
 
-        # 将模型设置为评估模式
+        # Set the model to the evaluation mode
         model.eval()
 
-        # 运行测试
+        # run test
         print("Starting testing...")
 
-        test_path = config.sks_name + "test.json"  # 测试文件路径
+        test_path = config.sks_name + "test.json"  # Test file path
         test_results = test(model, tokenizer, test_path, device)
     elif args.mode == "test":
-        # 仅测试模式
-        checkpoint_path = args.checkpoint_path  # 这应该是final_model目录的路径
+        # for only test
+        checkpoint_path = args.checkpoint_path  # This should be the path to final_model directory
 
-        # 1. 加载config
-        # 1. 加载额外的训练信息(包含special tokens信息)
+        # 1. Load config
+        # 1. Load additional training information (including special tokens information)
         extra_info = torch.load(os.path.join(checkpoint_path, 'training_info.bin'))
         sks_tokens = extra_info['sks_tokens']
         sks_tokens2 = extra_info['sks_tokens2']
         sks_tokens3 = extra_info['sks_tokens3']
         prefix_tokens = extra_info['prefix_tokens']
 
-        # 2.加载config和tokenizer
+        # 2.load config and tokenizer
         config = AutoConfig.from_pretrained(checkpoint_path, trust_remote_code=True)
         tokenizer = AutoTokenizer.from_pretrained(
             checkpoint_path,
@@ -1279,7 +1219,7 @@ if __name__ == "__main__":
             use_fast=False
         )
 
-        # 3. 初始化模型（使用原始预训练模型路径）
+        # 3. Initialize the model (using the original pre-trained model path)
         config_path = "/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality/Internvideo2_chat_8B_HD_finetune_REMOH_3people"
         model = AutoModel.from_pretrained(
             config_path,  # 使用原始模型路径
@@ -1288,12 +1228,11 @@ if __name__ == "__main__":
             torch_dtype=torch.bfloat16
         ).cuda()
 
-        # 4. 扩展词表
-        # print("Vocabulary size before:", len(tokenizer))
 
-        sks_name_strip = sks_tokens[0].strip("<>")  # 获取 "Mi"
-        sks_name_strip2 = sks_tokens2[0].strip("<>")  # 获取 "Mi"
-        sks_name_strip3 = sks_tokens3[0].strip("<>")  # 获取 "Mi"
+
+        sks_name_strip = sks_tokens[0].strip("<>")  # get "Mi"
+        sks_name_strip2 = sks_tokens2[0].strip("<>")  # get "Mi"
+        sks_name_strip3 = sks_tokens3[0].strip("<>")  # get "Mi"
         prefix_tokens = [f'<{sks_name_strip}_token{i}>' for i in
                          range(config.model_config["bridge"]["num_prefix_token"])]
         prefix_tokens2 = [f'<{sks_name_strip2}_token{i}>' for i in
@@ -1307,7 +1246,7 @@ if __name__ == "__main__":
         tokenizer.add_tokens(person_tokens)
         # print("Vocabulary size after:", len(tokenizer))
 
-        # 5. 调整模型的embedding大小
+        # 5. Adjust the size of the model's embedding
         model.tokenizer = tokenizer
         model.lm.resize_token_embeddings(len(tokenizer))
         if hasattr(model.lm, 'lm_head'):
@@ -1318,13 +1257,13 @@ if __name__ == "__main__":
                 bias=False
             ).to(model.lm.device)
 
-        # 6. 加载经过训练的模型权重
+        # 6. Load the weights of the trained model
         model.load_state_dict(torch.load(os.path.join(checkpoint_path, 'pytorch_model.bin')))
 
-        # 4. 设置为评估模式
+        # 4. Set it to the evaluation mode
         model.eval()
 
-        # 运行测试
+        # run test
         print("Starting testing...")
         test_path = sks_tokens[0]+"_" +sks_tokens2[0] +sks_tokens3[0]+"_test.json"
         test_results = test(model, tokenizer, test_path, device)

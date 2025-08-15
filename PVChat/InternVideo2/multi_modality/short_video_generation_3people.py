@@ -23,15 +23,15 @@ def parse_args():
 
 def create_short_video(input_video_path, output_video_path, num_frames=8):
     """
-    从输入视频里【跳过前9帧，读取第10帧】，然后把这帧复制 num_frames 次，保存为新视频。
-    如果你想改为读取第一帧，或者其它帧，可自行修改此函数。
+    From the input video, [skip the first 9 frames and read the 10th frame], then copy this frame num_frames several times and save it as a new video.
+If you want to change to read the first frame or other frames, you can modify this function by yourself.
     """
     cap = cv2.VideoCapture(input_video_path)
     if not cap.isOpened():
         print(f"Error opening video file: {input_video_path}")
         return False
 
-    # 跳过前 9 帧
+    # skip first frames
     for _ in range(9):
         ret, _ = cap.read()
         if not ret:
@@ -39,7 +39,7 @@ def create_short_video(input_video_path, output_video_path, num_frames=8):
             cap.release()
             return False
 
-    # 读取第 10 帧
+    # read 10th frame
     ret, tenth_frame = cap.read()
     cap.release()
 
@@ -47,9 +47,9 @@ def create_short_video(input_video_path, output_video_path, num_frames=8):
         print("[Warning] Failed to read the 10th frame.")
         return False
 
-    # 根据该帧的尺寸/通道数写视频
+    #Write the video based on the size/number of channels of this frame
     height, width, _ = tenth_frame.shape
-    fps = 30  # 固定FPS为30
+    fps = 30  # Fix the FPS at 30
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     out = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height))
 
@@ -62,13 +62,13 @@ def create_short_video(input_video_path, output_video_path, num_frames=8):
 
 def process_videos(input_json_path, sks_name1, sks_name2, sks_name3):
     """
-    1) 读取 input_json_path 对应的 JSON
-    2) 对每个 video, 取其 video_path 并检查是否存在
-    3) 在 /root/autodl-tmp/yufei/DeepFaceLab/output 下建立新文件夹 {sks1}_{sks2}_{sks3}_short_video
-    4) 为每个视频调用 create_short_video => 生成短视频
-    5) 更新 video_name 和 video_path
-    6) 仅保留 qa_pairs 里 is_special=True 或衣着描述相关的问答
-    7) 返回更新后的视频列表
+    1) Read the JSON corresponding to input_json_path
+    2) For each video, take its video_path and check if it exists
+    3) in the/root/autodl - / TMP/yufei DeepFaceLab/create a new folder under the output {sks1} _ {sks2} _ {sks3} _short_video
+    4) For each video, call create_short_video => to generate a short video
+    5) Update video_name and video_path
+    6) Keep only the Q&A related to is_special=True or clothing description in qa_pairs
+    7) Return the updated video list
     """
     if not os.path.exists(input_json_path):
         print(f"[Warning] JSON file not found: {input_json_path}")
@@ -82,7 +82,7 @@ def process_videos(input_json_path, sks_name1, sks_name2, sks_name3):
         print("No 'videos' list found in JSON.")
         return []
 
-    # 创建输出文件夹
+    # Create an output folder
     folder_name = f"{sks_name1}_{sks_name2}_{sks_name3}_short_video"
     output_folder = os.path.join("/root/autodl-tmp/yufei/DeepFaceLab/output", folder_name)
     os.makedirs(output_folder, exist_ok=True)
@@ -90,7 +90,7 @@ def process_videos(input_json_path, sks_name1, sks_name2, sks_name3):
 
     new_videos = []
 
-    # 准备过滤 QA 的关键词
+    # Prepare to filter the keywords of QA
     special_substrings = [
         "wearing in this video?",
         "outfit in this footage?",
@@ -111,13 +111,13 @@ def process_videos(input_json_path, sks_name1, sks_name2, sks_name3):
             print(f"[Warning] Path {abs_video_path} has fewer than 3 segments.")
             continue
 
-        # 取末尾3个
-        dir_part_1 = parts[-3]  # 如 "cekebv-hq"
-        dir_part_2 = parts[-2]  # 如 "35666"
+        # Take the last three
+        dir_part_1 = parts[-3]  # such as "cekebv-hq"
+        dir_part_2 = parts[-2]  # such as "35666"
         base_filename = parts[-1]  # "Cixf80-WZX0_3.mp4"
 
         filename_no_ext, ext = os.path.splitext(base_filename)
-        # 构造新的短视频文件名
+        # Construct new short video file names
         new_video_name = f"{dir_part_1}_{dir_part_2}_{filename_no_ext}_short_video{ext}"
         new_video_path = os.path.join(output_folder, new_video_name)
         print(f"[Info] Processing: {orig_video_path} => {new_video_path}")
@@ -130,7 +130,7 @@ def process_videos(input_json_path, sks_name1, sks_name2, sks_name3):
         new_video["video_name"] = new_video_name
         new_video["video_path"] = new_video_path
 
-        # 保留 QA
+        # save QA
         original_qa = video.get("qa_pairs", [])
         filtered_qa = [
             qa for qa in original_qa
@@ -146,9 +146,9 @@ def process_videos(input_json_path, sks_name1, sks_name2, sks_name3):
 
 def save_new_json(new_videos, input_json_path, sks_name1, sks_name2, sks_name3):
     """
-    将 new_videos 写回 JSON (仍然使用 "videos" 键).
-    输出文件名:  <sks1>_<sks2>_<sks3>_short_train.json
-    存放在 input_json_path 同目录
+    Write new_videos back to JSON (still using the "videos" key).
+    Output file names: <sks1>_<sks2>_<sks3>_short_train.json
+    Store in the same directory as input_json_path
     """
     input_dir = os.path.dirname(input_json_path)
     output_json_name = f"<{sks_name1}>_<{sks_name2}>_<{sks_name3}>_short_train.json"
@@ -168,7 +168,7 @@ def main():
     sks_name2 = args.sks2
     sks_name3 = args.sks3
 
-    # 假设输入 JSON 位于 multi_modality 目录:
+    # Suppose the input JSON is located in the multi modality directory:
     base_dir = "/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality"
     input_json_path = os.path.join(base_dir, f"<{sks_name1}>_<{sks_name2}>_<{sks_name3}>.json")
 

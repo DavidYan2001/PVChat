@@ -2,10 +2,10 @@
 
 class PersonalizedVideoDataset(Dataset):
     def __init__(self, json_path: str, tokenizer, split='train'):
-        # 加载json文件
+        # load json file
         with open(json_path, 'r') as f:
             data = json.load(f)
-        self.videos = data['video']  # 确保顶级键是 'video'
+        self.videos = data['video']  # Make sure the top-level key is 'video'
         self.sks_name = Path(json_path).stem
         self.split = split
         self.tokenizer = tokenizer
@@ -26,7 +26,7 @@ class PersonalizedVideoDataset(Dataset):
         video_idx, qa_pair = self.all_qa_pairs[idx]
         video_data = self.videos[video_idx]
 
-        # 加载视频
+        # load video
         video_tensor = load_video(
             video_data['video_path'],
             num_segments=8,

@@ -78,9 +78,9 @@ class InternVideo2_VideoChat2(BaseMLLM):
             return_visual: bool = False,
             instruction=None,
     ):
-        # text_embeds # 将文本嵌入和视觉特征融合
-        text_embeds = self.lm.get_input_embeddings()(input_ids.long()).detach()  # 获取初始的嵌入向量，因为文本的embedding不需要更新所以直接截断了
-        # 处理图像或视频特征并与文本融合
+        # text embeds # Fuses text embedding and visual features
+        text_embeds = self.lm.get_input_embeddings()(input_ids.long()).detach()  # Obtain the initial embedding vector. Since the embedding of the text does not need to be updated, it is directly truncated
+        # Process image or video features and fuse them with text
         visual = None
         visual_idx = None
 
@@ -105,7 +105,7 @@ class InternVideo2_VideoChat2(BaseMLLM):
             prompt_video_embeds = self.project_up(prompt_video_embeds)  # 投影到所需维度
             prompt_video_embeds = prompt_video_embeds.view(-1, prompt_video_embeds.shape[-1])
             visual_idx = video_idx
-            ## 替换原来的0嵌入,这里相当于原本的一个完整的表示，1的是视频的位置，0是文本的位置
+            ## Replace the original 0 embedding. Here, it is equivalent to a complete representation of the original, where 1 represents the position of the video and 0 represents the position of the text
             text_embeds[video_idx == 1] = text_embeds[video_idx == 1] * 0 + prompt_video_embeds.to(
                 text_embeds.device).to(text_embeds.dtype)
         else:
@@ -114,9 +114,9 @@ class InternVideo2_VideoChat2(BaseMLLM):
         if return_visual:
             return text_embeds, visual, visual_idx
 
-        return text_embeds  # 真实的文本token嵌入+视频的特征
+        return text_embeds  # Real text token embedding + video features
 
-    # 1. 使用vision_encoder提取视频/图像特征
+    # 1. Extract video/image features using vision encoder
     def encode_vision(
             self,
             image,
@@ -135,9 +135,9 @@ class InternVideo2_VideoChat2(BaseMLLM):
         if self.extra_num_query_token > 0:
             query_tokens = torch.cat([self.query_tokens, self.extra_query_tokens], dim=1)
         query_tokens = query_tokens.expand(image_embeds.shape[0], -1, -1)
-        ## 形状变为: [batch_size, num_query_token, vision_width]
+        ## The shape changes: [batch_size, num_query_token, vision_width]
         if instruction is not None:
-            ## 文本token化 (batch_size, text_length)
+            ##Text tokenization  (batch_size, text_length)
             text_Qformer = self.qformer_tokenizer(
                 instruction,
                 padding='longest',
@@ -145,13 +145,13 @@ class InternVideo2_VideoChat2(BaseMLLM):
                 max_length=512,
                 return_tensors="pt",
             ).to(image_embeds.device)
-            ## 为query_tokens创建attention mask
-            # 形状: (batch_size, 36)  # 假设36个query tokens
-            # 合并query和text的attention mask
-            # 形状: (batch_size, 36 + text_length)
+            ## Create an attention mask for query_tokens
+            # Shape: (batch_size, 36) # Suppose there are 36 query tokens
+            # Merge the attention masks of query and text
+            # Shape: (batch_size, 36 + text_length)
             query_atts = torch.ones(query_tokens.size()[:-1], dtype=torch.long).to(image_embeds.device)
             Qformer_atts = torch.cat([query_atts, text_Qformer.attention_mask], dim=1)
-            # 2. 通过Qformer处理视觉特征
+            # 2. . Process visual features through Qformer
 
             query_output = self.qformer.bert(
                 text_Qformer.input_ids,
@@ -167,11 +167,11 @@ class InternVideo2_VideoChat2(BaseMLLM):
                 encoder_hidden_states=image_embeds,
                 encoder_attention_mask=image_atts,
                 return_dict=True,
-            )  # 输出包含了视觉特征的高级语义表示
+            )  # The output contains a high-level semantic representation of visual features
 
         return query_output.last_hidden_state[:, :query_tokens.size(1), :]
 
-    # 使用语言模型生成响应
+    # Generate responses using language models
     def generate_caption(
             self,
             input_ids,
@@ -208,7 +208,7 @@ class InternVideo2_VideoChat2(BaseMLLM):
 
         return outputs
 
-    #  # 将对话内容转换为token，并处理图像/视频占位符
+    #  # Convert the conversation content into tokens and handle image/video placeholders
     def build_input_ids(
             self,
             tokenizer,
@@ -223,28 +223,17 @@ class InternVideo2_VideoChat2(BaseMLLM):
             image_placeholder: str = DEFAULT_IMG_PLACEHOLDER,
             video_placeholder: str = DEFAULT_VID_PLACEHOLDER,
     ):
-        # conversation
-        # [INST] <Video>[<VID_PLH>]</Video> [/INST]  [<VID_PLH>] 是视频占位符(VID_TOKEN)，用于后续替换为视频特征
-        # [INST] Describe what he is doing? [/INST]
 
-        # 多轮对话会变成
-        # [INST] <Video>[<VID_PLH>]</Video> [/INST]
-        # [INST] Describe what he is doing? [/INST] He is playing basketball on the court, dribbling the ball and attempting to shoot.</s>
-        # [INST] What is he wearing? [/INST]
-
-        # 对于每个视觉占位符，分配96个token位置
-        # 使用indexs来追踪哪些位置是视觉token（1）和文本token（0）
-        # 保持了文本的连续性，同时为视觉特征预留了固定大小的空间
-        input_ids = []  # 存储标记化后的ID
-        indexs = []  # 存储位置索引（用于区分文本和视觉token）
-        attention_mask = []  # 存储注意力掩码
-        start, total_len = 0, 0  # 跟踪处理位置和总长度
+        input_ids = []  # Store the tokenized ID
+        indexs = []  # Storage location index (used to distinguish text from visual tokens)
+        attention_mask = []  # Store the attention mask
+        start, total_len = 0, 0  # Track the processing position and total length
         while True:
-            # 寻找下一个图像或视频占位符
+            # Look for the next image or video placeholder
             index1 = conversation.find(image_placeholder, start)
             index2 = conversation.find(video_placeholder, start)
 
-            # 确定下一个要处理的占位符位置
+            # Determine the position of the next placeholder to be processed
             if index1 == -1 and index2 == -1:
                 index = -1
             elif index1 == -1:
@@ -252,51 +241,43 @@ class InternVideo2_VideoChat2(BaseMLLM):
             elif index2 == -1:
                 index = index1
             else:
-                index = min(index1, index2)  # 两种占位符都找到，取最近的，一般只有一个
+                index = min(index1, index2)  # When both types of placeholders are found, take the nearest one, which is usually only one
                 assert index != -1
-            if index == -1:  # 处理最后的文本部分
+            if index == -1:  # Handle the final text section
                 inputs = tokenizer(conversation[start:], max_length=max_length - total_len, truncation=truncation,
                                    padding=padding, return_tensors=return_tensors)
-            else:  # 处理占位符之前的文本
+            else:  #Process the text before the placeholder
                 inputs = tokenizer(conversation[start:index], max_length=max_length, truncation=truncation,
                                    padding='longest', return_tensors=return_tensors)
-            # 添加文本部分的token IDs和attention mask
+            # Add the token IDs and attention mask for the text part
             input_ids += inputs.input_ids
             attention_mask += inputs.attention_mask
             total_len += inputs.input_ids[0].shape[0]
-            indexs += torch.zeros_like(inputs.input_ids)  # 文本部分的索引标记为0
-            # 如果找到占位符，添加视觉token的位置
+            indexs += torch.zeros_like(inputs.input_ids)  # The index tag for the text part is 0
+            # If a placeholder is found, add the position of the visual token
             if index != -1:
-                input_ids += [torch.zeros(96).long()]  # 96个零作为视觉token的占位符
-                attention_mask += [torch.ones(96).long()]  # 对应的attention mask
-                indexs += [torch.ones(96)]  # 标记这96个位置为视觉token
+                input_ids += [torch.zeros(96).long()]  #96 zeros serve as placeholders for the visual token
+                attention_mask += [torch.ones(96).long()]  #The corresponding attention mask
+                indexs += [torch.ones(96)]  # Mark these 96 positions as visual tokens
 
             if index == -1:
                 return {
-                    'input_ids': torch.cat(input_ids),  # 连接所有token IDs  最后这里的input_ids是前面的文本+96个视觉的占位符+后面的文本的
-                    'attention_mask': torch.cat(attention_mask),  # 连接所有attention masks
-                    'index': torch.cat(indexs).to(torch.bool),  # 连接并转换为布尔类型的索引，文本为0，视频为1
+                    'input_ids': torch.cat(input_ids),  # Connect all token IDs. Finally, here the input_ids is the text in front +96 visual placeholders + the text behind
+                    'attention_mask': torch.cat(attention_mask),  # Connect all attention masks
+                    'index': torch.cat(indexs).to(torch.bool),  # Connect and convert to a Boolean type index, with text as 0 and video as 1
                 }
 
-            # input_ids = []
-            # 举例，对于文本 "Describe what [<VID_PLH>] is doing"
-            # input_ids 可能looks like：
-            # [101, 2345, 1234, 0, 0, ...(96个0)..., 0, 4567, 102]
-            #  ↑     ↑     ↑    ←------视频token----→  ↑     ↑
-            # [CLS] Des  what  [     96个占位符     ] doing [SEP]
-            # attention_mask = []
-            # 对应上面的例子，attention_mask可能是：0表示这个位置应该被忽略（比如padding）
-            # [1, 1, 1, 1, 1, ...(96个1)..., 1, 1]
+
             start = index + len(DEFAULT_IMG_PLACEHOLDER)
 
     def chat(
             self,
             tokenizer,
             msg,
-            user_prompt,  # user_prompt 是具体的问题或任务
+            user_prompt,  # A user prompt is a specific question or task
             media_type,
             media_tensor,
-            instruction=None,  # instruction 是一个"背景设定"或"上下文提示"，告诉模型应该如何看这个视频
+            instruction=None,  # instruction is a "background setting" or "context prompt" that tells the model how to view this video
             chat_history=[],
             return_history=False,
             generation_config={},
@@ -310,9 +291,9 @@ class InternVideo2_VideoChat2(BaseMLLM):
         
         conversation += (
                 "[INST]" + " "
-        )  # 添加指令开始标记
+        )  # Add the command start marker
 
-        if media_type == 'image':  # 获取图像数量
+        if media_type == 'image':  # Obtain the number of images
             ilen = media_tensor.shape[0]
             conversation += ("<Image>" + IMG_TOKEN + "</Image>") * ilen
         else:
@@ -321,14 +302,14 @@ class InternVideo2_VideoChat2(BaseMLLM):
 
         conversation += (
                 msg.rstrip() + "[/INST]"
-        )  # 添加额外消息和指令结束标记
+        )  # Add additional messages and instruction end tags
 
         for q, a in chat_history:
-            conversation += (" [INST] " + q + " [/INST]")  # 添加历史问题
-            conversation += (a + "</s>")  # 添加历史回答
-        ## 添加当前问题
+            conversation += (" [INST] " + q + " [/INST]")  # Add historical questions
+            conversation += (a + "</s>")  # Add historical questions
+        ## Add the current issue
         conversation += (" [INST] " + user_prompt + " [/INST]")
-        if answer_prompt:  # 添加回答提示（如果有）:
+        if answer_prompt:  # Add answer prompts (if any) :
             conversation += (answer_prompt)
         else:
             conversation += ("")
@@ -338,7 +319,7 @@ class InternVideo2_VideoChat2(BaseMLLM):
 
         total_len = 0
         indexs = []
-        # 这个可以得到视频+文字的所有的token和mask
+        # This can obtain all the tokens and masks of the video and text
         tokenized = self.build_input_ids(
             tokenizer,
             conversation,
@@ -364,7 +345,7 @@ class InternVideo2_VideoChat2(BaseMLLM):
                 video=media_tensor,
                 instruction=[instruction] * ilen if instruction else None,
                 **generation_config)
-        # 解码生成的文本
+        # Decode the generated text
         response = tokenizer.batch_decode(generation_output, skip_special_tokens=True)[0]
         if return_history:
             chat_history.append((user_prompt, response))

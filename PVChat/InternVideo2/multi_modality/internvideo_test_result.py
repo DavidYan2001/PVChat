@@ -59,7 +59,7 @@ def parse_args():
 
     # 额外可调参数
     parser.add_argument("--videos_per_chunk", type=int, default=5,
-                        help="每次处理多少个视频后重启模型")
+                        help="Restart the model after processing how many videos each time")
     args = parser.parse_args()
     return args
 
@@ -210,8 +210,8 @@ def load_video(video_path, num_segments=8, return_msg=False, resolution=224, hd_
 
 def load_model_and_references(args):
     """
-    加载模型、tokenizer，并把参考视频和参考文字打入模型，返回 (model, tokenizer, chat_history)。
-    每调用一次该函数，就会重新加载模型并重新初始化 chat_history。
+    Load the model and tokenizer, input the reference video and reference text into the model, and return (model, tokenizer, chat_history).
+    Each time this function is called, the model is reloaded and chat_history is reinitialized.
     """
     print("===== Loading tokenizer and model... =====")
     tokenizer = AutoTokenizer.from_pretrained(
@@ -231,10 +231,10 @@ def load_model_and_references(args):
             torch_dtype=torch.bfloat16,
             trust_remote_code=True
         )
-    # 初始化一个空的 chat_history
+    # Initialize an empty chat history
     chat_history = []
 
-    # 依次打入参考视频
+    # Enter the reference videos in sequence
     def process_reference(ref_video, ref_prompt):
         if ref_video and ref_prompt:
             print(f"Processing reference video: {ref_video}")
@@ -256,12 +256,12 @@ def load_model_and_references(args):
                 return_history=True,
                 generation_config={'do_sample': False}
             )
-            # 更新外部的 chat_history
+            # Update the external chat history
             return new_chat_history
         else:
             return chat_history
 
-    # 把参考视频一次打进去，得到最后的 chat_history
+    #Type in the reference video at once to get the final chat history
     chat_history = process_reference(args.ref_video1, args.ref_prompt1)
     chat_history = process_reference(args.ref_video2, args.ref_prompt2)
     chat_history = process_reference(args.ref_video3, args.ref_prompt3)
@@ -271,7 +271,7 @@ def load_model_and_references(args):
 
 def unload_model(model, tokenizer=None, chat_history=None):
     """
-    卸载模型，释放显存
+    Uninstall the model and release the video memory
     """
     del model
     if tokenizer is not None:
@@ -284,19 +284,19 @@ def unload_model(model, tokenizer=None, chat_history=None):
 def main():
     args = parse_args()
 
-    # 加载测试文件
+    # Load the test file
     print(f"Loading test cases from {args.input_json}...")
     with open(args.input_json, 'r') as f:
         test_data = json.load(f)
 
-    # 复制一份数据作为最终输出
+    # Copy a piece of data as the final output
     results_data = test_data.copy()
-    # 结构假设为 results_data["results"] = [ { "video_path":..., "qa_pairs": [...] }, ... ]
 
-    # 准备一次性处理多少个视频
+
+    # Prepare how many videos to process at one time
     num_videos_per_chunk = args.videos_per_chunk
 
-    # 我们需要一个计数器，每处理完 num_videos_per_chunk 个视频后就重启模型
+    # We need a counter to restart the model every time num_videos_per_chunk of video is processed
     video_counter = 0
     model = None
     tokenizer = None
@@ -305,24 +305,24 @@ def main():
     total_videos = len(results_data["results"])
     print(f"Total videos to process: {total_videos}")
 
-    # 遍历每个视频
+    # Traverse each video
     for i, result in enumerate(tqdm(results_data["results"], desc="Processing Videos")):
         video_path = result["video_path"]
 
-        # 判断该视频是否已经处理完
+        # Determine whether the video has been processed
         all_answered = True
         for qa_pair in result.get("qa_pairs", []):
             if "generated_answer" not in qa_pair:
                 all_answered = False
                 break
         if all_answered:
-            # 如果全部回答已经存在，就跳过
+            # If all the answers already exist, skip them
             print(f"  [Skip] Video {video_path} has been fully processed.")
             continue
 
-        # 如果当前还没有模型，或者已经处理了num_videos_per_chunk个，就重新加载模型
+        # If there is no model at present, or num_videos_per_chunks have been processed, reload the model
         if model is None or video_counter == 0:
-            # 如果 model 不为 None，先卸载
+            # If the model is not None, uninstall it first
             if model is not None:
                 unload_model(model, tokenizer, chat_history)
             # 重新加载
@@ -330,9 +330,9 @@ def main():
 
         print(f"Processing video: {video_path}")
 
-        # 推理阶段
+        # inference
         try:
-            # 加载视频张量
+            # load video tensor
             video_tensor = load_video(
                 video_path,
                 num_segments=args.num_segments,
@@ -341,10 +341,10 @@ def main():
             )
             video_tensor = video_tensor.to(model.device)
 
-            # 遍历此视频下的每个问题
+            # Go through each question under this video
             for j, qa_pair in enumerate(result["qa_pairs"]):
                 if "generated_answer" in qa_pair:
-                    continue  # 已有答案就跳过
+                    continue  #Skip it if you already have the answer
 
                 question = qa_pair["question"]
                 print(f"  Question: {question}")
@@ -362,35 +362,35 @@ def main():
                     )
                 except RuntimeError as e:
                     print(f"  Encountered RuntimeError: {e}")
-                    # 先写回已有结果，然后抛出异常
+                    # First, write back the existing results, and then throw an exception
                     with open(args.output_json, 'w') as f:
                         json.dump(results_data, f, indent=2)
                     raise e
 
-                # 保存答案
+                # Save the answer
                 results_data["results"][i]["qa_pairs"][j]["generated_answer"] = response
                 print(f"  Response: {response}")
 
-                # 更新 chat_history
+                # updata chat_history
                 chat_history = new_chat_history
 
         finally:
-            # 无论成功或失败，都释放视频相关的显存
+            # Whether it succeeds or fails, release the video memory related to the video
             if 'video_tensor' in locals():
                 del video_tensor
             torch.cuda.empty_cache()
 
-        # 每处理完一个视频就保存局部结果（防止意外终止）
+        # Save the local result after processing each video (to prevent accidental termination)
         with open(args.output_json, 'w') as f:
             json.dump(results_data, f, indent=2)
 
-        # 视频计数 +1
+        # Video count +1
         video_counter += 1
-        # 如果达到阈值，就重置计数器，使得下一个视频会触发重载模型
+        # If the threshold is reached, reset the counter so that the next video will trigger the reloading model
         if video_counter == num_videos_per_chunk:
             video_counter = 0
 
-    # 循环结束后，如果还存在模型也可以卸载
+    # After the loop ends, if the model still exists, it can also be uninstalled
     if model is not None:
         unload_model(model, tokenizer, chat_history)
 

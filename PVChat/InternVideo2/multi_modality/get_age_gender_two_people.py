@@ -52,7 +52,7 @@ def HD_transform_padding(frames, image_size=224, hd_num=6):
     _, _, H, W = frames.shape
     trans = False
     if W < H:
-        # 交换维度
+        # Swap dimensions
         frames = frames.flip(-2, -1)
         trans = True
         width, height = H, W
@@ -90,7 +90,7 @@ def find_closest_aspect_ratio(aspect_ratio, target_ratios, width, height, image_
             best_ratio_diff = ratio_diff
             best_ratio = ratio
         elif ratio_diff == best_ratio_diff:
-            # 可自行根据需要来决定如何处理并列情况
+            # You can decide how to handle ties based on your needs
             if area > 0.5 * image_size * image_size * ratio[0] * ratio[1]:
                 best_ratio = ratio
     return best_ratio
@@ -161,7 +161,7 @@ def load_video(video_path, num_segments=8, return_msg=False, resolution=224, hd_
 def parse_gender_age(response):
     resp = response.lower()
 
-    # 优先检测 "woman"/"female" 再看 "man"/"male"
+    # First check "woman"/"female" then check "man"/"male"
     if "woman" in resp or "female" in resp:
         gender = "female"
     elif "man" in resp or "male" in resp:
@@ -192,7 +192,7 @@ def parse_age(response):
     return age
 
 def read_train_test_json(train_path, test_path):
-    """读取 train.json 和 test.json，返回其数据结构。"""
+    """Read train.json and test.json, return their data structures."""
     with open(train_path, 'r', encoding='utf-8') as f:
         train_data = json.load(f)
     with open(test_path, 'r', encoding='utf-8') as f:
@@ -201,8 +201,8 @@ def read_train_test_json(train_path, test_path):
 
 def build_sample_type_map(train_data, test_data):
     """
-    生成一个 dict: video_name -> sample_type
-    方便在处理视频时，查这个视频是 'person1' / 'person2' / 'both' / 'random'。
+    Generate a dict: video_name -> sample_type
+    For easy lookup of whether a video is 'person1' / 'person2' / 'both' / 'random' when processing.
     """
     sample_type_map = {}
     combined = train_data['data'] + test_data['data']
@@ -214,7 +214,7 @@ def build_sample_type_map(train_data, test_data):
 
 def update_json_files(train_path, test_path, video_data):
     """
-    将 video_data 中的 gender, age, gender2, age2 写回 train.json 和 test.json。
+    Write gender, age, gender2, age2 from video_data back to train.json and test.json.
     video_data[video_name] = {
        'gender': ...,
        'age': ...,
@@ -232,10 +232,10 @@ def update_json_files(train_path, test_path, video_data):
             video_name = item['video_name']
             if video_name in video_data:
                 info = video_data[video_name]
-                # 更新 gender, age
+                # Update gender, age
                 item['gender'] = info.get('gender')
                 item['age'] = info.get('age')
-                # 新增 gender2, age2
+                # Add gender2, age2
                 item['gender2'] = info.get('gender2')
                 item['age2'] = info.get('age2')
 
@@ -246,10 +246,10 @@ def update_json_files(train_path, test_path, video_data):
 
 def inference_on_video(video_path, model, tokenizer):
     """
-    给定单个视频文件路径，通过 InternVideo 模型推断得到 (gender, age)。
-    如果没有识别到 age，会多问几次。
+    Given a single video file path, infer (gender, age) through the InternVideo model.
+    If age is not recognized, it will ask again a few times.
     """
-    # 加载视频张量
+    # Load video tensor
     video_tensor = load_video(
         video_path, num_segments=8,
         return_msg=False, resolution=224, hd_num=6
@@ -257,7 +257,7 @@ def inference_on_video(video_path, model, tokenizer):
     if torch.cuda.is_available():
         video_tensor = video_tensor.to(model.device)
 
-    # 发起推断
+    # Initiate inference
     chat_history = []
     response, chat_history = model.chat(
         tokenizer,
@@ -271,7 +271,7 @@ def inference_on_video(video_path, model, tokenizer):
     )
     gender, age = parse_gender_age(response)
 
-    # 若没识别到 age，则继续问，最多 3 次
+    # If age is not recognized, continue asking, up to 3 times
     retry_count = 0
     while age is None and retry_count < 3:
         response, chat_history = model.chat(
@@ -296,18 +296,18 @@ def inference_on_video(video_path, model, tokenizer):
 def main():
     args = get_args()
 
-    # 路径
+    # Paths
     train_path = "/root/autodl-tmp/yufei/datasets/cekebv-hq/train_"+args.sks1+'_'+args.sks2+'.json'
     test_path = "/root/autodl-tmp/yufei/datasets/cekebv-hq/test_"+args.sks1+'_'+args.sks2+'.json'
     video_dir = "/root/autodl-tmp/yufei/DeepFaceLab/data_src"
     qa_model_path = '/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality/InternVideo2_chat_8B_HD'
     token = os.environ['HF_TOKEN']
 
-    # 读取 JSON 数据，以获取每个视频的 sample_type
+    # Read JSON data to get sample_type for each video
     train_data, test_data = read_train_test_json(train_path, test_path)
     sample_type_map = build_sample_type_map(train_data, test_data)
 
-    # 初始化模型
+    # Initialize model
     tokenizer = AutoTokenizer.from_pretrained(
         qa_model_path,
         trust_remote_code=True,
@@ -328,20 +328,20 @@ def main():
             trust_remote_code=True
         )
 
-    # 收集结果的 dict: { video_name: {gender, age, gender2, age2} }
+    # Dict to collect results: { video_name: {gender, age, gender2, age2} }
     video_data = {}
 
-    # 获取所有 mp4 文件列表
+    # Get list of all mp4 files
     video_files = [f for f in os.listdir(video_dir) if f.endswith('.mp4')]
 
     for video_file in video_files:
         print(f"\n=== Processing {video_file}... ===")
         video_path = os.path.join(video_dir, video_file)
 
-        # 根据 sample_type 判断是否双人
+        # Check if it's a two-person video based on sample_type
         stype = sample_type_map.get(video_file, None)
 
-        # 如果在 JSON 中找不到，就跳过或给默认值
+        # If not found in JSON, skip or give default value
         if stype is None:
             print(f"Warning: {video_file} not found in train/test JSON. Skipping or set default.")
             video_data[video_file] = {
@@ -353,13 +353,13 @@ def main():
             continue
 
         if stype == "both":
-            # 原逻辑是写死，这里改为真实读取 groups/human_0.mp4 & human_1.mp4
+            # Original logic was hardcoded, now changed to actually read groups/human_0.mp4 & human_1.mp4
             video_folder = os.path.splitext(video_file)[0]  # e.g. "Sheldon&Howard2"
             group_dir = os.path.join("/root/autodl-tmp/yufei/DeepFaceLab/output", video_folder, "groups")
             human0_path = os.path.join(group_dir, "human_0.mp4")
             human1_path = os.path.join(group_dir, "human_1.mp4")
 
-            # 检查两个文件是否存在
+            # Check if both files exist
             if not os.path.exists(human0_path) or not os.path.exists(human1_path):
                 print(f"Warning: Both sub-videos for {video_file} not found. Skipping.")
                 video_data[video_file] = {
@@ -371,13 +371,13 @@ def main():
                 continue
 
             try:
-                # 分别做推断
+                # Perform inference separately
                 print(f" -> Inferring {human0_path}")
                 g0, a0 = inference_on_video(human0_path, model, tokenizer)
                 print(f" -> Inferring {human1_path}")
                 g1, a1 = inference_on_video(human1_path, model, tokenizer)
 
-                # 根据 trace 决定 person1/person2 分配
+                # Assign person1/person2 based on trace flag
                 if args.trace:
                     # human_0 -> person1, human_1 -> person2
                     video_data[video_file] = {
@@ -387,7 +387,7 @@ def main():
                         'age2': a1
                     }
                 else:
-                    # 反过来
+                    # Reversed
                     video_data[video_file] = {
                         'gender': g1,
                         'age': a1,
@@ -406,7 +406,7 @@ def main():
             continue
 
         elif stype == "random":
-            # 这是负例，可能两人都不出现，也可能不需要识别
+            # This is a negative example, both people may not appear, or recognition may not be needed
             print(f"Video {video_file} is 'random' negative. Skipping inference or set them empty.")
             video_data[video_file] = {
                 'gender': None,
@@ -417,11 +417,11 @@ def main():
             continue
 
         else:
-            # stype == 'person1' 或 'person2' => 正常单人视频 => 继续原推断
+            # stype == 'person1' or 'person2' => normal single person video => continue with original inference
             try:
 
                 gender, age = inference_on_video(video_path, model, tokenizer)
-                # 单人视频没有 gender2, age2
+                # Single person video doesn't have gender2, age2
                 video_data[video_file] = {
                     'gender': gender,
                     'age': age,
@@ -431,7 +431,7 @@ def main():
 
             except Exception as e:
                 print(f"Error processing {video_file}: {str(e)}")
-                # 给个缺省
+                # Give default value
                 video_data[video_file] = {
                     'gender': None,
                     'age': None,
@@ -440,7 +440,7 @@ def main():
                 }
                 continue
 
-    # 最后，更新到 train.json / test.json
+    # Finally, update train.json / test.json
     update_json_files(train_path, test_path, video_data)
     print("Done. All videos processed.")
 

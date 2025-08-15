@@ -1237,28 +1237,29 @@ class BertForMaskedLM(BertPreTrainedModel):
         )
 
 
-def build_qformer(num_query_token, vision_width, ## 查询token的数量 # 视觉特征的维度
-                  qformer_hidden_dropout_prob=0.1,# # 隐藏层dropout概率
-                  qformer_attention_probs_dropout_prob=0.1,## 注意力层dropout概率
-                  qformer_drop_path_rate=0.,  ## drop path的比率
-                  bert_type="bert-base-uncased" ## 使用的bert基础模型
+def build_qformer(num_query_token, vision_width, ## Query the number of tokens # dimensions of visual features
+                  qformer_hidden_dropout_prob=0.1,# # Hidden layer dropout probability
+                  qformer_attention_probs_dropout_prob=0.1,## dropout probability of the attention layer
+                  qformer_drop_path_rate=0.,  ## The ratio of drop path
+                  bert_type="bert-base-uncased" ## The bert basic model used
                   ):
     encoder_config = BertConfig.from_pretrained(bert_type)
     encoder_config.encoder_width = vision_width
     # insert cross-attention layer every other block
-    encoder_config.add_cross_attention = True## 启用交叉注意力层
-    encoder_config.cross_attention_freq = 2  ## 每隔一个block插入一个交叉注意力层
+    encoder_config.add_cross_attention = True## Enable the cross-attention layer
+    encoder_config.cross_attention_freq = 2  ## Insert a cross-attention layer every other block
+
     encoder_config.query_length = num_query_token
-    encoder_config.hidden_dropout_prob = qformer_hidden_dropout_prob  ## 隐藏层dropout
-    encoder_config.attention_probs_dropout_prob = qformer_attention_probs_dropout_prob ## 注意力层dropout
-    encoder_config.drop_path_list = [x.item() for x in torch.linspace(0, qformer_drop_path_rate, encoder_config.num_hidden_layers)]## 线性增加的drop path率
+    encoder_config.hidden_dropout_prob = qformer_hidden_dropout_prob  ## Hidden layer dropout
+    encoder_config.attention_probs_dropout_prob = qformer_attention_probs_dropout_prob ## Attention layer dropout
+    encoder_config.drop_path_list = [x.item() for x in torch.linspace(0, qformer_drop_path_rate, encoder_config.num_hidden_layers)]## Linearly increasing drop path rate
     logger.info(f"Drop_path:{encoder_config.drop_path_list}")
     logger.info(encoder_config)
-    Qformer = BertLMHeadModel(encoder_config)                ## 创建BERT语言模型
+    Qformer = BertLMHeadModel(encoder_config)                ## Create the BERT language model
     query_tokens = nn.Parameter(
         torch.zeros(1, num_query_token, encoder_config.hidden_size)
-    )   ## 初始化查询tokens
-    query_tokens.data.normal_(mean=0.0, std=encoder_config.initializer_range)  ## 使用正态分布初始化query_tokens
+    )   ## Initialize the query tokens
+    query_tokens.data.normal_(mean=0.0, std=encoder_config.initializer_range)  ## Initialize query tokens using a normal distribution
     return Qformer, query_tokens
 
 

@@ -87,16 +87,16 @@ class BaseMLLM(PreTrainedModel):
             freeze_module(self.vision_layernorm)
 
     def build_bridge(self):
-        # ViT to LM: 1792 -> 6656 NOTE 768 is qformer dim    从Q-former维度(768)到LLM维度的投影
+        # ViT to LM: 1792 -> 6656 NOTE 768 is qformer dim projection from the Q-former dimension (768) to the LLM dimension
         self.project_up = nn.Linear(768, self.lm.config.hidden_size)  # whether bias is needed?
-        # LM to ViT: 6656 -> 1792   ## 从LLM维度回到Q-former维度的投影
+        # LM to ViT: 6656 -> 1792   ## Projection from the LLM dimension back to the Q-former dimension
         self.project_down = nn.Linear(self.lm.config.hidden_size, 768)
 
         if 'qformer' in self.model_config.bridge.name.lower():
             from transformers import BertTokenizer
             self.qformer_tokenizer = BertTokenizer.from_pretrained("bert-base-uncased", truncation_side="left")
             self.qformer_tokenizer.add_special_tokens({"bos_token": "[DEC]"})
-            ## 添加特殊token
+            ##add special token
             # self.qformer_tokenizer.add_special_tokens({"bos_token": "[DEC]"})
             self.qformer_tokenizer.padding_side = "left"
             if self.model_config.bridge.name == 'qformer':
@@ -108,9 +108,9 @@ class BaseMLLM(PreTrainedModel):
                 )
                 
 
-            # 它是一组可学习的参数向量，数量由num_query_token指定
-            # 每个token是一个维度为vision_width的向量
-            # 这些token是随机初始化的，通过训练来学习到有意义的表示
+            # It is a set of learnable parameter vectors, and the quantity is specified by num_query_token
+            # Each token is a vector with dimension vision_width
+            # These tokens are randomly initialized and trained to learn meaningful representations
             self.qformer.resize_token_embeddings(len(self.qformer_tokenizer))
             self.qformer.cls = None
             self.extra_num_query_token = self.model_config.bridge.extra_num_query_token

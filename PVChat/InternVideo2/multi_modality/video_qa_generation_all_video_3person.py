@@ -3,8 +3,8 @@
 
 """
 update_qa_pairs.py
-目标: 针对3个人的场景, 对 is_positive=True 的条目, 根据 sample_type={person1, person2, person3}
-     去调用 InternVideo2 生成回答, 再经ChatGPT API处理, 最终保存至新的JSON.
+Goal: For 3-person scenarios, for entries with is_positive=True, based on sample_type={person1, person2, person3}
+     call InternVideo2 to generate answers, process through ChatGPT API, and finally save to new JSON.
 """
 
 import os
@@ -20,7 +20,7 @@ import numpy as np
 from glob import glob
 from tqdm import tqdm
 
-# 如果你的脚本中还需要 decord、PIL 等依赖, 保持不变.
+# If your script still needs decord, PIL and other dependencies, keep them unchanged.
 import decord
 from decord import VideoReader, cpu
 from PIL import Image
@@ -29,7 +29,7 @@ from transformers import AutoTokenizer, AutoModel
 
 
 ################################
-# 1) 视频相关函数
+# 1) Video-related functions
 ################################
 
 def get_index(num_frames, num_segments):
@@ -41,7 +41,7 @@ def get_index(num_frames, num_segments):
     return offsets
 
 def HD_transform_padding(frames, image_size=224, hd_num=6):
-    # 与原逻辑一致，不再赘述
+    # Consistent with original logic, no further elaboration
     def _padding_224(frames):
         _, _, H, W = frames.shape
         tar = int(np.ceil(H / 224) * 224)
@@ -87,13 +87,13 @@ def HD_transform_padding(frames, image_size=224, hd_num=6):
     return padded_frames
 
 def HD_transform_no_padding(frames, image_size=224, hd_num=6, fix_ratio=(2,1)):
-    # 与原逻辑一致，不再赘述
+    # Consistent with original logic, no further elaboration
     min_num = 1
     max_num = hd_num
     _, _, orig_height, orig_width = frames.shape
     aspect_ratio = orig_width / orig_height
 
-    # 仅示例, 不再详细
+    # Example only, no more details
     target_aspect_ratio = fix_ratio or (1,1)
     target_width = image_size * target_aspect_ratio[0]
     target_height = image_size * target_aspect_ratio[1]
@@ -131,7 +131,7 @@ def load_video(video_path, num_segments=8, return_msg=False, resolution=224, hd_
     frames = transform(frames)
     T_, C, H, W = frames.shape
 
-    # sub_img 逻辑
+    # sub_img logic
     sub_img = frames.reshape(
         1, T_, 3, H // resolution, resolution, W // resolution, resolution
     ).permute(0, 3, 5, 1, 2, 4, 6).reshape(-1, T_, 3, resolution, resolution).contiguous()
@@ -157,11 +157,11 @@ def load_video(video_path, num_segments=8, return_msg=False, resolution=224, hd_
 
 def get_caption_from_api(answer):
     """
-    调用第三方 ChatGPT-like API，对回答内容中的人称做替换。
-    你可根据自己实际API实现。
+    Call third-party ChatGPT-like API to replace person references in the answer content.
+    You can implement according to your actual API.
     """
     import openai
-    # 仅示例
+    # Example only
     openai.api_base = "https://api.openai-sb.com/v1"
     api_key = os.getenv("OPENAI_API_KEY")
     openai.api_key =api_key
@@ -187,18 +187,18 @@ def get_caption_from_api(answer):
         return answer  # fallback
 
 def call_chatgpt_api(text):
-    """简单包装"""
+    """Simple wrapper"""
     replaced_text = get_caption_from_api(text)
     return replaced_text
 
 
 ################################
-# 3) 调用 InternVideo2 进行视频问答
+# 3) Call InternVideo2 for video Q&A
 ################################
 
 def ask_internvideo2(video_path, question, model=None, tokenizer=None):
     """
-    加载并处理视频 => InternVideo2模型 => 返回回答字符串
+    Load and process video => InternVideo2 model => return answer string
     """
     video_tensor = load_video(video_path, num_segments=8, resolution=224, hd_num=4)
     if video_tensor is None:
@@ -222,7 +222,7 @@ def ask_internvideo2(video_path, question, model=None, tokenizer=None):
 
 
 ################################
-# 4) 问题模板 (示例)
+# 4) Question templates (example)
 ################################
 
 QUESTION_TEMPLATES = {
@@ -251,7 +251,7 @@ QUESTION_TEMPLATES = {
 
 
 ################################
-# 5) 核心逻辑: 针对 3 种 personX
+# 5) Core logic: for 3 types of personX
 ################################
 
 def process_json_file(input_path, output_path, model=None, tokenizer=None):
@@ -269,7 +269,7 @@ def process_json_file(input_path, output_path, model=None, tokenizer=None):
     video_items = data["data"]
     print(f"[Info] Loaded {len(video_items)} video entries from {input_path}.")
 
-    # 收集要问的所有问题(总计15条)
+    # Collect all questions to ask (15 in total)
     all_questions = (
         QUESTION_TEMPLATES["action_questions"] +
         QUESTION_TEMPLATES["clothing_questions"] +
@@ -278,7 +278,7 @@ def process_json_file(input_path, output_path, model=None, tokenizer=None):
 
     for item in tqdm(video_items, desc=f"Processing {os.path.basename(input_path)}"):
         if not item.get("is_positive", False):
-            # 负样本或其它情况不处理
+            # Don't process negative samples or other cases
             continue
 
         sample_type = item.get("sample_type", "")
@@ -290,7 +290,7 @@ def process_json_file(input_path, output_path, model=None, tokenizer=None):
         qa_pairs = item.get("qa_pairs", [])
 
         if sample_type == "person1":
-            # 问一次: <sks> => "the woman" (示例), 最终回答中 <person> => <sks1>
+            # Ask once: <sks> => "the woman" (example), final answer <person> => <sks1>
             for q in all_questions:
                 question_in_intern = q.replace("<sks>", "the woman")
                 intern_answer = ask_internvideo2(video_path, question_in_intern, model, tokenizer)
@@ -305,7 +305,7 @@ def process_json_file(input_path, output_path, model=None, tokenizer=None):
                 })
 
         elif sample_type == "person2":
-            # 问一次: <sks> => "the man", <person> => <sks2>
+            # Ask once: <sks> => "the man", <person> => <sks2>
             for q in all_questions:
                 question_in_intern = q.replace("<sks>", "the man")
                 intern_answer = ask_internvideo2(video_path, question_in_intern, model, tokenizer)
@@ -320,7 +320,7 @@ def process_json_file(input_path, output_path, model=None, tokenizer=None):
                 })
 
         elif sample_type == "person3":
-            # 问一次: <sks> => "the child", <person> => <sks3>
+            # Ask once: <sks> => "the child", <person> => <sks3>
             for q in all_questions:
                 question_in_intern = q.replace("<sks>", "the child")
                 intern_answer = ask_internvideo2(video_path, question_in_intern, model, tokenizer)
@@ -335,19 +335,19 @@ def process_json_file(input_path, output_path, model=None, tokenizer=None):
                 })
 
         else:
-            # 其余 sample_type，比如 "random" 或 "both" 等，先不处理
+            # Other sample_types, such as "random" or "both" etc., not processed for now
             continue
 
         item["qa_pairs"] = qa_pairs
 
-    # 写回 output
+    # Write back to output
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump({"data": video_items}, f, indent=2, ensure_ascii=False)
     print(f"[Info] Updated data saved => {output_path}.")
 
 
 ################################
-# 6) 入口 main()
+# 6) Entry point main()
 ################################
 
 def get_args():
@@ -361,7 +361,7 @@ def main():
     args = get_args()
     decord.bridge.set_bridge("torch")
 
-    # 这里放你的 Huggingface token or any other required
+    # Put your Huggingface token or any other required here
     HF_TOKEN = os.environ['HF_TOKEN']
     token = HF_TOKEN
     decord.bridge.set_bridge("torch")
@@ -387,7 +387,7 @@ def main():
             trust_remote_code=True
         )
 
-    # 输入、输出文件路径:  e.g. train_Cl_Xo_Ja.json => train_all_video_Cl_Xo_Ja.json
+    # Input and output file paths: e.g. train_Cl_Xo_Ja.json => train_all_video_Cl_Xo_Ja.json
     base_dir = "/root/autodl-tmp/yufei/datasets/cekebv-hq"
 
     train_input  = os.path.join(base_dir, f"train_all_video_{args.sks1}_{args.sks2}_{args.sks3}.json")

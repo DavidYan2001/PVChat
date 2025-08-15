@@ -11,8 +11,8 @@ import logging
 
 # logging.basicConfig(level=logging.INFO)
 # logger = logging.getLogger(__name__)
-logger = logging.getLogger()  # 直接获取根 logger
-# 添加处理器
+logger = logging.getLogger()  # Get root logger directly
+# Add handler
 import re
 import math
 import os
@@ -63,49 +63,49 @@ def save_gtzero_positions_last162(
     last_n: int = 16
 ):
     """
-    对 gating_probs ([B, T, H])：仅取每个样本的最后 last_n=16 行 (shape=[16, H])，
-    保留所有数值（不管是否大于0），并以列表形式保存到 JSON 文件(追加模式)。
+    For gating_probs ([B, T, H]): only take the last last_n=16 rows of each sample (shape=[16, H]),
+    keep all values (regardless of whether > 0), and save to JSON file in list form (append mode).
 
-    gating_probs:  [B, T, H] 的张量 (B=batch_size, T=sequence_length, H=#routed_heads)
-    out_path:      输出 JSON 文件路径 (会以 'a' 追加方式写入)
-    last_n:        要截取的最后几个 time-step (默认16)
+    gating_probs:  [B, T, H] tensor (B=batch_size, T=sequence_length, H=#routed_heads)
+    out_path:      Output JSON file path (will be written in 'a' append mode)
+    last_n:        Number of last time-steps to extract (default 16)
     """
 
-    # 1) 先把 gating_probs 转成 float32，然后搬到 CPU
+    # 1) First convert gating_probs to float32, then move to CPU
     gating_probs_cpu = gating_probs.to(dtype=torch.float32).detach().cpu()
     B, T, H = gating_probs_cpu.shape
 
-    # 2) 准备要写入 JSON 的数据列表
+    # 2) Prepare data list to write to JSON
     all_batch_data = []
 
-    # 3) 遍历每个样本
+    # 3) Iterate through each sample
     for b in range(B):
-        # 取该样本的最后 last_n 行: shape = [last_n, H]
-        # 注意：若 T < last_n，请确保不会越界 (也可自行改成 max(0, T - last_n) 之类的逻辑)
-        last_slice = gating_probs_cpu[b, T - last_n :, :]  # 从 T-16 到 T-1
+        # Take the last last_n rows of this sample: shape = [last_n, H]
+        # Note: if T < last_n, ensure no out of bounds (can also use max(0, T - last_n) logic)
+        last_slice = gating_probs_cpu[b, T - last_n :, :]  # From T-16 to T-1
 
-        # 逐行把数值转成 Python list
-        # row_values_list 的形状是 16 x H (默认)
+        # Convert values to Python list row by row
+        # row_values_list shape is 16 x H (default)
         row_values_list = []
         for i in range(last_n):
-            # row 是 [H]  (比如 H=4，就有4个值)
+            # row is [H]  (e.g. if H=4, there are 4 values)
             row = last_slice[i].tolist()
             row_values_list.append(row)
 
-        # 将本样本的结果存到字典
+        # Store results of this sample in dictionary
         data_dict = {
             "batch_idx": b,
-            "last16_values": row_values_list  # 形如: [[v1,v2,v3,v4], [...], ..., ...] (共16行)
+            "last16_values": row_values_list  # Like: [[v1,v2,v3,v4], [...], ..., ...] (16 rows total)
         }
         all_batch_data.append(data_dict)
 
-    # 4) 以“追加”模式写入到 JSON
+    # 4) Write to JSON in "append" mode
     with open(out_path, "a", encoding="utf-8") as f:
-        # 这里每次调用一次此函数，就往文件里追加一行 JSON
+        # Each call to this function appends one line of JSON to the file
         json.dump(all_batch_data, f, ensure_ascii=False)
         f.write("\n")
 
-    print(f"已将每个样本最后 {last_n} 行的全部 gating_probs 数值保存到 {out_path} (追加模式).")
+    print(f"All gating_probs values of last {last_n} rows for each sample have been saved to {out_path} (append mode).")
 
 def save_head_ratios_last16(
     gating_probs: torch.Tensor,
@@ -113,32 +113,33 @@ def save_head_ratios_last16(
     last_n: int = 16
 ):
     """
-    对 gating_probs ([B, T, 4]) 只取每个样本的最后 last_n=16 行 (shape=[16,4])，
-    统计每个头 (0,1,2,3) 在这 16 行中「大于0」出现的次数，并计算出占比 = 次数 / 16。
-    写入 out_path 文件（追加模式），每 9 条后空一行。
+    For gating_probs ([B, T, 4]) only take the last last_n=16 rows of each sample (shape=[16,4]),
+    count the number of times each head (0,1,2,3) appears as "greater than 0" in these 16 rows,
+    and calculate the ratio = count / 16.
+    Write to out_path file (append mode), insert blank line after every 9 entries.
 
-    gating_probs:  [B, T, H=4] 的张量 (B=batch_size, T=sequence_length, H=4)
-    out_path:      输出的文件路径 (会以 'a' 追加方式写入)
-    last_n:        要截取的最后几个 time-step (默认16)
+    gating_probs:  [B, T, H=4] tensor (B=batch_size, T=sequence_length, H=4)
+    out_path:      Output file path (will be written in 'a' append mode)
+    last_n:        Number of last time-steps to extract (default 16)
     """
-    # 1) 将 gating_probs 转成 float32 并搬到 CPU
+    # 1) Convert gating_probs to float32 and move to CPU
     gating_probs_cpu = gating_probs.to(dtype=torch.float32).detach().cpu()
-    B, T, H = gating_probs_cpu.shape  # 假设 H=4
+    B, T, H = gating_probs_cpu.shape  # Assume H=4
 
-    # 如果 T < last_n，避免越界
+    # If T < last_n, avoid out of bounds
     if T < last_n:
-        raise ValueError(f"sequence_length={T} 小于 last_n={last_n}，无法截取最后 {last_n} 条。")
+        raise ValueError(f"sequence_length={T} is less than last_n={last_n}, cannot extract last {last_n} entries.")
 
-    # 2) 打开文件（追加模式），我们逐行写入 JSON
+    # 2) Open file (append mode), write JSON line by line
     with open(out_path, "a", encoding="utf-8") as f:
-        line_count = 0  # 用于计数，写满 9 条就插入一个空行
+        line_count = 0  # For counting, insert blank line after writing 9 entries
 
-        # 3) 遍历 batch 内各个样本
+        # 3) Iterate through each sample in batch
         for b in range(B):
-            # 截取最后 16 行 (形状: [16,4])
+            # Extract last 16 rows (shape: [16,4])
             last_slice = gating_probs_cpu[b, T - last_n:, :]  # [16, 4]
 
-            # 统计每个 head 的出现次数
+            # Count occurrences of each head
             counts = [0, 0, 0, 0]
             for i in range(last_n):
                 row = last_slice[i]  # shape=[4]
@@ -146,73 +147,74 @@ def save_head_ratios_last16(
                     if row[head_idx] > 0:
                         counts[head_idx] += 1
 
-            # 计算占比 = 出现次数 / 16
+            # Calculate ratio = occurrence count / 16
             ratios = [count / last_n for count in counts]
 
-            # 组织输出的 JSON 内容
+            # Organize output JSON content
             out_dict = {
                 "batch_idx": b,
                 "ratios": ratios
             }
-            # 写入文件（一行一个 JSON 对象）
+            # Write to file (one JSON object per line)
             f.write(json.dumps(out_dict, ensure_ascii=False) + "\n")
             line_count += 1
 
-            # 若已写了 9 行，就插入一个空行，并重置计数
+            # If 9 lines written, insert blank line and reset count
             if line_count == 9:
                 f.write("\n")
                 line_count = 0
 
-    print(f"已将 {B} 个样本的 head 占比信息写入到 {out_path} (追加模式)，每 9 行后插入一空行.")
+    print(f"Head ratio information for {B} samples has been written to {out_path} (append mode), blank line inserted after every 9 lines.")
 def save_gtzero_positions_last16(
         gating_probs: torch.Tensor,
         out_path: str = "gating_positions.json",
         last_n: int = 16
 ):
     """
-    对 gating_probs (形状 [B, T, H])，只取每个样本的最后 last_n=16 行，每行有 H=4 个值，记录哪些 head 索引 > 0。
-    保存到 JSON 文件(追加模式)。
+    For gating_probs (shape [B, T, H]), only take the last last_n=16 rows of each sample,
+    each row has H=4 values, record which head indices > 0.
+    Save to JSON file (append mode).
 
-    gating_probs:  [B, T, H] 的张量 (B=batch_size, T=sequence_length, H=#routed_heads=4)
-    out_path:      输出 JSON 文件路径 (会以 'a' 追加方式写入)
-    last_n:        要截取的最后几个 time-step (默认为 16)
+    gating_probs:  [B, T, H] tensor (B=batch_size, T=sequence_length, H=#routed_heads=4)
+    out_path:      Output JSON file path (will be written in 'a' append mode)
+    last_n:        Number of last time-steps to extract (default 16)
     """
-    # 1) 先把 gating_probs 转成 float32，然后搬到 CPU
+    # 1) First convert gating_probs to float32, then move to CPU
     gating_probs_cpu = gating_probs.to(dtype=torch.float32).detach().cpu()
-    B, T, H = gating_probs_cpu.shape  # B=3, T=112, H=4(示例)
+    B, T, H = gating_probs_cpu.shape  # B=3, T=112, H=4 (example)
 
-    # 2) 准备要写入 JSON 的数据列表
+    # 2) Prepare data list to write to JSON
     all_batch_data = []
 
-    # 3) 遍历每个样本
+    # 3) Iterate through each sample
     for b in range(B):
-        # 取该样本的最后 last_n 行: shape = [last_n, H] => [16, 4]
-        last_slice = gating_probs_cpu[b, T - last_n:, :]  # 从 T-16 到 T-1
-        # 用于记录该样本的“最后 16 行，每行大于 0 的 head 索引”
+        # Take the last last_n rows of this sample: shape = [last_n, H] => [16, 4]
+        last_slice = gating_probs_cpu[b, T - last_n:, :]  # From T-16 to T-1
+        # Used to record "last 16 rows, head indices > 0 in each row" for this sample
         row_heads_gt0_list = []
 
-        # 遍历这 16 行
+        # Iterate through these 16 rows
         for i in range(last_n):
             row = last_slice[i]  # shape=[4]
-            # row>0 => 得到一个bool向量，如 [True, False, True, False]
-            # .nonzero() => 返回满足条件的下标，比如 [[0],[2]]; 然后再 squeeze(-1) => [0,2]
+            # row>0 => get a bool vector, e.g. [True, False, True, False]
+            # .nonzero() => returns indices that satisfy condition, e.g. [[0],[2]]; then squeeze(-1) => [0,2]
             heads_gt0 = (row > 0).nonzero(as_tuple=False).squeeze(-1).tolist()
-            # heads_gt0 可能是空列表(如果4个都<=0)，也可能是 [0,1,2] 等
+            # heads_gt0 might be empty list (if all 4 are <=0), or could be [0,1,2] etc
             row_heads_gt0_list.append(heads_gt0)
 
-        # 这个 batch 样本的记录
+        # Record for this batch sample
         data_dict = {
             "batch_idx": b,
-            "last16_gt0": row_heads_gt0_list  # 形如: [ [...], [...], ..., ... ](16个)
+            "last16_gt0": row_heads_gt0_list  # Like: [ [...], [...], ..., ... ] (16 items)
         }
         all_batch_data.append(data_dict)
 
-    # 4) 以“追加”模式写入到 JSON
+    # 4) Write to JSON in "append" mode
     with open(out_path, "a", encoding="utf-8") as f:
         json.dump(all_batch_data, f, ensure_ascii=False)
         f.write("\n")
 
-    print(f"已将每个样本最后 {last_n} 行中 >0 的下标信息写入到 {out_path} (追加模式).")
+    print(f"Index information of >0 values in last {last_n} rows for each sample has been written to {out_path} (append mode).")
 class BertEmbeddings(nn.Module):
     """Construct the embeddings from word and position embeddings."""
 
@@ -274,12 +276,12 @@ class BertEmbeddings(nn.Module):
 
 class MoHRouterAlpha(nn.Module):
     """
-    一个独立小模块，包含:
-    1) router: 用于计算 gating_logits (路由得分)
-    2) alpha_proj: 用于计算 alpha_logits (例如 alpha_1, alpha_2)
+    An independent small module containing:
+    1) router: for computing gating_logits (routing scores)
+    2) alpha_proj: for computing alpha_logits (e.g. alpha_1, alpha_2)
 
-    - 初始化时把权重设为0，以便初期 gating = 均匀/alpha = 均匀
-    - 在 forward 里做 clamp(-10, 10)，再 softmax
+    - Initialize weights to 0 so that initially gating = uniform/alpha = uniform
+    - Do clamp(-10, 10) in forward, then softmax
     """
 
     def __init__(self, hidden_size, num_routed_heads, alpha_proj_size=2):
@@ -287,23 +289,23 @@ class MoHRouterAlpha(nn.Module):
         self.num_routed_heads = num_routed_heads
         self.alpha_proj_size = alpha_proj_size
 
-        # 1) 定义 router，输出大小 = num_routed_heads
+        # 1) Define router, output size = num_routed_heads
         self.router = nn.Linear(hidden_size, num_routed_heads, bias=True)
-        # 2) 定义 alpha_proj，输出大小 = 2 (比如 alpha_1, alpha_2)
+        # 2) Define alpha_proj, output size = 2 (e.g. alpha_1, alpha_2)
         self.alpha_proj = nn.Linear(hidden_size, alpha_proj_size, bias=False)
 
-        #--- 初始化 ---
+        #--- Initialization ---
         # with torch.no_grad():
-        #     # 把 weight/bias 全部初始化为 0
+        #     # Initialize weight/bias all to 0
         #     nn.init.zeros_(self.router.weight)
         #     if self.router.bias is not None:
         #         nn.init.zeros_(self.router.bias)
         #
         #     nn.init.zeros_(self.alpha_proj.weight)
-        #     # 没有 bias
+        #     # No bias
 
-        # 也可以改成小随机值:
-        # 这里演示 Kaiming Uniform, 适合ReLU-like激活/线性层
+        # Can also change to small random values:
+        # Here shows Kaiming Uniform, suitable for ReLU-like activation/linear layers
         nn.init.normal_(self.router.weight, mean=0.0, std=1e-5)
         nn.init.normal_(self.router.bias, mean=0.0, std=1e-5)
         nn.init.normal_(self.alpha_proj.weight, mean=0.0, std=1e-5)
@@ -329,8 +331,8 @@ class MoHRouterAlpha(nn.Module):
                 )
                 self.router.bias.data.clamp_(-0.01, 0.01)
 
-            self.router.weight.data.clamp_(-0.01, 0.01) # 添加clamp
-            self.alpha_proj.weight.data.clamp_(-0.01, 0.01)  # 添加clamp
+            self.router.weight.data.clamp_(-0.01, 0.01) # Add clamp
+            self.alpha_proj.weight.data.clamp_(-0.01, 0.01)  # Add clamp
 
         if torch.isnan(self.router.weight).any() or torch.isinf(self.router.weight).any():
             print("self.router.weight is nan/inf !")
@@ -348,10 +350,10 @@ class MoHRouterAlpha(nn.Module):
         hidden_states: [B, T, hidden_size]
         return:
           gating_probs: [B, T, num_routed_heads]
-          alpha_probs:  [B, T, alpha_proj_size] (常见 alpha_proj_size=2, 代表 alpha_1, alpha_2)
+          alpha_probs:  [B, T, alpha_proj_size] (common alpha_proj_size=2, representing alpha_1, alpha_2)
         """
 
-        # 1) 计算 gating_logits，并 clamp 避免极端值
+        # 1) Calculate gating_logits, and clamp to avoid extreme values
        # pdb.set_trace()
 
         gating_logits = self.router(hidden_states)              # [B, T, num_routed_heads]
@@ -362,15 +364,15 @@ class MoHRouterAlpha(nn.Module):
 
         # softmax
         #gating_probs = F.softmax(gating_logits, dim=-1)         # [B, T, num_routed_heads]
-        #REMOE的思想用Relu
+        # REMOE idea uses ReLU
         gating_probs = F.relu(gating_logits)
 
-        # 2) 计算 alpha_logits，并 clamp
+        # 2) Calculate alpha_logits, and clamp
         alpha_logits = self.alpha_proj(hidden_states)           # [B, T, alpha_proj_size]
         alpha_logits = alpha_logits.clamp(min=-1.0, max=1.0)
 
         alpha_probs = F.softmax(alpha_logits, dim=-1)           # [B, T, alpha_proj_size]
-        # REMOE的思想用Relu，但这个不需要
+        # REMOE idea uses ReLU, but this doesn't need it
         #alpha_probs = F.relu(alpha_logits)  # [B, T, alpha_proj_size]
 
         if torch.isnan(gating_logits).any() or torch.isinf(gating_logits).any():
@@ -546,19 +548,19 @@ class BertSelfAttention(nn.Module):
 
 class MoHBertSelfAttention(BertSelfAttention):
     """
-    基于 BertSelfAttention 增加了 MoH 路由器和门控逻辑的版本。
+    Version of BertSelfAttention with MoH router and gating logic added.
     """
 
     def __init__(self, config, is_cross_attention):
         super().__init__(config, is_cross_attention)
 
-        # 1) 定义 MoH 用到的路由器(示例用一个简单的线性层)
-        #    如果你要分两部分(共享头 + 可路由头)，可以加相应的超参：
+        # 1) Define router used by MoH (example uses a simple linear layer)
+        #    If you want to split into two parts (shared heads + routable heads), you can add corresponding hyperparameters:
         self.num_shared_heads = getattr(config, "moh_num_shared_heads", 1)
         self.num_shared_heads = 8
         self.top_k = getattr(config, "moh_top_k", 2)
         self.lambda_=getattr(config, "remoe_lambda", 1e-1)
-        # 路由器投影到 h 维或 2h 维都可以，论文中常见：W_r 的输出是 2 * #heads
+        # Router projects to h dimensions or 2h dimensions, common in papers: W_r output is 2 * #heads
         self.moh_alpha_proj_size = getattr(config, "moh_alpha_proj_size", 2)
         self.load_balance_weight = getattr(config, "moh_load_balance_weight", 1)
         self.alpha = getattr(config, "remoe_alpha", 1.2)
@@ -569,7 +571,7 @@ class MoHBertSelfAttention(BertSelfAttention):
         self.num_routed_heads = self.num_attention_heads - self.num_shared_heads
         if self.num_routed_heads <= 0:
             raise ValueError("num_shared_heads can't exceed total heads.")
-        # 路由器: 只对 routed heads 做 gating，所以这里的维度是 self.num_routed_heads
+        # Router: only do gating for routed heads, so dimension here is self.num_routed_heads
 
         self.router_alpha = MoHRouterAlpha(
             hidden_size=config.hidden_size,
@@ -578,25 +580,25 @@ class MoHBertSelfAttention(BertSelfAttention):
         )
         self.times=0
         #self.router = nn.Linear(config.hidden_size, self.num_routed_heads, bias=True)
-        # 这里简单写成路由到 #heads，然后再做一些分块
-            # alpha投影: 输出 shape = 2，然后 softmax，得到 alpha_1, alpha_2
-            # 也可以做 per-token 的 alpha，也可以是 per-head。论文中常见做法各有不同
-            # 这里简单做 "per-token" 形式
+        # Here simply written as routing to #heads, then do some partitioning
+            # alpha projection: output shape = 2, then softmax, get alpha_1, alpha_2
+            # Can also do per-token alpha, or per-head. Common practices vary in papers
+            # Here simply do "per-token" form
         #self.alpha_proj = nn.Linear(config.hidden_size, self.moh_alpha_proj_size, bias=False)
 
-        # 在这里手动改初始化，比如 normal_(mean=0, std=1e-2):
+        # Manually change initialization here, e.g. normal_(mean=0, std=1e-2):
         #nn.init.normal_(self.router.weight, mean=0.0, std=1e-3)
         # if self.router.bias is not None:
         #     nn.init.zeros_(self.router.bias)
 
         #nn.init.normal_(self.alpha_proj.weight, mean=0.0, std=1e-3)
 
-        # 2) 一般还需要一个可训练的投影 W_r2，用于算 alpha_1, alpha_2
-        #    如果你直接在 router 里输出 2 * #heads，也可以拆成两个
-        #    这里仅作示例
+        # 2) Generally also need a trainable projection W_r2, used to calculate alpha_1, alpha_2
+        #    If you output 2 * #heads directly in router, you can also split into two
+        #    This is just an example
         # self.router2 = nn.Linear(config.hidden_size, 2 * config.num_attention_heads, bias=True)
 
-        # 用于在 forward 中临时保存本 batch 的 gating 用于 loss
+        # Used to temporarily save gating for this batch for loss calculation in forward
         self._cur_moh_gates = None
 
     def forward(
@@ -610,10 +612,10 @@ class MoHBertSelfAttention(BertSelfAttention):
             output_attentions=False,
     ):
         """
-        在这里加上 MoH 的 gating 流程。
+        Add MoH gating process here.
         """
-        # ---- 0) 常规的 Q, K, V 和注意力分数的计算 ----
-        # === 1) 原始多头注意力 (先算所有heads的 context_layer)
+        # ---- 0) Regular Q, K, V and attention score calculation ----
+        # === 1) Original multi-head attention (first calculate context_layer for all heads)
         self.times += 1
 
         is_cross_attention = encoder_hidden_states is not None
@@ -636,7 +638,7 @@ class MoHBertSelfAttention(BertSelfAttention):
         query_layer = self.transpose_for_scores(mixed_query_layer)
         past_key_value = (key_layer, value_layer)
 
-        # 常规注意力分数 [B, #heads, T, T]
+        # Regular attention scores [B, #heads, T, T]
         attention_scores = torch.matmul(query_layer, key_layer.transpose(-1, -2))
         if (
             self.position_embedding_type == "relative_key"
@@ -693,7 +695,7 @@ class MoHBertSelfAttention(BertSelfAttention):
         context_layer = torch.matmul(attention_probs_dropped, value_layer)
 
 
-        # === 2) 先把 context_layer 拆成 (shared part) + (routed part)
+        # === 2) First split context_layer into (shared part) + (routed part)
         # context_layer shape [B, h, T, d], h= num_attention_heads
         # shared part = context_layer[:, :self.num_shared_heads, ...]
         # routed part = context_layer[:, self.num_shared_heads:, ...]
@@ -707,19 +709,19 @@ class MoHBertSelfAttention(BertSelfAttention):
         gating_probs, alpha_probs = self.router_alpha(hidden_states)
        # save_head_ratios_last16(gating_probs, out_path="gating_positions.json")
        # pdb.set_trace()
-        #gating_logits = self.router(hidden_states) #[6, 112, 11] 11 是num_route
+        #gating_logits = self.router(hidden_states) #[6, 112, 11] 11 is num_route
         #gating_logits = gating_logits.clamp(-10, 10)
         #gating_probs = F.softmax(gating_logits, dim=-1)
 
-        # 取 top-K
+        # Take top-K
         # topk_val, topk_idx = torch.topk(gating_probs, k=self.top_k, dim=-1)  # [B, T, top_k], [B, T, top_k]
         # chosen_mask = torch.zeros_like(gating_probs, dtype=torch.bool)  # [B, T, h_r]
         # chosen_mask.scatter_(-1, topk_idx, True)
-        # gating_probs 只保留 top-K
+        # gating_probs only keep top-K
         #gating_probs = gating_probs * chosen_mask
         #denom = gating_probs.sum(dim=-1, keepdim=True).clamp_min(1e-9)
         #gating_probs = gating_probs / denom
-        # === 4) alpha_1, alpha_2 计算
+        # === 4) alpha_1, alpha_2 calculation
         # alpha_logits [B, T, 2]
 
         #alpha_logits = self.alpha_proj(hidden_states)
@@ -730,12 +732,12 @@ class MoHBertSelfAttention(BertSelfAttention):
         alpha_1 = alpha[..., 0].unsqueeze(-1)  # [B, T, 1][6, 112, 1]
         alpha_2 = alpha[..., 1].unsqueeze(-1)  # [B, T, 1]
 
-        # === 5) shared heads -> 直接 * alpha_1
-        # 先把 shared_context shape 调整到 [B, T, h_s, d] => [B, h_s, T, d] => 需要再 permute?
-        # 其实 shared_context 目前是 [B, h_s, T, d], 所以只需要 broadcast alpha_1: [B, T, 1, 1] => [B, 1, T, 1]
+        # === 5) shared heads -> directly * alpha_1
+        # First adjust shared_context shape to [B, T, h_s, d] => [B, h_s, T, d] => need to permute again?
+        # Actually shared_context is currently [B, h_s, T, d], so only need to broadcast alpha_1: [B, T, 1, 1] => [B, 1, T, 1]
         # => cunning reshape
         alpha_1_for_context = alpha_1.unsqueeze(1)  # [B, 1, T, 1]
-        # broadcast到 h_s维度
+        # broadcast to h_s dimension
         alpha_1_for_context = alpha_1_for_context.expand(-1, self.num_shared_heads, -1, -1)  # [B,h_s,T,1]
         shared_context = shared_context * alpha_1_for_context  # [B, h_s, T, d]
 
@@ -748,37 +750,37 @@ class MoHBertSelfAttention(BertSelfAttention):
         routed_weight = gating_probs_4d * alpha_2_for_context  # [B, h_r, T, 1]
         routed_context = routed_context * routed_weight
 
-        # === 7) 把 shared_context + routed_context 合并 => mixture_context
-        # 3.6) 合并 => [B, nHeads, T, headDim]
+        # === 7) Merge shared_context + routed_context => mixture_context
+        # 3.6) Merge => [B, nHeads, T, headDim]
         mixture_context = torch.cat([shared_context, routed_context], dim=1)
         # ---- MoH gating end ----
 
-        # 4) **关键：像 BERT 那样 permute + reshape => [B, T, hidden_size]**
+        # 4) **Key: like BERT permute + reshape => [B, T, hidden_size]**
         # mixture_context [B, nHeads, T, headDim]
         mixture_context = mixture_context.permute(0, 2, 1, 3).contiguous()  # => [B, T, nHeads, headDim]
         # reshape => [B, T, nHeads*headDim] == hidden_size
         new_shape = mixture_context.size()[:-2] + (self.all_head_size,)  # self.all_head_size = nHeads * headDim
         mixture_context = mixture_context.view(*new_shape)  # => [B, T, hiddenDim]
 
-        # === 8) 存储 gating (仅对 routed heads) 以做 load-balance
+        # === 8) Store gating (only for routed heads) for load-balance
         self._cur_moh_gates = gating_probs  # [B, T, h_r]
-       # temperature = 10.0  # 可根据实验调整
-       # S_soft = torch.sigmoid(gating_probs * temperature).mean()  # 激活率
+       # temperature = 10.0  # Can be adjusted based on experiments
+       # S_soft = torch.sigmoid(gating_probs * temperature).mean()  # Activation rate
 
-        #current_S = 1 - S_soft  # 软稀疏率
+        #current_S = 1 - S_soft  # Soft sparsity
         # === 9) output
         if output_attentions:#false
-            # 你也可以把 (attention_probs) 输出
+            # You can also output (attention_probs)
             outputs = (mixture_context, attention_probs)
         else:
             outputs = (mixture_context,)
         outputs = outputs + (past_key_value,)
 
-        return outputs  # 最后输出给后续 BertSelfOutput
+        return outputs  # Finally output to subsequent BertSelfOutput
 
     def get_moh_gates(self):
         """
-        供外部拿到 gating_probs，用来做负载均衡损失
+        For external access to gating_probs, used for load balancing loss
         """
         return self._cur_moh_gates
 
@@ -872,29 +874,29 @@ class MOHBertAttention(nn.Module):
         if gates is not None:
             # gates shape [B, T, h_r]
             B, T, h_r = gates.shape
-            # 假设 gates = [B, T, h_r]
+            # Assume gates = [B, T, h_r]
 
 
-            #MOH的
-            # # 计算 f_i = 1/(B*T) * sum_{b,t} gating中 这个头的概率 or 1_{top-K}?
-            # # 这里我们是soft gating+topK=0, 仅保留top-K => gating_probs是0/残值
-            # # 所以 sum(gates[:,:,i]) 就是该头总共多少 token gate
+            # MOH version
+            # # Calculate f_i = 1/(B*T) * sum_{b,t} probability of this head in gating or 1_{top-K}?
+            # # Here we have soft gating+topK=0, only keep top-K => gating_probs is 0/residual
+            # # So sum(gates[:,:,i]) is how many tokens gate this head in total
             # f = gates.sum(dim=(0, 1)) / (B * T)  # [h_r]
-            # # 目标 p=1/h_r
+            # # Target p=1/h_r
             # p = 1.0 / h_r
-            # # MSE 形式
+            # # MSE form
             # lb_loss = ((f - p) ** 2).sum()
 
-            #REMOE的
-            # L1 正则：对所有 token 上所有 routed head 输出求和再平均
+            # REMOE version
+            # L1 regularization: sum all routed head outputs across all tokens and average
             L_reg = gates.sum() / (B * T)
-            # 计算全局平均激活比例 S（这里对 routed 部分所有 token 求平均）
-            temperature = 10.0  # 可根据实验调整
-           # S_soft = torch.sigmoid(gates * temperature).mean()  # 激活率
+            # Calculate global average activation ratio S (average across all tokens for routed part)
+            temperature = 10.0  # Can be adjusted based on experiments
+           # S_soft = torch.sigmoid(gates * temperature).mean()  # Activation rate
 
-            #current_S = 1 - S_soft  # 软稀疏率
+            #current_S = 1 - S_soft  # Soft sparsity
 
-           #S = (gates > 0).float().mean()  # S 是一个标量
+           #S = (gates > 0).float().mean()  # S is a scalar
             #S_soft = (gates > 0).float().mean()
             routing_map = gates > 0
             S_soft = routing_map.sum().float() / routing_map.numel()
@@ -902,35 +904,35 @@ class MOHBertAttention(nn.Module):
             current_S=1-S_soft
           #  current_S = 1 - S_soft
           #q  pdb.set_trace()
-            # 那么目标稀疏性就是 1 - top_k/h_r.
+            # Then target sparsity is 1 - top_k/h_r.
             target_sparsity = 1 - (self.self.top_k / h_r)
            # self.self.lambda_ = self.self.lambda_ * (self.self.alpha ** torch.sign(target_sparsity-current_S))
 
-            #新的考虑
+            # New consideration
             delta = target_sparsity - current_S
-            # 使用指数更新，k为一个小正数（例如 0.1），这样差值越大，更新幅度越大，但平滑过渡,
-            # 激活率高，0.9，稀疏度0.1，delta=0.5-0.1=0.4, k*delta=0.04，e……0.04>1，lamda变大，更大的压制力
+            # Use exponential update, k is a small positive number (e.g. 0.1), so the larger the difference, the larger the update amplitude, but smooth transition,
+            # High activation rate, 0.9, sparsity 0.1, delta=0.5-0.1=0.4, k*delta=0.04, e^0.04>1, lambda increases, greater suppression
             scaling = torch.exp(self.self.k * delta)# 0.1*
             self.self.lambda_=self.self.lambda_*scaling
             self.self.lambda_ = torch.clamp(self.self.lambda_, min=1e-15, max=10)
 
             some_max_value=10
             if S_soft.detach().item() < 1e-4:
-                # 当激活率极低时，直接增加 lambda 一定比例，比如增加 10%
+                # When activation rate is extremely low, directly increase lambda by a certain percentage, e.g. 10%
                 self.self.alignment_weight = min(self.self.alignment_weight * 1.2, some_max_value)
             else:
                 self.self.alignment_weight=0.5
 
            # pdb.set_trace()
-            #根据 REMOE 的定义，计算每个 routed head 的激活比例：
+            # According to REMOE definition, calculate activation ratio for each routed head:
             f = (gates > 0).float().mean(dim=(0, 1))
-            #将每个 token 的路由输出乘以对应专家的 f，再平均：
+            # Multiply each token's routing output by corresponding expert's f, then average:
             lb_loss =  (f * gates.mean(dim=(0, 1))).sum()
 
             if torch.isnan(lb_loss).any() or torch.isinf(lb_loss).any():
                 pdb.set_trace()
-            # 乘上 config.moh_load_balance_weight
-            # 最后将 lb_loss 乘以当前的 lambda_ 和一个全局权重 load_balance_weight
+            # Multiply by config.moh_load_balance_weight
+            # Finally multiply lb_loss by current lambda_ and a global weight load_balance_weight
             #alignment_loss = (S_soft - (1 - target_sparsity)) ** 2
             S_soft_for_log = S_soft.detach()
             if (1 - target_sparsity)>S_soft_for_log:
@@ -944,7 +946,7 @@ class MOHBertAttention(nn.Module):
             logger.info(f"all_loss:{lb_loss.detach()}, lb_loss:{lb_loss_ori.detach()}, lamdba: {self.self.lambda_.detach()} , active_rate:{S_soft.detach()},alignment_loss:{alignment_loss} , alignment_weight:{self.self.alignment_weight}")
            # pdb.set_trace()
 
-            # 打印 routed head 激活情况
+            # Print routed head activation status
             # activated = (gates > 0).float()
             # activation_ratio = activated.mean(dim=(0, 1))  # shape: [h_r]
             # active_count = (activation_ratio > 0.1).sum().item()
@@ -1170,11 +1172,11 @@ class BertLayer(nn.Module):
         gates = None
        # pdb.set_trace()
         if hasattr(self.attention.self, "get_moh_gates"):
-            gates = self.attention.self.get_moh_gates()  # gating 输出，形状 [B, T, h_r] 6, 112, 6
+            gates = self.attention.self.get_moh_gates()  # gating output, shape [B, T, h_r] 6, 112, 6
             #logger.info(f"[Layer >6 have routed")
         if gates is not None:
             activated = (gates.detach() > 0).float()
-            activation_ratio = activated.mean(dim=(0, 1))  # 每个 routed head 的激活率
+            activation_ratio = activated.mean(dim=(0, 1))  # Activation rate for each routed head
             logger.info(f"[Layer {self.layer_num}] Routed head activation ratio: {activation_ratio.cpu().numpy()}")
 
         return outputs,moh_loss
@@ -1188,8 +1190,6 @@ class BertLayer(nn.Module):
         intermediate_output = self.intermediate_query(attention_output)
         layer_output = self.output_query(intermediate_output, attention_output)
         return layer_output
-
-
 class BertEncoder(nn.Module):
     def __init__(self, config):
         super().__init__()
@@ -1298,7 +1298,6 @@ class BertEncoder(nn.Module):
 
         )
         return encoder_outputs,acc_lb_loss
-
 
 class BertPooler(nn.Module):
     def __init__(self, config):
@@ -1781,7 +1780,7 @@ class BertLMHeadModel(BertPreTrainedModel):
         )
 
         sequence_output = outputs[0]
-        #lb_loss = getattr(outputs, "lb_loss", 0.0)  # 取出 MoH loss
+        #lb_loss = getattr(outputs, "lb_loss", 0.0)  # Extract MoH loss
         if query_embeds is not None:
             sequence_output = outputs[0][:, query_embeds.shape[1]:, :]
 
@@ -1943,49 +1942,47 @@ class BertForMaskedLM(BertPreTrainedModel):
         )
 
 
-def build_qformer(num_query_token, vision_width,  ## 查询token的数量 # 视觉特征的维度
-                  qformer_hidden_dropout_prob=0.1,  # # 隐藏层dropout概率
-                  qformer_attention_probs_dropout_prob=0.1,  ## 注意力层dropout概率
-                  qformer_drop_path_rate=0.,  ## drop path的比率
-                  bert_type="bert-base-uncased" , ## 使用的bert基础模型
-                  num_shared_heads=None  # 新增参数
+def build_qformer(num_query_token, vision_width,  ## Number of query tokens # Dimension of visual features
+                  qformer_hidden_dropout_prob=0.1,  # Hidden layer dropout probability
+                  qformer_attention_probs_dropout_prob=0.1,  ## Attention layer dropout probability
+                  qformer_drop_path_rate=0.,  ## Drop path rate
+                  bert_type="bert-base-uncased" ,  ## BERT base model to use
+                  num_shared_heads=None  # New parameter
                   ):
     encoder_config = BertConfig.from_pretrained(bert_type)
     encoder_config.encoder_width = vision_width
     # insert cross-attention layer every other block
-    encoder_config.add_cross_attention = True  ## 启用交叉注意力层
-    encoder_config.cross_attention_freq = 2  ## 每隔一个block插入一个交叉注意力层
+    encoder_config.add_cross_attention = True  ## Enable cross-attention layers
+    encoder_config.cross_attention_freq = 2  ## Insert cross-attention layer every other block
     encoder_config.query_length = num_query_token
-    encoder_config.hidden_dropout_prob = qformer_hidden_dropout_prob  ## 隐藏层dropout
-    encoder_config.attention_probs_dropout_prob = qformer_attention_probs_dropout_prob  ## 注意力层dropout
+    encoder_config.hidden_dropout_prob = qformer_hidden_dropout_prob  ## Hidden layer dropout
+    encoder_config.attention_probs_dropout_prob = qformer_attention_probs_dropout_prob  ## Attention layer dropout
     encoder_config.drop_path_list = [x.item() for x in torch.linspace(0, qformer_drop_path_rate,
-                                                                      encoder_config.num_hidden_layers)]  ## 线性增加的drop path率
-    # MoH相关配置
+                                                                      encoder_config.num_hidden_layers)]  ## Linearly increasing drop path rate
+    # MoH related configuration
     if num_shared_heads is None:
-        num_shared_heads = encoder_config.num_attention_heads // 4  # 默认25%的头作为共享头
+        num_shared_heads = encoder_config.num_attention_heads // 4  # Default 25% of heads as shared heads
         num_shared_heads = 8
     encoder_config.num_shared_heads = num_shared_heads
-    encoder_config.use_moh = True  # 启用MoH
+    encoder_config.use_moh = True  # Enable MoH
     encoder_config.moh_top_k = 2
 
     encoder_config.remoe_lambda = 1e-8
     encoder_config.remoe_alpha=1.2
     encoder_config.k = 0.8
     encoder_config.alignment_weight =0.5
-    # 路由器输出 alpha_1, alpha_2 的投影
+    # Router output alpha_1, alpha_2 projection
     encoder_config.moh_alpha_proj_size = 2
-    # load balance loss 的加权系数
-    encoder_config.moh_load_balance_weight = 1  # 你可以自己定义
+    # Load balance loss weighting coefficient
+    encoder_config.moh_load_balance_weight = 1  # You can define your own
     encoder_config.moh_start_layer = 6
 
     logger.info(f"Drop_path:{encoder_config.drop_path_list}")
     logger.info(encoder_config)
 
-    Qformer = BertLMHeadModel(encoder_config)  ## 创建BERT语言模型
+    Qformer = BertLMHeadModel(encoder_config)  ## Create BERT language model
     query_tokens = nn.Parameter(
         torch.zeros(1, num_query_token, encoder_config.hidden_size)
-    )  ## 初始化查询tokens
-    query_tokens.data.normal_(mean=0.0, std=encoder_config.initializer_range)  ## 使用正态分布初始化query_tokens
+    )  ## Initialize query tokens
+    query_tokens.data.normal_(mean=0.0, std=encoder_config.initializer_range)  ## Initialize query_tokens using normal distribution
     return Qformer, query_tokens
-
-

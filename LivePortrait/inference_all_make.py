@@ -8,23 +8,20 @@ from pathlib import Path
 
 
 def ensure_dir(directory):
-    """确保目录存在，如果不存在则创建"""
+    """Make sure the directory exists; if not, create it"""
     Path(directory).mkdir(parents=True, exist_ok=True)
 
 
 def get_latest_mp4_file(directory):
     """
-    从某个目录中获取最新生成的 mp4 文件路径。
-    如果你的 inference.py 只生成单个 mp4，可以用这个函数来定位并重命名。
-    如若生成多个文件，需要根据实际需求做进一步过滤。
+    Obtain the path of the newly generated mp4 file from a certain directory.
+    If your Infers.py only generates a single mp4, you can use this function to locate and rename it.
+    If multiple files are generated, further filtering is required based on actual needs.
     """
     mp4_files = [os.path.join(directory, f) for f in os.listdir(directory) if f.endswith('.mp4')]
     if not mp4_files:
         return None, None
-    # 按修改时间排序，获取最新的
-    # mp4_files.sort(key=os.path.getmtime, reverse=True)
-    # return mp4_files[0]
-        # 分类视频文件
+
     concat_video = None
     normal_video = None
     for video in mp4_files:
@@ -37,14 +34,14 @@ def get_latest_mp4_file(directory):
 
 
 def process_images(base_path, device_id):
-    # DeepFaceLab/output 目录
+    # DeepFaceLab/output catalogue
     deeplabf_output = f"{base_path}/DeepFaceLab/output"
-    # 参考视频目录
+    # Refer video catalogue
     ref_video_dir = f"{base_path}/DeepFaceLab/ref_video"
-    # LivePortrait 脚本所在目录（需要在此目录下执行 python inference.py）
+    # The directory where the LivePortrait script is located (python inference.py needs to be executed in this directory)
     liveportrait_path = f"{base_path}/LivePortrait"
 
-    # 5 个参考视频
+    # 5 ref video
     ref_videos = [
         "angry_512.mp4",
         "no_512.mp4",
@@ -53,32 +50,32 @@ def process_images(base_path, device_id):
         "yes_512.mp4"
     ]
 
-    # 获取所有输出目录（例如 d82LKPNesE8_100 等）
+    # Obtain all output directories (such as d82LKPNesE8100, etc.)
     output_dirs = [
         d for d in os.listdir(deeplabf_output)
         if os.path.isdir(os.path.join(deeplabf_output, d))
     ]
 
-    print(f"找到 {len(output_dirs)} 个输出目录: {output_dirs}")
-    # 先不计算总任务量，因为 HQ_face + photomaker 是组合的，这里仅做提示
+    print(f"find {len(output_dirs)} output catalogue: {output_dirs}")
+
 
     for dir_name in output_dirs:
         current_output_dir = os.path.join(deeplabf_output, dir_name)
         hq_face_dir = os.path.join(current_output_dir, "HQ_face")
         photomaker_dir = os.path.join(current_output_dir, "photomaker")
 
-        # --- 1) 从 HQ_face 里获取第一张图（若存在） ---
+        # --- 1) Get the first image (if it exists) from HQ face ---
         hq_face_image = None
         if os.path.exists(hq_face_dir):
             face_images = [f for f in os.listdir(hq_face_dir) if f.endswith('.jpg')]
-            face_images.sort()  # 确保顺序
+            face_images.sort()  # Ensure the sequence
             if face_images:
-                # 使用第一张作为源图
+                # Use the first one as the source image
                 hq_face_image = os.path.join(hq_face_dir, face_images[0])
             else:
-                print(f"[警告] {hq_face_dir} 中没有找到jpg文件，将跳过 HQ_face。")
+                print(f"[warning] If the jpg file is not found in {hq_face_dir}, HQ_face will be skipped")
 
-        # --- 2) 从 photomaker/scene_0~5 里各随机选 1 张 ---
+        # --- 2) Randomly select one photo from photomaker/scene 0 to 5 ---
         photomaker_images = []
         if os.path.exists(photomaker_dir):
             for scene_i in range(6):
@@ -91,13 +88,13 @@ def process_images(base_path, device_id):
                         chosen_img = random.choice(candidate_imgs)  # 随机选一张
                         photomaker_images.append(os.path.join(scene_dir, chosen_img))
                     else:
-                        print(f"[警告] {scene_dir} 中没有 jpg 文件，跳过此 scene")
+                        print(f"[warning] There is no jpg file in {scene_dir}. Skip this scene")
                 else:
-                    print(f"[提示] {scene_dir} 不存在，跳过")
+                    print(f"[Hint] {scene_dir} does not exist. Skip")
         else:
-            print(f"[提示] photomaker 目录不存在: {photomaker_dir}")
+            print(f"[Hint] photomaker catelogue is not exist: {photomaker_dir}")
 
-        # 把 HQ_face 的那一张 + photomaker 选中的 6 张 合并
+        # Merge the one from HQ_face with the six selected ones from photomaker
         source_images = []
         if hq_face_image:
             source_images.append(hq_face_image)
@@ -110,32 +107,32 @@ def process_images(base_path, device_id):
             sim_imgs_fullpath = [os.path.join(similar_image_dir, x) for x in sim_imgs]
             if sim_imgs_fullpath:
                 source_images.extend(sim_imgs_fullpath)
-                print(f"[提示] {dir_name} 的 similar_image 中找到 {len(sim_imgs_fullpath)} 张图片，将一并处理。")
+                print(f"[Hint]  Find the {len(sim_imgs_fullpath)} image in the similar_image of {dir_name} and process them together")
             else:
-                print(f"[提示] {dir_name} 的 similar_image 中没有发现 jpg 文件，跳过。")
+                print(f"[Hint]  No jpg file was found in the similar_image of {dir_name}, skip it.")
         if not source_images:
-            print(f"[警告] 在 {dir_name} 中既没找到 HQ_face 的图，也没找到 photomaker 的图，跳过此目录。")
+            print(f"[Warning] Neither the graph of HQ_face nor that of photomaker was found in {dir_name}. Skip this directory.")
             continue
 
-        # --- 3) 为每个源图，执行 5 个参考视频 ---
-        # 统一将结果放到 "5_movie_video" 目录下
+        # --- 3) For each source image, run five reference videos ---
+        # Put the results uniformly in the "5 movie video" directory
         final_video_dir = os.path.join(current_output_dir, "5_movie_video")
         ensure_dir(final_video_dir)
 
-        print(f"\n处理目录: {dir_name}")
-        print(f"共找到 {len(source_images)} 张待处理的源图片（HQ_face + photomaker）")
-        print(f"输出目录: {final_video_dir}")
+        print(f"\nProcess catalogue: {dir_name}")
+        print(f"A total of {len(source_images)} source images to be processed (HQ_face + photomaker) were found.")
+        print(f"Outputcatalogue : {final_video_dir}")
 
         # 遍历每张源图
         for source_image in source_images:
             source_basename = os.path.splitext(os.path.basename(source_image))[0]
-            # 例如 scene_0_output_2 或 HQ_face_0
+            # For example, scene 0 output 2 or HQ face 0
 
             for video in ref_videos:
                 ref_basename = os.path.splitext(video)[0]
-                # 例如 angry_512, no_512
+                # such as angry_512, no_512
 
-                # 为了避免不同任务文件互相覆盖，给每次推理都建一个临时输出目录
+                # To prevent different task files from overwriting each other, a temporary output directory is created for each inference
                 temp_output_dir = os.path.join(current_output_dir, "moved_image_temp")
                 ensure_dir(temp_output_dir)
 
@@ -147,34 +144,34 @@ def process_images(base_path, device_id):
                     "--device-id", str(device_id)
                 ]
 
-                # 进入 LivePortrait 环境并执行
+                # Enter the LivePortrait environment and execute
                 try:
                     os.chdir(liveportrait_path)
-                    print(f"\n[执行命令] {' '.join(cmd)}")
+                    print(f"\n[executive command] {' '.join(cmd)}")
                     subprocess.run(cmd, check=True)
 
-                    # 假设 inference.py 在 temp_output_dir 下会生成一个 mp4 文件
+                    # Suppose inference.py generates an mp4 file under temp_output_dir
                     generated_mp4,_ = get_latest_mp4_file(temp_output_dir)
                     if generated_mp4 is None:
-                        print(f"[警告] 未在 {temp_output_dir} 找到新生成的 mp4，跳过重命名。")
+                        print(f"[Warning] The newly generated mp4 was not found in {temp_output_dir}. Skip and rename.")
                     else:
-                        # 构造新名字，例如: scene_0_output_2_no_512.mp4
+                        # Construct a new name,for example: scene_0_output_2_no_512.mp4
                         final_name = f"{source_basename}_{ref_basename}.mp4"
                         final_path = os.path.join(final_video_dir, final_name)
 
-                        # 重命名移动到 5_movie_video
+                        # Rename and move to 5 movie video
                         os.rename(generated_mp4, final_path)
-                        print(f"生成视频: {final_path}")
+                        print(f"Generate Video: {final_path}")
 
                 except subprocess.CalledProcessError as e:
-                    print(f"[错误] inference.py 处理失败: {e}")
+                    print(f"[Error] inference.py executive unsuccessful: {e}")
                 except Exception as e:
-                    print(f"[异常] 发生错误: {e}")
+                    print(f"[Exception] An error occurred: {e}")
                 finally:
-                    # 如果需要清理临时目录，可在这里做清理
+                    # If need to clean up the temporary directory, you can do it here
                     pass
 
-    print("\n所有处理全部完成！")
+    print("\nAll processing has been completed！")
 
 
 def main():
@@ -182,9 +179,9 @@ def main():
     base_path = "/root/autodl-tmp/yufei"
     device_id = 1
 
-    print("开始批量处理图片...")
+    print("Start batch processing of images...")
     process_images(base_path, device_id)
-    print("\n所有处理完成!")
+    print("\nAll processing completed!")
 
 
 if __name__ == "__main__":

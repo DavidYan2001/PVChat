@@ -10,25 +10,25 @@ def parse_args():
 
 
 def replace_sks_in_json(input_path, output_path, sks_name):
-    # 读取 JSON 文件
+    # Read the JSON file
     with open(input_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
-    # 将 "data" 键改为 "videos"
+    # Change the "data" key to "videos"
     if "data" in data:
         data["videos"] = data.pop("data")
 
-    # 遍历所有视频数据
+    # Traverse all video data
     for video in data["videos"]:
-        # 更新 sks_present
+        # updata sks_present
         video["sks_present"] = sks_name
 
-        # 更新所有 QA 对
+        # Update all QA pairs
         for qa_pair in video["qa_pairs"]:
             qa_pair["question"] = qa_pair["question"].replace("<sks>", sks_name)
             qa_pair["answer"] = qa_pair["answer"].replace("<sks>", sks_name)
 
-    # 保存修改后的文件
+    # Save the modified file
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
@@ -53,19 +53,19 @@ def main():
     args = parse_args()
     sks_name = args.sks_name
 
-    # 清理旧文件
+    # clean old file
     clean_old_files()
 
-    # 输入文件路径
+    # input file path
     input_train = "/root/autodl-tmp/yufei/datasets/cekebv-hq/train_all_video_updated.json"
     input_test = "/root/autodl-tmp/yufei/datasets/cekebv-hq/test_all_video_updated.json"
 
-    # 输出文件路径 (直接使用完整的名称，包括尖括号)
+    # Output file path (use the full name directly, including Angle brackets)
     output_dir = "/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality"
     output_train = os.path.join(output_dir, f"{sks_name}.json")
     output_test = os.path.join(output_dir, f"{sks_name}test.json")
 
-    # 处理训练和测试文件
+    # Handle training and test files
     replace_sks_in_json(input_train, output_train, sks_name)
     replace_sks_in_json(input_test, output_test, sks_name)
 

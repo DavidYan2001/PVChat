@@ -169,14 +169,14 @@ def HD_transform_no_padding(frames, image_size=224, hd_num=6, fix_ratio=(2,1)):
 
 def process_single_video(video_path, model, tokenizer):
     try:
-        # 加载视频
+        # load video
         video_tensor = load_video(video_path, num_segments=8, return_msg=False, resolution=224, hd_num=6)
         video_tensor = video_tensor.to(model.device)
 
-        # 初始化聊天历史
+        # init chat history
         chat_history = []
 
-        # 获取描述
+        # Get description
         _, chat_history = model.chat(
             tokenizer,
             '',
@@ -188,7 +188,7 @@ def process_single_video(video_path, model, tokenizer):
             generation_config={'do_sample': False}
         )
 
-        # 获取性别和年龄信息
+        # Obtain gender and age information
         response, _ = model.chat(
             tokenizer,
             '',
@@ -200,17 +200,17 @@ def process_single_video(video_path, model, tokenizer):
             generation_config={'do_sample': False}
         )
 
-        # 解析性别和年龄
+        # Analyze gender and age
         gender = None
         age = None
 
-        # 在response中查找性别关键词
+        # Search for gender keywords in the response
         if 'male' in response.lower():
             gender = 'male'
         elif 'female' in response.lower():
             gender = 'female'
 
-        # 在response中查找年龄关键词
+        # Search for the age keyword in the response
         age_keywords = ['child', 'young', 'middle-aged', 'elderly']
         for keyword in age_keywords:
             if keyword in response.lower():
@@ -235,29 +235,29 @@ def process_single_video(video_path, model, tokenizer):
 
 
 def process_video_directory(directory_path, model, tokenizer, output_json_path):
-    # 获取所有视频文件
+    # Get all video files
     video_files = []
     for root, _, files in os.walk(directory_path):
         for file in files:
             if file.lower().endswith(('.mp4', '.avi', '.mov', '.mkv')):
                 video_files.append(os.path.join(root, file))
 
-    # 存储所有结果
+    # Store all results
     results = []
 
-    # 使用tqdm显示进度
+    # Use tqdm to display progress
     for video_path in tqdm(video_files, desc="Processing videos"):
         result = process_single_video(video_path, model, tokenizer)
         results.append(result)
 
-        # 实时保存结果到JSON文件
+        # Save the results in real time to a JSON file
         with open(output_json_path, 'w', encoding='utf-8') as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
 
     return results
 
 
-# 使用示例：
+# forexample：
 if __name__ == "__main__":
     token = os.environ['HF_TOKEN'] = "xxxx"
 
@@ -277,7 +277,7 @@ if __name__ == "__main__":
             torch_dtype=torch.bfloat16,
             trust_remote_code=True)
     decord.bridge.set_bridge("torch")
-    # 设置视频目录路径和输出JSON文件路径
+    # Set the video directory path and the output JSON file path
     video_directory = "/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality/Finetune_datasets/YUFEI"
     output_json = "video_analysis_results.json"
 

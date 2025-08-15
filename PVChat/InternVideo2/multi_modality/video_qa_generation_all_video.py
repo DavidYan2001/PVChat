@@ -158,15 +158,15 @@ def HD_transform_no_padding(frames, image_size=224, hd_num=6, fix_ratio=(2,1)):
     return resized_frame
 
 ################################
-# 1) 这部分是示例：InternVideo2推理的函数
-#    实际使用中，请接入你完整的InternVideo2模型加载和处理逻辑
+# 1) This part is an example: InternVideo2 inference functions
+#    In actual use, please integrate your complete InternVideo2 model loading and processing logic
 ################################
 def get_caption_from_api(answer):
     original = "Help me replace all the descriptions of people in the following paragraph, such as human, he, she, etc., with <person>.Just return the modified one:"
     prompt = original + answer
     api_key = os.getenv("OPENAI_API_KEY")
     client = OpenAI(
-        api_key="api_key,
+        api_key="api_key",
         base_url="https://api.openai-sb.com/v1"
     )
 
@@ -194,25 +194,25 @@ def get_caption_from_api(answer):
     return answer  # Fallback to the original answer if API fails
 def load_video_for_internvideo2(video_path):
     """
-    这里仅是示例。
-    你可以参考你之前的 load_video(...) 函数，做8帧采样、预处理等。
-    返回一个能喂给 InternVideo2 模型的张量或其它结构即可。
+    This is just an example.
+    You can refer to your previous load_video(...) function for 8-frame sampling, preprocessing, etc.
+    Return a tensor or other structure that can be fed to the InternVideo2 model.
     """
-    # TODO: 使用你的实际实现
-    return torch.zeros((1, 10, 3, 224, 224))  # 假装返回一个Tensor
+    # TODO: Use your actual implementation
+    return torch.zeros((1, 10, 3, 224, 224))  # Pretend to return a Tensor
 
 
 def ask_internvideo2(video_path, question, model=None, tokenizer=None):
     """
-    对单个video和问题，调用InternVideo2模型得到回答。
-    在这里你要真正地载入视频张量，并喂给模型，同时传入question。
-    返回字符串形式的回答。
+    For a single video and question, call the InternVideo2 model to get an answer.
+    Here you need to actually load the video tensor and feed it to the model along with the question.
+    Return the answer as a string.
     """
-    # 加载并预处理视频
+    # Load and preprocess video
     chat_history = []
     video_tensor = load_video(video_path)
     video_tensor = video_tensor.to(model.device)
-    # 在这里调用你自己的模型推理逻辑
+    # Call your own model inference logic here
     response, chat_history = model.chat(
         tokenizer,
         '',
@@ -223,26 +223,26 @@ def ask_internvideo2(video_path, question, model=None, tokenizer=None):
         return_history=True,
         generation_config={'do_sample': False}
     )
-    # 下方仅做一个mock，返回固定回答
+    # Below is just a mock, returning a fixed answer
     answer = response
     return answer
 
 
 ################################
-# 2) 这部分是示例：调用ChatGPT或其他API替换人的描述为 <person>
+# 2) This part is an example: Call ChatGPT or other API to replace person descriptions with <person>
 ################################
 
 def call_chatgpt_api(text):
     """
-    这里用来模拟你使用 ChatGPT / openai / etc. 的 API，
-    将回答中所有 'he','she','man','woman','boy','girl','the person' 等人称替换为 <person>。
-    你可以使用正则表达式或更复杂的语言模型来实现更精准的替换。
-    这里只是一个示范。
+    This is used to simulate using ChatGPT / openai / etc. API,
+    to replace all references to people like 'he','she','man','woman','boy','girl','the person' etc. with <person>.
+    You can use regex or more sophisticated language models for more precise replacement.
+    This is just a demonstration.
     """
-    # 简单用正则表达式替换
-    # 注意：实际情况中，你可以调用 openai.ChatCompletion.create(...) 等
-    # 并在 prompt 里写：“请把回答中的人称替换成 <person>” 等
-    # 这里只做一个简易演示：
+    # Simple replacement using regex
+    # Note: In actual use, you can call openai.ChatCompletion.create(...) etc.
+    # and write in the prompt: "Please replace all person references in the answer with <person>" etc.
+    # Here's just a simple demonstration:
     # patterns = [
     #     r'\bhe\b', r'\bshe\b', r'\bman\b', r'\bwoman\b',
     #     r'\bboy\b', r'\bgirl\b', r'the person'
@@ -250,13 +250,13 @@ def call_chatgpt_api(text):
     # replaced_text = text
     # for pat in patterns:
     #     replaced_text = re.sub(pat, "<person>", replaced_text, flags=re.IGNORECASE)
-    #调用大语言模型
+    # Call large language model
     replaced_text = get_caption_from_api(text)
     return replaced_text
 
 
 ################################
-# 3) 15个问题模板
+# 3) 15 question templates
 ################################
 
 QUESTION_TEMPLATES = {
@@ -285,14 +285,14 @@ QUESTION_TEMPLATES = {
 
 
 ################################
-# 4) 处理函数
+# 4) Processing functions
 ################################
 
 def process_json_file(input_path, output_path, model=None, tokenizer=None):
     """
-    读取 input_path (train_all_video.json 或 test_all_video.json)，
-    对 "is_positive": true 的视频附加15个问答。
-    保存到 output_path.
+    Read input_path (train_all_video.json or test_all_video.json),
+    add 15 Q&A pairs to videos with "is_positive": true.
+    Save to output_path.
     """
     if not os.path.exists(input_path):
         print(f"[Warning] {input_path} not found, skip.")
@@ -309,7 +309,7 @@ def process_json_file(input_path, output_path, model=None, tokenizer=None):
     print(f"[Info] Loaded {len(video_items)} video entries from {input_path}.")
 
     for item in tqdm(video_items, desc=f"Processing {os.path.basename(input_path)}"):
-        # 仅处理 is_positive = true
+        # Only process is_positive = true
 
         if not item.get("is_positive", False):
             continue
@@ -319,15 +319,15 @@ def process_json_file(input_path, output_path, model=None, tokenizer=None):
         if not video_name or not video_path:
             continue
 
-        # 取出已有 qa_pairs，没有就新建空列表
+        # Get existing qa_pairs, create empty list if none
         qa_pairs = item.get("qa_pairs", [])
 
-        # 针对15个问题，逐一生成回答
-        # 先把 <sks> -> "the person" 放进 InternVideo2
-        # 拿到回答后 -> ChatGPT API (替换所有人称 -> <person>)
-        # 再把 <person> -> <sks>
-        # question 保留原样(含 <sks>)
-        # answer 最终存入 qa_pairs
+        # For 15 questions, generate answers one by one
+        # First replace <sks> -> "the person" to feed into InternVideo2
+        # After getting answer -> ChatGPT API (replace all person references -> <person>)
+        # Then replace <person> -> <sks>
+        # question keeps original (with <sks>)
+        # answer is finally stored in qa_pairs
         all_questions = (
                 QUESTION_TEMPLATES["action_questions"] +
                 QUESTION_TEMPLATES["clothing_questions"] +
@@ -335,36 +335,36 @@ def process_json_file(input_path, output_path, model=None, tokenizer=None):
         )
 
         for q in all_questions:
-            # 1) 替换 <sks> => "the person" (仅在要问 InternVideo2 时)
+            # 1) Replace <sks> => "the person" (only when asking InternVideo2)
             intern_q = q.replace("<sks>", "the person")
 
-            # 2) InternVideo2回答
+            # 2) InternVideo2 answer
             intern_answer = ask_internvideo2(video_path, intern_q, model, tokenizer)
 
-            # 3) 传给 ChatGPT API 替换成 <person>
+            # 3) Pass to ChatGPT API to replace with <person>
             replaced_with_person = call_chatgpt_api(intern_answer)
 
-            # 4) 最后把 <person> => <sks>
+            # 4) Finally replace <person> => <sks>
             final_answer = replaced_with_person.replace("<person>", "<sks>")
 
-            # 追加到 qa_pairs
+            # Append to qa_pairs
             qa_pairs.append({
-                "question": q,  # 问题仍然保留 <sks>
-                "answer": final_answer,  # 答案改成替换后的
+                "question": q,  # Question still keeps <sks>
+                "answer": final_answer,  # Answer is the replaced version
                 "is_special": False
             })
 
-        # 更新回去
+        # Update back
         item["qa_pairs"] = qa_pairs
 
-    # 保存新文件
+    # Save new file
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump({"data": video_items}, f, indent=2, ensure_ascii=False)
     print(f"[Info] Updated data saved to {output_path}.")
 
 
 def main():
-    # 假设你已加载好 InternVideo2 模型/ tokenizer
+    # Assume you have loaded InternVideo2 model/tokenizer
     HF_TOKEN = os.environ['HF_TOKEN']
     token = HF_TOKEN
     decord.bridge.set_bridge("torch")
@@ -384,7 +384,7 @@ def main():
             torch_dtype=torch.bfloat16,
             trust_remote_code=True)
 
-    # 输入输出文件示例
+    # Input/output file examples
     train_input = "/root/autodl-tmp/yufei/datasets/cekebv-hq/train_all_video.json"
     test_input = "/root/autodl-tmp/yufei/datasets/cekebv-hq/test_all_video.json"
     train_output = "/root/autodl-tmp/yufei/datasets/cekebv-hq/train_all_video_updated.json"

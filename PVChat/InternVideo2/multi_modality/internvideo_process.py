@@ -17,11 +17,11 @@ def parse_args():
 def main():
     args = parse_args()
 
-    # 1. 读取旧的 JSON
+    # 1. Read the old JSON
     with open(args.input_json, "r") as f:
         data = json.load(f)
 
-    # 2. 删除所有的 generated_answer 字段
+    # 2.Delete all generated answer fields
     if "results" in data:
         for result in data["results"]:
             if "qa_pairs" in result:
@@ -29,7 +29,7 @@ def main():
                     if "generated_answer" in qa_pair:
                         del qa_pair["generated_answer"]
 
-    # 3. 保存到新的 JSON 文件，不覆盖原文件
+    # 3. Save to a new JSON file without overwriting the original file
     with open(args.output_json, "w") as f:
         json.dump(data, f, indent=2)
 

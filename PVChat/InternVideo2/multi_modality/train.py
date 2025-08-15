@@ -47,7 +47,7 @@ def get_args():
 def main():
     args = get_args()
 
-    # 定义学习率
+    # Define learning rates
     learning_rates = {
         'personal_token_lr': args.personal_token_lr,
         'token_lr': args.token_lr,
@@ -55,26 +55,26 @@ def main():
         'lora_lr': args.lora_lr
     }
 
-    # 定义模型配置
+    # Define model configuration
     config_path = args.model_path
     config = AutoConfig.from_pretrained(config_path, trust_remote_code=True)
     reference_config_path = Path(config_path) / "config.json"
 
-    # 自动补充缺失字段（如果需要）
-    # 这里假设 `ensure_complete_config` 函数已经被整合到 `LightningModule` 中
-    # 如果需要，可以在这里加载并处理
+    # Automatically supplement missing fields (if needed)
+    # Here assumes that `ensure_complete_config` function has been integrated into `LightningModule`
+    # If needed, can load and process here
 
-    # 初始化 tokenizer
+    # Initialize tokenizer
     tokenizer = AutoTokenizer.from_pretrained(
         config_path,
         trust_remote_code=True,
         use_fast=False
     )
 
-    # 定义前缀tokens
+    # Define prefix tokens
     prefix_tokens = [f'<token{i}>' for i in range(args.num_personal_token)]
 
-    # 初始化 LightningModule
+    # Initialize LightningModule
     model = PersonalizedVideoLightningModule(
         config_path=config_path,
         sks_name=args.sks_name,
@@ -83,7 +83,7 @@ def main():
         model_config=config.to_dict()
     )
 
-    # 初始化 DataModule
+    # Initialize DataModule
     data_module = PersonalizedVideoDataModule(
         data_root=args.data_root,
         sks_name=args.sks_name,
@@ -92,7 +92,7 @@ def main():
         num_workers=4
     )
 
-    # 设置回调
+    # Set up callbacks
     checkpoint_callback = ModelCheckpoint(
         monitor='val_loss',
         dirpath=Path(args.save_dir) / args.sks_name,
@@ -103,34 +103,34 @@ def main():
 
     lr_monitor = LearningRateMonitor(logging_interval='step')
 
-    # 设置 logger
+    # Set up logger
     logger = TensorBoardLogger(
         save_dir=args.log_dir,
         name=args.sks_name
     )
 
-    # 初始化 Trainer
+    # Initialize Trainer
     trainer = pl.Trainer(
         max_epochs=args.num_epochs,
         gpus=2 if torch.cuda.device_count() >=2 else 1,
         logger=logger,
         callbacks=[checkpoint_callback, lr_monitor],
-        precision=16 if torch.cuda.is_available() else 32,  # 使用混合精度
+        precision=16 if torch.cuda.is_available() else 32,  # Use mixed precision
         accelerator='gpu' if torch.cuda.is_available() else 'cpu',
         strategy='ddp' if torch.cuda.device_count() >1 else None
     )
 
     if args.mode == "train":
-        # 开始训练
+        # Start training
         trainer.fit(model, datamodule=data_module)
 
-        # 运行测试
+        # Run test
         trainer.test(model, datamodule=data_module)
 
     elif args.mode == "test":
-        assert args.checkpoint_path is not None, "测试模式下需要指定 checkpoint_path"
+        assert args.checkpoint_path is not None, "checkpoint_path must be specified in test mode"
 
-        # 加载 checkpoint
+        # Load checkpoint
         model = PersonalizedVideoLightningModule.load_from_checkpoint(
             checkpoint_path=args.checkpoint_path,
             config_path=config_path,
@@ -140,20 +140,20 @@ def main():
             model_config=config.to_dict()
         )
 
-        # 加载模型权重
+        # Load model weights
         model.model.load_state_dict(torch.load(Path(args.checkpoint_path) / 'pytorch_model.bin', map_location=torch.device('cuda' if torch.cuda.is_available() else 'cpu')))
 
-        # 扩展词表
+        # Expand vocabulary
         tokenizer.add_tokens(model.sks_tokens + model.prefix_tokens)
         model.model.lm.resize_token_embeddings(len(tokenizer))
 
-        # 设置模型为评估模式
+        # Set model to evaluation mode
         model.eval()
 
-        # 初始化 DataModule
+        # Initialize DataModule
         data_module.setup()
 
-        # 运行测试
+        # Run test
         trainer.test(model, datamodule=data_module)
 
 if __name__ == "__main__":

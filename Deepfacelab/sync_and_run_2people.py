@@ -4,40 +4,40 @@
 import os
 import paramiko
 
-# ============ 配置区，根据实际情况修改 ============
+# ============ Configuration area, modify according to the actual situation ============
 HOST = "xxx"
 PORT = 20002
 USERNAME = "xxx"
 PASSWORD = "xxx"
 
-# 本地输出目录（DeepFaceLab 输出结果所在目录）
+# Local output directory (the directory where DeepFaceLab's output results are located)
 LOCAL_OUTPUT_DIR = "/root/autodl-tmp/yufei/DeepFaceLab/output"
 
-# 远程服务器上放置 HQ_face/HQ_face2 目录的父目录
+# Place the parent directory of the HQ_face/HQ_face2 directory on the remote server
 REMOTE_TMP_PICTURE = "/mnt/hdd1/yufei/img2dataset/tmp_picture"
 
-# 远程执行 clip-retrieval.py 的相关信息
+# Remotely execute the relevant information of Clip-retriev.py
 REMOTE_CLIP_SCRIPT = "/mnt/hdd1/yufei/img2dataset/clip-retrieval.py"
-# 如果你用 conda 环境管理，需根据实际情况修改如下命令
+# If you use conda environment management, you need to modify the following command according to the actual situation
 REMOTE_CLIP_ENV_ACTIVATE = "/home/yufei/miniconda3/bin/activate clip"
 REMOTE_CLIP_RUN_DIR = "/mnt/hdd1/yufei/img2dataset"
 
 
 def is_image_file(filename):
-    """判断文件是否为图片（支持常见图片格式）"""
+    """Determine whether the file is an image (supports common image formats)"""
     return filename.lower().endswith((".png", ".jpg", ".jpeg", ".bmp", ".gif"))
 
 
 def sftp_mkdir_p(sftp, remote_directory):
     """
-    模拟 'mkdir -p'：逐级创建远程目录。
+    Simulate 'mkdir -p' : Create remote directories step by step.
     """
     parts = remote_directory.strip("/").split("/")
     path = ""
     for p in parts:
         path = path + "/" + p
         try:
-            sftp.stat(path)  # 检测是否已存在
+            sftp.stat(path)  # Check if it already exists
         except FileNotFoundError:
             try:
                 sftp.mkdir(path)
@@ -47,7 +47,7 @@ def sftp_mkdir_p(sftp, remote_directory):
 
 def sftp_copy_dir_to_remote(sftp, local_dir, remote_dir):
     """
-    递归上传本地 local_dir -> 远程 remote_dir（不存在则自动创建）
+    Recursively upload local local_dir -> remote remote_dir (automatically created if not present)
     """
     for root, dirs, files in os.walk(local_dir):
         rel_path = os.path.relpath(root, local_dir)
@@ -65,7 +65,7 @@ def sftp_copy_dir_to_remote(sftp, local_dir, remote_dir):
 
 def sftp_copy_dir_to_local(sftp, remote_dir, local_dir):
     """
-    递归下载远程 remote_dir -> 本地 local_dir（不存在则自动创建）
+    Recursively download remote remote_dir -> local local_dir (automatically created if not present)
     """
     def _stat_is_dir(st):
         return (st.st_mode & 0o40000) == 0o40000  # S_IFDIR
@@ -83,7 +83,7 @@ def sftp_copy_dir_to_local(sftp, remote_dir, local_dir):
                 print(f"[DOWNLOAD] {remote_item} -> {local_item}")
 
     try:
-        sftp.stat(remote_dir)  # 如果远程目录不存在，会抛出 FileNotFoundError
+        sftp.stat(remote_dir)  # If the remote directory does not exist, a FileNotFoundError will be thrown
     except FileNotFoundError:
         print(f"[WARNING] Remote directory not found: {remote_dir}")
         return
@@ -92,7 +92,7 @@ def sftp_copy_dir_to_local(sftp, remote_dir, local_dir):
 
 
 def main():
-    # 1) 建立 SSH 连接 & SFTP
+    # 1)Establish an SSH connection & SFTP
     print(f"[INFO] Connecting to {HOST}:{PORT} ...")
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -100,8 +100,8 @@ def main():
     sftp = client.open_sftp()
     print("[INFO] SSH connection established.")
 
-    # 2) 上传 HQ_face & HQ_face2
-    #    如果本地 already 存在 'similar_image' (or 'similar_image2') 且图片数>=5 则跳过该人的上传
+    # 2) updata HQ_face & HQ_face2
+    #    If the local already exists 'similar_image' (or 'similar_image2') and the number of images is greater than or equal to 5, the person's upload will be skipped
     print("[INFO] Start uploading all HQ_face / HQ_face2 directories ...")
 
     for video_name in os.listdir(LOCAL_OUTPUT_DIR):
@@ -109,16 +109,16 @@ def main():
         if not os.path.isdir(local_video_dir):
             continue
 
-        # ---------------- 第一人 HQ_face ----------------
+        # ---------------- First people HQ_face ----------------
         local_hq_face = os.path.join(local_video_dir, "HQ_face")
         if os.path.isdir(local_hq_face):
             local_sim_dir = os.path.join(local_video_dir, "similar_image")
-            need_upload_1 = True  # 先假设需要上传
+            need_upload_1 = True  # Let's assume for now that an upload is needed
 
             if os.path.isdir(local_sim_dir):
                 image_files = [f for f in os.listdir(local_sim_dir) if is_image_file(f)]
                 if len(image_files) >= 5:
-                    # 已有 >= 5 张相似图，则跳过上传
+                    # If there are already more than or equal to 5 similar images, skip the upload
                     print(f"[INFO] {video_name} has similar_image (>=5), skip upload for HQ_face.")
                     need_upload_1 = False
 
@@ -128,7 +128,7 @@ def main():
                 print(f"\n[INFO] Uploading: {local_hq_face} => {remote_hq_face}")
                 sftp_copy_dir_to_remote(sftp, local_hq_face, remote_hq_face)
 
-        # ---------------- 第二人 HQ_face2 ----------------
+        # ---------------- Second people HQ_face2 ----------------
         local_hq_face2 = os.path.join(local_video_dir, "HQ_face2")
         if os.path.isdir(local_hq_face2):
             local_sim_dir2 = os.path.join(local_video_dir, "similar_image2")
@@ -146,7 +146,7 @@ def main():
                 print(f"\n[INFO] Uploading: {local_hq_face2} => {remote_hq_face2}")
                 sftp_copy_dir_to_remote(sftp, local_hq_face2, remote_hq_face2)
 
-    # 3) 在远程服务器执行 clip-retrieval.py 脚本（一次性执行）
+    # 3) Execute the clip-retrieval.py script on the remote server (in one go)
     print("\n[INFO] Running clip-retrieval.py on remote server ...")
     command = f"""
         source {REMOTE_CLIP_ENV_ACTIVATE}
@@ -165,7 +165,7 @@ def main():
     else:
         print("[INFO] Remote script finished successfully.")
 
-    # 4) 下载远程生成的 similar_image / similar_image2 到本地
+    # 4) Download the remotely generated similar_image/similar_image2 to your local device
     print("[INFO] Downloading similar_image / similar_image2 directories back to local ...")
 
     for video_name in os.listdir(LOCAL_OUTPUT_DIR):
@@ -173,7 +173,7 @@ def main():
         if not os.path.isdir(local_video_dir):
             continue
 
-        # ---------------- 第一人 similar_image ----------------
+        # ----------------First people similar_image ----------------
         local_sim_dir = os.path.join(local_video_dir, "similar_image")
         sim_count = 0
         if os.path.isdir(local_sim_dir):
@@ -186,13 +186,13 @@ def main():
         else:
             print(f"[INFO] {video_name} already has >=5 images in similar_image, skip download.")
 
-        # ---------------- 第二人 similar_image2 ----------------
+        # ---------------- Second people similar_image2 ----------------
         local_sim_dir2 = os.path.join(local_video_dir, "similar_image2")
         sim2_count = 0
         if os.path.isdir(local_sim_dir2):
             sim2_count = len([f for f in os.listdir(local_sim_dir2) if is_image_file(f)])
 
-        # HQ_face2 文件夹是否存在本地
+        # Does the HQ face2 folder exist locally
         local_hq_face2 = os.path.join(local_video_dir, "HQ_face2")
         if os.path.isdir(local_hq_face2):
             if sim2_count < 5:
@@ -204,7 +204,7 @@ def main():
             else:
                 print(f"[INFO] {video_name} already has >=5 images in similar_image2, skip download.")
         else:
-            # 如果本地根本没有 HQ_face2，就不需要下载
+            # If HQ face2 is not available locally at all, there is no need to download it
             pass
 
     # 5) 关闭连接

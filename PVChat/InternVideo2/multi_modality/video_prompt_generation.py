@@ -57,7 +57,7 @@ def get_index(num_frames, num_segments):
 
 def get_prompts_from_class_data(class_data, gender, age):
     """
-    从class_data中获取对应gender和age的所有prompts
+    Obtain all prompts corresponding to gender and age from class_data
     """
     prompts = []
 
@@ -66,16 +66,17 @@ def get_prompts_from_class_data(class_data, gender, age):
 
     scenarios = class_data[gender][age]
 
-    # 遍历每个大场景
+    # Traverse each large scene
     for main_scenario, sub_scenarios in scenarios.items():
-        # 对于每个大场景下的小场景
+        # For each small scene within a large one
         for sub_scenario, specific_scenarios in sub_scenarios.items():
-            # 如果specific_scenarios是字典，随机选择一个描述
+            # If specific_scenarios is a dictionary, randomly select a description
             if isinstance(specific_scenarios, dict):
-                if specific_scenarios:  # 确保不是空字典
+                if specific_scenarios:  #Make sure it is not an empty dictionary
+
                     random_description = random.choice(list(specific_scenarios.values()))
                     prompts.append(random_description)
-            # 如果specific_scenarios是字符串，直接添加
+            # If specific scenarios are strings, add them directly
             elif isinstance(specific_scenarios, str):
                 prompts.append(specific_scenarios)
 
@@ -217,7 +218,7 @@ def HD_transform_no_padding(frames, image_size=224, hd_num=6, fix_ratio=(2,1)):
     return resized_frame
 
 def parse_gender_age(response):
-    # 解析性别
+    # "Analysis of Gender
     gender = None
     if 'male' in response.lower():
         gender = 'male'
@@ -233,7 +234,7 @@ def parse_gender_age(response):
             break
 
     return gender, age
-# 处理每个视频
+# process video
 def get_caption_from_api(answer):
     original = "Help me replace all the descriptions of people in the following paragraph, such as human, he, she, etc., with <person>.Just return the modified one:"
     prompt = original + answer
@@ -262,16 +263,16 @@ def get_caption_from_api(answer):
 
 def process_question(question, sks_name, is_special=False):
     """
-    处理问题文本，根据不同情况进行替换
+    Handle the problem text and replace it according to different situations
     """
     if is_special:
-        # 对于特殊问题，将sks_name添加尖括号
+        # For special issues, add Angle brackets to sks name
         return question#.replace(sks_name, f'<{sks_name}>')
     elif question == "Describe the action step by step.":
-        # 对于描述性问题，保持原样
+        # For descriptive questions, keep them as they are
         return question
     else:
-        # 对于其他问题，将"the person"或"person"替换为<sks_name>
+        # For other questions, replace "the person" or "person" with <sks_name>
         return question.replace('the person', f'<{sks_name}>').replace('person', f'<{sks_name}>')
 
 def process_qa_dataset(input_file, output_file):
@@ -287,21 +288,21 @@ def process_qa_dataset(input_file, output_file):
         json.dump(data, f, indent=4)
 def replace_person_with_name(text, name):
     """
-    将文本中的 <person> 替换为 <name>
+Replace <person> in the text with <name>
     """
     return text.replace('<person>', f'<{name}>')
 
 
-# 在处理视频的循环中，修改特殊问题的处理部分
+# In the video processing loop, modify the section for handling special issues
 def get_special_qa_pairs(sks_name):
-    # 随机选择10个问题和对应的肯定回答
+    # Randomly select 10 questions and their corresponding affirmative answers
     selected_indices = random.sample(range(len(confirm_data["questions"])), 10)
     special_qa_pairs = []
 
     for idx in selected_indices:
-        # 替换问题中的<sks>为具体的<sks_name>
+        # Replace <sks> in the problem with the specific <sks name>
         question = confirm_data["questions"][idx].replace("<sks>", f"<{sks_name}>")
-        # 随机选择一个肯定回答并替换<sks>
+        # Randomly select an affirmative answer and replace <sks>
         answer = random.choice(confirm_data["yes_answers"]).replace("<sks>", f"<{sks_name}>")
 
         special_qa_pairs.append({
@@ -316,17 +317,17 @@ def get_special_qa_pairs(sks_name):
 
 print("Starting...")
 
-# 设置路径
+# set path
 video_dir = "/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality/Finetune_datasets/YUFEI"
 output_json = "qa_dataset4.json"
+# Get the list of video files
+# Debugging Information
 
-# 获取视频文件列表
-# 调试信息
 
-# 获取视频文件列表（考虑大小写）
+# Get the list of video files (case sensitive)
 video_files = [f for f in os.listdir(video_dir) if f.lower().endswith(('.mp4', '.avi', '.mov'))]
 print("Found video files:", video_files)
-# 初始化或加载数据集
+# Initialize or load the dataset
 if os.path.exists(output_json):
     with open(output_json, 'r', encoding='utf-8') as f:
         dataset = json.load(f)
@@ -334,27 +335,17 @@ if os.path.exists(output_json):
     video_files = [f for f in video_files if f not in processed_files]
 else:
     dataset = {"videos": []}
-# 加载确认问题的JSON文件
+# Load the JSON file for confirming the issue
 with open("/root/autodl-tmp/yufei/ConsisID/confirm_question.json", 'r', encoding='utf-8') as f:
     confirm_data = json.load(f)
 
-# 加载三类问题的JSON文件
+# Load the JSON files of the three types of questions
 with open("/root/autodl-tmp/yufei/ConsisID/negative_sample_3question.json", 'r', encoding='utf-8') as f:
     three_type_questions = json.load(f)
-# 在主处理循环前，加载class_data
+# Load the class data before the main processing loop
 with open("/root/autodl-tmp/yufei/ConsisID/class_data_modified.json", 'r', encoding='utf-8') as f:
     class_data = json.load(f)
-# 问题列表
-# questions = [
-#     "Describe the action step by step.",
-#     "What is the person doing?",
-#     "What is the person wearing?",
-#     "Where is the person in the video?",
-# 'According to the video and just told me two words about gender from "male, female" and age from "child, young, middle-aged, elderly" about the protagonist of the video'
-# ]
-# 修改questions列表
-#问题列表
-# 将原始的action/clothing/location问题列表分别保存，用于后续比较
+
 original_action_questions = three_type_questions["questions"]["action_questions"]
 original_clothing_questions = three_type_questions["questions"]["clothing_questions"]
 original_location_questions = three_type_questions["questions"]["location_questions"]
@@ -383,35 +374,30 @@ for video_file in tqdm(video_files):
 
     print(f"\nProcessing {video_file}")
 
-    # 清理内存
+    # clear cache
     torch.cuda.empty_cache()
     gc.collect()
 
     try:
-        # 加载视频
+        # load video
         video_path = os.path.join(video_dir, video_file)
         video_tensor = load_video(video_path, num_segments=8, return_msg=False, resolution=224, hd_num=6)
         video_tensor = video_tensor.to(model.device)
 
-        # 获取sks_name
+        # obtain sks_name
         sks_name = re.match(r'([a-zA-Z]+)', video_file)
         sks_name = sks_name.group(1) if sks_name else None
 
-        # 进行问答
+        # Have a question-and-answer session
         chat_history = []
         qa_pairs = []
         gender = None
         age = None
 
-        # 添加特定问题
+        # Add specific questions
         qa_pairs.extend(get_special_qa_pairs(sks_name))
-        # qa_pairs.append({
-        #     "question": f"If <{sks_name}> is in this video?",
-        #     "answer": "Yes" if sks_name in video_file.lower() else "No",
-        #     "is_special": True
-        # })
 
-        # 处理其他问题
+        # Handle other issues
         for question in questions:
            
             print(f"Processing question: {question}")
@@ -425,7 +411,7 @@ for video_file in tqdm(video_files):
                 return_history=True,
                 generation_config={'do_sample': False}
             )
-            # 如果是性别年龄问题，解析结果
+            # If it is a gender or age issue, analyze the result
             if "gender" in question and "age" in question:
                 gender, age = parse_gender_age(response)
                 same_face_prompts = []
@@ -441,12 +427,11 @@ for video_file in tqdm(video_files):
                 qa_pairs.append({
                     "question": processed_question,
                     "answer": processed_response,
-                    #"original_answer": response,  # 保存原始回答
                     "is_special": False
                 })
                 print(f"Answer: {response}")
 
-        # 保存结果
+        # save result
         video_data = {
             "video_name": video_file,
             "video_path": video_path,
@@ -459,11 +444,11 @@ for video_file in tqdm(video_files):
 
         dataset["videos"].append(video_data)
 
-        # 写入文件
+        # input file
         with open(output_json, 'w', encoding='utf-8') as f:
             json.dump(dataset, f, indent=2, ensure_ascii=False)
 
-        # 清理内存
+        # clear cache
         del video_tensor
         torch.cuda.empty_cache()
         gc.collect()
