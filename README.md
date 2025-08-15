@@ -29,11 +29,11 @@ This repository contains the implementation of PVChat, a personalized video chat
 
 - [x] Dataset Expansion
 - [x] Dataset Organization
-- [ ] Dataset Expansion Code Optimization
+- [x] Dataset Expansion Code Optimization
 - [ ] Fine-tuning Code Optimization
 - [ ] HuggingFace Weights Update
 - [ ] Two people training process
-
+- [ ] three people training process
 ## Table of Contents
 - [1. Dataset Expansion](#1-dataset-expansion)
   - [1.1 Environment Setup](#11-environment-setup)
