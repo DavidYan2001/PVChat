@@ -273,6 +273,13 @@ PVChat/
 
 If you find our paper and/or code helpful, please consider citing :
 ```
+@article{pvchat,
+      title={PVChat: Personalized Video Chat with One-Shot Learning}, 
+      author={Yufei Shi and Weilong Yan and Gang Xu and Yumeng Li and Yucheng Chen and Zhenxi Li and Fei Richard Yu and Ming Li and Si Yong Yeo}, 
+      year={2025},
+      journal={arXiv preprint arXiv:2503.17069},
+}
+
 @misc{shi2025pvchatpersonalizedvideochat,
       title={PVChat: Personalized Video Chat with One-Shot Learning}, 
       author={Yufei Shi and Weilong Yan and Gang Xu and Yumeng Li and Yuchen Chen and Zhenxi Li and Fei Richard Yu and Ming Li and Si Yong Yeo},
