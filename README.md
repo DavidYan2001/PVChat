@@ -188,6 +188,9 @@ To expand your dataset with person-specific videos:
    bash all_dataset_set_detail.sh
    ```
 
+### 1.6 Download the LAION-face-5B datsets
+
+Refer this github https://github.com/rom1504/img2dataset
 ## 2. Fine-tuning Process
 
 ### Configuration
