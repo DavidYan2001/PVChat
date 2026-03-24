@@ -124,6 +124,14 @@ Do not train:
 - merger modules
 - later text decoder layers
 
+Stage 2 therefore keeps all stage-1 trainable parts active:
+
+- REMOH-added parameters inside `Qwen3VLTextDecoderLayer[0:3].self_attn`
+- `embed_tokens` rows for `<sks>` and `<sks_token1:16>`
+- `lm_head` rows for `<sks>` and `<sks_token1:16>`
+
+and then adds LoRA adaptation on the final two visual attention blocks.
+
 This preserves the pretrained visual representation as much as possible while still allowing a small amount of visual-side adaptation in the final stage.
 
 ## Why This Mapping Is Preferred
@@ -193,5 +201,5 @@ The migration is considered architecturally correct when:
 - personalized tokens are added and can be generated
 - REMOH is active only in the first three text decoder self-attention layers
 - stage 1 does not update the visual tower
-- stage 2 updates only LoRA adapters on the last two visual attention blocks
+- stage 2 keeps all stage-1 trainable parts and additionally updates LoRA adapters on the last two visual attention blocks
 - non-personalized embedding and `lm_head` rows remain unchanged across optimization steps
