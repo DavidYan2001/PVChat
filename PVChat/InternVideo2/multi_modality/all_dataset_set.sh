@@ -122,7 +122,7 @@ main() {
         "/root/autodl-tmp/yufei/datasets/cekebv-hq/get_all_video_base.py"
 
     # Step 10
-    execute_step 10 "internvideo" "/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality" \
+    execute_step 10 "qwen" "/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality" \
         "/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality/video_qa_generation_all_video.py"
 
     # Step 11

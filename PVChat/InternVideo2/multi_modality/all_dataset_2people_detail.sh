@@ -130,7 +130,7 @@ main() {
         "/root/autodl-tmp/yufei/datasets/cekebv-hq/get_all_video_base_detail_2people.py" "--sks1 'Nz'" "--sks2 'Ab'"
 
     # Step 10 得具体改改怎么去问双人视频
-    execute_step 10 "internvideo" "/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality" \
+    execute_step 10 "qwen" "/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality" \
         "/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality/video_qa_generation_all_video_2person.py" "--sks1 'Nz'" "--sks2 'Ab'"
 
     # Step 11

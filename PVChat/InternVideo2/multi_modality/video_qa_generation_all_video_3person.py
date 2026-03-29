@@ -12,6 +12,7 @@ import json
 import random
 import re
 import argparse
+from pathlib import Path
 
 import torch
 import torch.nn.functional as F
@@ -26,6 +27,42 @@ from decord import VideoReader, cpu
 from PIL import Image
 from torchvision import transforms
 from transformers import AutoTokenizer, AutoModel
+
+from qwen_video_qa import ask_qwen3_vl, load_qwen_model_and_processor
+
+NEGATIVE_TEMPLATE_PATH = (
+    Path(__file__).resolve().parents[3] / "consisid" / "negative_sample_3question.json"
+)
+CATEGORY_TO_RESPONSE_KEY = {
+    "action_questions": "action_responses",
+    "clothing_questions": "clothing_responses",
+    "location_questions": "location_responses",
+    "emotion_questions": "emotion_responses",
+}
+
+
+def load_negative_qa_config():
+    with open(NEGATIVE_TEMPLATE_PATH, "r", encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+NEGATIVE_QA_CONFIG = load_negative_qa_config()
+
+
+def build_negative_qa_pairs(target_token):
+    qa_pairs = []
+    for category_name, response_name in CATEGORY_TO_RESPONSE_KEY.items():
+        questions = NEGATIVE_QA_CONFIG["questions"][category_name]
+        responses = NEGATIVE_QA_CONFIG["negative_responses"][response_name]
+        for question in questions:
+            qa_pairs.append(
+                {
+                    "question": question.replace("<sks>", target_token),
+                    "answer": random.choice(responses).replace("<sks>", target_token),
+                    "is_special": False,
+                }
+            )
+    return qa_pairs
 
 
 ################################
@@ -196,29 +233,11 @@ def call_chatgpt_api(text):
 # 3) Call InternVideo2 for video Q&A
 ################################
 
-def ask_internvideo2(video_path, question, model=None, tokenizer=None):
+def ask_qwen_video_qa(video_path, question, model=None, processor=None):
     """
-    Load and process video => InternVideo2 model => return answer string
+    Send a video and question to Qwen3-VL => return answer string
     """
-    video_tensor = load_video(video_path, num_segments=8, resolution=224, hd_num=4)
-    if video_tensor is None:
-        return "No video found"
-
-    if torch.cuda.is_available():
-        video_tensor = video_tensor.to(model.device)
-
-    chat_history = []
-    response, chat_history = model.chat(
-        tokenizer,
-        '',    # system prompt
-        question,
-        media_type='video',
-        media_tensor=video_tensor,
-        chat_history=chat_history,
-        return_history=True,
-        generation_config={'do_sample': False}
-    )
-    return response
+    return ask_qwen3_vl(video_path, question, model=model, processor=processor)
 
 
 ################################
@@ -246,6 +265,13 @@ QUESTION_TEMPLATES = {
         "Which part of the scene does <sks> appear in?",
         "How does <sks>'s position change throughout the video?",
         "Where can <sks> be found in this footage?"
+    ],
+    "emotion_questions": [
+        "What visible emotion does <sks> appear to be expressing in this video?",
+        "How would you describe <sks>'s facial expression or emotional state in this footage?",
+        "What kind of emotional expression does <sks> show in this recording?",
+        "Based on the video, what emotion or mood does <sks> seem to display?",
+        "How does <sks> appear to feel from their expression and body language here?"
     ]
 }
 
@@ -254,7 +280,7 @@ QUESTION_TEMPLATES = {
 # 5) Core logic: for 3 types of personX
 ################################
 
-def process_json_file(input_path, output_path, model=None, tokenizer=None):
+def process_json_file(input_path, output_path, model=None, processor=None):
     if not os.path.exists(input_path):
         print(f"[Warning] {input_path} not found, skip.")
         return
@@ -269,16 +295,21 @@ def process_json_file(input_path, output_path, model=None, tokenizer=None):
     video_items = data["data"]
     print(f"[Info] Loaded {len(video_items)} video entries from {input_path}.")
 
-    # Collect all questions to ask (15 in total)
+    # Collect all questions to ask (20 in total)
     all_questions = (
         QUESTION_TEMPLATES["action_questions"] +
         QUESTION_TEMPLATES["clothing_questions"] +
-        QUESTION_TEMPLATES["location_questions"]
+        QUESTION_TEMPLATES["location_questions"] +
+        QUESTION_TEMPLATES["emotion_questions"]
     )
 
     for item in tqdm(video_items, desc=f"Processing {os.path.basename(input_path)}"):
         if not item.get("is_positive", False):
-            # Don't process negative samples or other cases
+            qa_pairs = item.get("qa_pairs", [])
+            qa_pairs.extend(build_negative_qa_pairs("<sks1>"))
+            qa_pairs.extend(build_negative_qa_pairs("<sks2>"))
+            qa_pairs.extend(build_negative_qa_pairs("<sks3>"))
+            item["qa_pairs"] = qa_pairs
             continue
 
         sample_type = item.get("sample_type", "")
@@ -293,7 +324,7 @@ def process_json_file(input_path, output_path, model=None, tokenizer=None):
             # Ask once: <sks> => "the woman" (example), final answer <person> => <sks1>
             for q in all_questions:
                 question_in_intern = q.replace("<sks>", "the woman")
-                intern_answer = ask_internvideo2(video_path, question_in_intern, model, tokenizer)
+                intern_answer = ask_qwen_video_qa(video_path, question_in_intern, model, processor)
                 replaced_with_person = call_chatgpt_api(intern_answer)
                 final_answer = replaced_with_person.replace("<person>", "<sks1>")
                 final_question = q.replace("<sks>", "<sks1>")
@@ -308,7 +339,7 @@ def process_json_file(input_path, output_path, model=None, tokenizer=None):
             # Ask once: <sks> => "the man", <person> => <sks2>
             for q in all_questions:
                 question_in_intern = q.replace("<sks>", "the man")
-                intern_answer = ask_internvideo2(video_path, question_in_intern, model, tokenizer)
+                intern_answer = ask_qwen_video_qa(video_path, question_in_intern, model, processor)
                 replaced_with_person = call_chatgpt_api(intern_answer)
                 final_answer = replaced_with_person.replace("<person>", "<sks2>")
                 final_question = q.replace("<sks>", "<sks2>")
@@ -323,7 +354,7 @@ def process_json_file(input_path, output_path, model=None, tokenizer=None):
             # Ask once: <sks> => "the child", <person> => <sks3>
             for q in all_questions:
                 question_in_intern = q.replace("<sks>", "the child")
-                intern_answer = ask_internvideo2(video_path, question_in_intern, model, tokenizer)
+                intern_answer = ask_qwen_video_qa(video_path, question_in_intern, model, processor)
                 replaced_with_person = call_chatgpt_api(intern_answer)
                 final_answer = replaced_with_person.replace("<person>", "<sks3>")
                 final_question = q.replace("<sks>", "<sks3>")
@@ -361,31 +392,8 @@ def main():
     args = get_args()
     decord.bridge.set_bridge("torch")
 
-    # Put your Huggingface token or any other required here
-    HF_TOKEN = os.environ['HF_TOKEN']
-    token = HF_TOKEN
-    decord.bridge.set_bridge("torch")
-
-    model_path = '/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality/InternVideo2_chat_8B_HD'
-
-    tokenizer = AutoTokenizer.from_pretrained(
-        model_path,
-        trust_remote_code=True,
-        use_fast=False,
-        token=token
-    )
-    if torch.cuda.is_available():
-        model = AutoModel.from_pretrained(
-            model_path,
-            torch_dtype=torch.bfloat16,
-            trust_remote_code=True
-        ).cuda()
-    else:
-        model = AutoModel.from_pretrained(
-            model_path,
-            torch_dtype=torch.bfloat16,
-            trust_remote_code=True
-        )
+    hf_token = os.getenv("HF_TOKEN")
+    model, processor = load_qwen_model_and_processor(hf_token=hf_token)
 
     # Input and output file paths: e.g. train_Cl_Xo_Ja.json => train_all_video_Cl_Xo_Ja.json
     base_dir = "/root/autodl-tmp/yufei/datasets/cekebv-hq"
@@ -397,10 +405,10 @@ def main():
     test_output  = os.path.join(base_dir, f"test_all_video_updated_{args.sks1}_{args.sks2}_{args.sks3}.json")
 
     print("[Main] Processing train_all_video.json...")
-    process_json_file(train_input, train_output, model=model, tokenizer=tokenizer)
+    process_json_file(train_input, train_output, model=model, processor=processor)
 
     print("[Main] Processing test_all_video.json...")
-    process_json_file(test_input, test_output, model=model, tokenizer=tokenizer)
+    process_json_file(test_input, test_output, model=model, processor=processor)
 
     print("[Main] Done.")
 

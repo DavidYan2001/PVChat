@@ -20,6 +20,13 @@
             "Which part of the scene does <sks> appear in?",
             "How does <sks>'s position change throughout the video?",
             "Where can <sks> be found in this footage?"
+        ],
+        "emotion_questions": [
+            "What visible emotion does <sks> appear to be expressing in this video?",
+            "How would you describe <sks>'s facial expression or emotional state in this footage?",
+            "What kind of emotional expression does <sks> show in this recording?",
+            "Based on the video, what emotion or mood does <sks> seem to display?",
+            "How does <sks> appear to feel from their expression and body language here?"
         ]
     },
     "negative_responses": {
@@ -73,6 +80,23 @@
             "The video shows various locations but <sks> is not present in any of them.",
             "I cannot determine <sks>'s position as they do not appear at any point in this footage.",
             "Without <sks> being present in the video, I cannot describe their location or spatial relationship to others."
+        ],
+        "emotion_responses": [
+            "I cannot describe <sks>'s emotional expression because <sks> is not present in this video footage.",
+            "Since <sks> does not appear in this recording, I cannot provide any information about their visible emotion.",
+            "The video contains no appearance of <sks>, making it impossible to describe their facial expression or mood.",
+            "I'm unable to comment on <sks>'s emotional state as they are not shown in any part of this footage.",
+            "There is no sign of <sks> in this video, so I cannot describe their expression or apparent mood.",
+            "After reviewing the footage, I can confirm <sks> is not present to analyze any emotional expression.",
+            "I cannot detail <sks>'s expression because they do not appear in any frame of this video.",
+            "The recording shows no evidence of <sks>, therefore I cannot describe how they appear to feel.",
+            "Without <sks> being present in the video, I cannot provide any description of their facial expression or visible emotion.",
+            "I've examined the footage, and <sks> is absent, making it impossible to comment on their emotional expression.",
+            "The video does not feature <sks>, so I cannot offer any information about their apparent emotion or mood.",
+            "As <sks> is not visible in this recording, I cannot describe any aspect of their expression or emotional state.",
+            "I see no trace of <sks> in this footage, thus cannot provide details about their facial expression.",
+            "The video content excludes <sks>, making it impossible to comment on their visible emotional cues.",
+            "With <sks> being absent from this video, I cannot describe their apparent emotion, mood, or expression."
         ]
     }
 }
