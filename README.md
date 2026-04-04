@@ -276,21 +276,20 @@ PVChat/
 
 If you find our paper and/or code helpful, please consider citing :
 ```
+@InProceedings{Shi_2025_ICCV,
+    author    = {Shi, Yufei and Yan, Weilong and Xu, Gang and Li, Yumeng and Chen, Yucheng and Li, Zhenxi and Yu, Fei and Li, Ming and Yeo, Si Yong},
+    title     = {PVChat: Personalized Video Chat with One-Shot Learning},
+    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+    month     = {October},
+    year      = {2025},
+    pages     = {23321-23331}
+}
+
 @article{pvchat,
       title={PVChat: Personalized Video Chat with One-Shot Learning}, 
       author={Yufei Shi and Weilong Yan and Gang Xu and Yumeng Li and Yucheng Chen and Zhenxi Li and Fei Richard Yu and Ming Li and Si Yong Yeo}, 
       year={2025},
       journal={arXiv preprint arXiv:2503.17069},
-}
-
-@misc{shi2025pvchatpersonalizedvideochat,
-      title={PVChat: Personalized Video Chat with One-Shot Learning}, 
-      author={Yufei Shi and Weilong Yan and Gang Xu and Yumeng Li and Yuchen Chen and Zhenxi Li and Fei Richard Yu and Ming Li and Si Yong Yeo},
-      year={2025},
-      eprint={2503.17069},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2503.17069}, 
 }
 ```
 ## License
