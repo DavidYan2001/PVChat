@@ -4,7 +4,7 @@ import os
 import shutil
 import torch
 import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset, DataLoader, Subset
 from transformers import AutoTokenizer, AutoModel
 import json
 from pathlib import Path
@@ -94,7 +94,7 @@ logger.addHandler(layer_handler)
 
 decord.bridge.set_bridge("torch")
 os.environ['TRANSFORMERS_NO_ADVISORY_WARNINGS'] = 'true'
-os.environ['HF_HOME'] = '/root/autodl-tmp/cache/'
+os.environ['HF_HOME'] = '../../../.cache/huggingface'
 warnings.filterwarnings("ignore", message="Keyword arguments {'add_special_tokens': False} not recognized.")
 warnings.filterwarnings("ignore", message="Setting `pad_token_id` to `eos_token_id`:2 for open-end generation.")
 # logger = logging.getLogger(__name__)
@@ -112,8 +112,10 @@ DEFAULT_VIDEO_TOKEN = "[VIDEOTOKEN]"
 
 DEFAULT_IMG_PLACEHOLDER = "[<IMG_PLH>]"
 DEFAULT_VID_PLACEHOLDER = "[<VID_PLH>]"
-# Set HF_TOKEN environment variable
-os.environ["HF_TOKEN"] =os.environ['HF_TOKEN']
+# HF_TOKEN is optional for local checkpoints; use it only if the shell provides it.
+hf_token = os.environ.get("HF_TOKEN")
+if hf_token:
+    os.environ["HF_TOKEN"] = hf_token
 
 
 def load_video(video_path, num_segments=8, return_msg=False, resolution=224, hd_num=4, padding=False):
@@ -268,7 +270,7 @@ class PersonalizedVideoDataset(Dataset):
     def __init__(
             self,
 
-            json_path: str,  # /root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality/<yufei>.json
+            json_path: str,  # <yufei>.json
             tokenizer,
             device,
             config,
@@ -278,7 +280,12 @@ class PersonalizedVideoDataset(Dataset):
         with open(json_path, 'r') as f:
             data = json.load(f)
         self.videos = data['videos']
-        self.sks_name = Path(json_path).stem
+        self.json_dir = Path(json_path).resolve().parent
+        self.dataset_root = self.json_dir.parent
+        for video in self.videos:
+            video['video_path'] = self.resolve_video_path(video['video_path'])
+        self.sks_name = getattr(config, "sks_name", Path(json_path).stem)
+        self.sks_token = self.sks_name if self.sks_name.startswith("<") and self.sks_name.endswith(">") else f"<{self.sks_name}>"
         # 获取sks名称 (从json路径中提取)
         #  self.sks_name = args.sks_name
         self.split = split
@@ -287,6 +294,15 @@ class PersonalizedVideoDataset(Dataset):
         self.all_qa_pairs = self.flatten_qa_pairs(self.videos)
         # 如果需要划分训练集和验证集
         # print(self.all_qa_pairs )
+
+    def resolve_video_path(self, video_path):
+        if os.path.isabs(video_path):
+            return video_path
+        for base_dir in (self.json_dir, self.dataset_root):
+            candidate = base_dir / video_path
+            if candidate.exists():
+                return str(candidate)
+        return video_path
 
     def __len__(self):
         return len(self.all_qa_pairs)
@@ -443,7 +459,7 @@ class PersonalizedVideoDataset(Dataset):
         if labels is not None:
             return_dict['labels'] = labels
             return_dict['is_special'] = qa_pair.get('is_special', False)
-            return_dict['sks_present'] = video_data['sks_present'] == f'<{self.sks_name}>'
+            return_dict['sks_present'] = video_data['sks_present'] == self.sks_token
         return return_dict
 
 
@@ -493,7 +509,7 @@ def collate_fn(batch):
 # 使用方式
 def create_dataloader(args):
     dataset = PersonalizedVideoDataset(
-        json_path=f"/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality/{args.sks_name}.json",
+        json_path=f"{args.sks_name}.json",
         tokenizer=tokenizer,
         device=model.device
     )
@@ -578,7 +594,7 @@ def get_args():
     parser = argparse.ArgumentParser()
     # Model related
     parser.add_argument("--model_path", type=str,
-                        default="/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality/Internvideo2_chat_8B_HD_finetune_REMOH")
+                        default="Internvideo2_chat_8B_HD_finetune_REMOH")
     parser.add_argument("--sks_name", type=str, default="<Me>")
     parser.add_argument("--num_personal_token", type=int, default=16)
 
@@ -591,7 +607,7 @@ def get_args():
 
     # Data related
     parser.add_argument("--data_root", type=str,
-                        default="/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality")
+                        default=".")
 
     # New args for file paths
     parser.add_argument("--train_json", type=str, default=None,
@@ -602,6 +618,12 @@ def get_args():
                         help="Path to the test json file. If not provided, will use {data_root}/{sks_name}test.json")
     parser.add_argument("--output_dir", type=str, default=None,
                         help="Directory to save test results. If not provided, will use {data_root}")
+    parser.add_argument("--short_eval_samples", type=int, default=15,
+                        help="Number of random test QA samples to print after epoch 0 short training. Set 0 to skip.")
+    parser.add_argument("--epoch_eval_samples", type=int, default=20,
+                        help="Number of random test QA samples to print after each later epoch. Set 0 to skip.")
+    parser.add_argument("--eval_seed", type=int, default=42,
+                        help="Base random seed for per-epoch sampled test QA printing.")
 
     # Log related
     parser.add_argument("--log_dir", type=str, default="./logs")
@@ -712,12 +734,13 @@ def train_epoch(model, train_loader, optimizer, epoch, writer, orig_embeds, toke
 
 def train(model, config, tokenizer, sks_tokens, prefix_tokens):
     args = get_args()
+    person_dir_name = args.sks_name.strip("<>")
     if args.output_dir:
-        save_dir = Path(args.output_dir) / "checkpoints" / args.sks_name
-        log_dir = Path(args.output_dir) / "logs" / args.sks_name
+        save_dir = Path(args.output_dir) / "checkpoints" / person_dir_name
+        log_dir = Path(args.output_dir) / "logs" / person_dir_name
     else:
-        save_dir = Path(args.save_dir) / args.sks_name
-        log_dir = Path(args.log_dir) / args.sks_name
+        save_dir = Path(args.save_dir) / person_dir_name
+        log_dir = Path(args.log_dir) / person_dir_name
     # 设置保存目录
     # save_dir = Path(args.save_dir) / args.sks_name
     save_dir.mkdir(parents=True, exist_ok=True)
@@ -801,7 +824,8 @@ def train(model, config, tokenizer, sks_tokens, prefix_tokens):
 
     trainable_params = [
         {'params': model.personal_query_tokens, 'lr': config.personal_token_lr},  # 使用属性访问
-        {'params': model.get_input_embeddings().weight[sks_token_ids], 'lr': config.token_lr},
+        # Optimize the full embedding matrix; train_epoch restores non-person tokens after each step.
+        {'params': [model.get_input_embeddings().weight], 'lr': config.token_lr},
         {'params': qformer_params, 'lr': config.qformer_lr},
         {'params': moh_params, 'lr': 1e-6},
         #{'params': model.qformer.parameters(), 'lr': config.qformer_lr},
@@ -822,7 +846,7 @@ def train(model, config, tokenizer, sks_tokens, prefix_tokens):
 
     # 6. 设置日志
     sks_name = getattr(config, 'sks_name', 'default_name')
-    writer = SummaryWriter(f'runs/{sks_name.strip("<>")}')
+    # Keep tensorboard logs under the requested output/log directory.
     # save_dir = Path(f'checkpoints/{sks_name.strip("<>")}')
     # save_dir.mkdir(parents=True, exist_ok=True)
 
@@ -835,7 +859,6 @@ def train(model, config, tokenizer, sks_tokens, prefix_tokens):
     num_blocks = len(model.vision_encoder.blocks)
     last_block_idx = num_blocks - 1
 
-    writer = SummaryWriter(log_dir="/root/tf-logs/")
     for epoch in range(args.num_epochs):
 
         if epoch == 0 and short_train_dataset is not None:
@@ -871,6 +894,31 @@ def train(model, config, tokenizer, sks_tokens, prefix_tokens):
         train_loss = train_epoch(model, train_loader, optimizer, epoch, writer, orig_embeds, tokenizer, device,
                                  sks_tokens, prefix_tokens)
         # 程序结束前可以将捕捉到的数据保存到文件
+        print(f'Epoch {epoch}: Loss = {train_loss:.4f}')
+
+        if epoch == 0 and short_train_dataset is not None:
+            sample_count = args.short_eval_samples
+            stage_name = "After short training epoch 0"
+        else:
+            sample_count = args.epoch_eval_samples
+            stage_name = f"After epoch {epoch}"
+        if sample_count > 0:
+            test_json_path = args.test_json or os.path.join(
+                args.data_root,
+                f"{config.sks_name}test.json",
+            )
+            test(
+                model,
+                tokenizer,
+                test_json_path,
+                device,
+                config=config,
+                output_dir=args.output_dir,
+                sample_count=sample_count,
+                stage_name=stage_name,
+                save_results=False,
+                seed=args.eval_seed + epoch,
+            )
 
         # 定期保存checkpoint
         if (epoch + 1) % args.save_epochs == 0:
@@ -898,8 +946,8 @@ def train(model, config, tokenizer, sks_tokens, prefix_tokens):
             torch.save(extra_info, checkpoint_dir / 'training_info.bin')
             # 4. 保存训练参数
             src_dir = Path(config_path)
-            for file_name in ['modeling_base.py', 'modeling_internvideo2.py', 'modeling_videochat2.py'
-                                                                              'modeling_qformer_MOH.py',
+            for file_name in ['modeling_base.py', 'modeling_internvideo2.py', 'modeling_videochat2.py',
+                              'modeling_qformer_MOH.py',
                               'flash_attention_class.py', 'modeling_internvideo2_vit.py']:
                 src_file = src_dir / file_name
                 if src_file.exists():
@@ -915,12 +963,11 @@ def train(model, config, tokenizer, sks_tokens, prefix_tokens):
                     'sks_tokens': sks_tokens,
                     'prefix_tokens': [t for t in prefix_tokens]
                 }, f, indent=4)
-        print(f'Epoch {epoch}: Loss = {train_loss:.4f}')
     if args.output_dir:
         save_file_for_loss_path = os.path.join(args.output_dir, f"{config.sks_name.strip('<>')}_layer_loss_data.json")
     else:
         save_file_for_loss_path = os.path.join(args.data_root, f"{config.sks_name.strip('<>')}_layer_loss_data.json")
-    #save_file_for_loss_path = "/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality/" + config.sks_name.strip("<>") + "_layer_loss_data.json"
+    #save_file_for_loss_path = config.sks_name.strip("<>") + "_layer_loss_data.json"
     layer_handler.dump_to_file(save_file_for_loss_path)
 
     final_save_dir = save_dir / 'final_model'
@@ -948,8 +995,8 @@ def train(model, config, tokenizer, sks_tokens, prefix_tokens):
     torch.save(extra_info, final_save_dir / 'training_info.bin')
     # 3. 保存其他必要的文件
     src_dir = Path(config_path)
-    for file_name in ['modeling_base.py', 'modeling_internvideo2.py', 'modeling_videochat2.py'
-                                                                      'modeling_qformer_MOH.py', 'flash_attention_class.py',
+    for file_name in ['modeling_base.py', 'modeling_internvideo2.py', 'modeling_videochat2.py',
+                      'modeling_qformer_MOH.py', 'flash_attention_class.py',
                       'modeling_internvideo2_vit.py']:
         src_file = src_dir / file_name
         if src_file.exists():
@@ -970,11 +1017,30 @@ def train(model, config, tokenizer, sks_tokens, prefix_tokens):
     return final_save_dir
 
 
-def test(model, tokenizer, test_path, device):
-    if args.test_json:
-        test_json_path = args.test_json
-    else:
-        test_json_path = os.path.join(args.data_root, f"{config.sks_name}test.json")
+def select_eval_indices(total_count, sample_count, seed):
+    if sample_count is None or sample_count <= 0 or sample_count >= total_count:
+        return list(range(total_count))
+    rng = random.Random(seed)
+    return rng.sample(range(total_count), sample_count)
+
+
+def test(
+        model,
+        tokenizer,
+        test_path,
+        device,
+        config=None,
+        output_dir=None,
+        sample_count=None,
+        stage_name="Final full test",
+        save_results=True,
+        seed=42,
+):
+    test_json_path = test_path
+    if config is None:
+        config = getattr(model, "config", None)
+    if config is None:
+        raise ValueError("test() requires config or a model with model.config")
     print(f"Loading test data from: {test_json_path}")
     test_dataset = PersonalizedVideoDataset(
         json_path=test_json_path,
@@ -983,9 +1049,12 @@ def test(model, tokenizer, test_path, device):
         config=config,
         split='test'
     )
+    selected_indices = select_eval_indices(len(test_dataset), sample_count, seed)
+    eval_dataset = Subset(test_dataset, selected_indices)
+    print(f"\n===== {stage_name}: {len(selected_indices)} / {len(test_dataset)} test QA samples =====")
 
     test_loader = DataLoader(
-        test_dataset,
+        eval_dataset,
         batch_size=1,  # 单个问题逐个测试
         shuffle=False,
         collate_fn=collate_fn
@@ -996,7 +1065,7 @@ def test(model, tokenizer, test_path, device):
     # 使用字典来按video_path分组存储结果
     video_results = {}
     with torch.no_grad():
-        for batch in test_loader:
+        for sample_idx, batch in enumerate(test_loader, start=1):
             if isinstance(batch['input_ids'], tuple):
                 batch['input_ids'] = torch.stack(batch['input_ids'])
             batch = {key: (value.to(device) if isinstance(value, torch.Tensor) else value) for key, value in
@@ -1032,10 +1101,11 @@ def test(model, tokenizer, test_path, device):
                     'qa_pairs': []
                 }
             video_results[video_path]['qa_pairs'].append(qa_pair)
-            # 打印进度信息
+            # Print sampled QA side by side for quick manual inspection.
+            print(f"[{stage_name}] Sample {sample_idx}/{len(selected_indices)}")
             print(f"Question: {question}")
-            print(f"Generated Answer: {generated_text}")
-            print(f"Original Answer: {answer}")
+            print(f"Gold Answer: {answer}")
+            print(f"Model Output: {generated_text}")
             print(f"Video Path: {video_path}")
             print("-" * 50)
 
@@ -1043,24 +1113,24 @@ def test(model, tokenizer, test_path, device):
     final_results = list(video_results.values())
     # 打印结果
     # 保存结果到json文件
+    model_name = Path(test_json_path).stem.removesuffix("test").strip("<>")
     output = {
-        "model_name": test_path.strip("<>").replace("test.json", ""),  # 从test_path提取模型名称
+        "model_name": model_name,
         "results": final_results
     }
     # Set output directory
-    if args.output_dir:
-        output_dir = args.output_dir
-    else:
-        output_dir = os.path.dirname(test_json_path)
+    if not output_dir:
+        output_dir = os.path.dirname(os.path.abspath(test_json_path))
 
-    # Create output directory if it doesn't exist
-    os.makedirs(output_dir, exist_ok=True)
-    #output_path = os.path.join(os.path.dirname(test_path), f"test_results_RE_MOH{output['model_name']}1person_facny.json")
-    output_path = os.path.join(output_dir, f"test_results_RE_MOH_{output['model_name']}_1person.json")
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(output, f, ensure_ascii=False, indent=2)
+    if save_results:
+        # Create output directory if it doesn't exist
+        os.makedirs(output_dir, exist_ok=True)
+        #output_path = os.path.join(os.path.dirname(test_path), f"test_results_RE_MOH{output['model_name']}1person_facny.json")
+        output_path = os.path.join(output_dir, f"test_results_RE_MOH_{output['model_name']}_1person.json")
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(output, f, ensure_ascii=False, indent=2)
 
-    print(f"Results saved to {output_path}")
+        print(f"Results saved to {output_path}")
     #  return results
     if final_results:
         example = final_results[0]
@@ -1106,10 +1176,12 @@ if __name__ == "__main__":
         os.makedirs(os.path.join(args.output_dir, "checkpoints"), exist_ok=True)
         os.makedirs(os.path.join(args.output_dir, "logs"), exist_ok=True)
     if args.mode == "train":
-        config_path = "/root/autodl-tmp/yufei/InternVideo/InternVideo2/multi_modality/Internvideo2_chat_8B_HD_finetune_REMOH"
+        config_path = args.model_path
         config = AutoConfig.from_pretrained(config_path, trust_remote_code=True)
         reference_config_path = config_path + "/config.json"  # 原始 JSON 配置文件
         config.sks_name=args.sks_name
+        # Keep the nested config token in sync with the command-line person token.
+        config.model_config["sks_name"] = args.sks_name
         # 自动补充缺失字段
         config = ensure_complete_config(config, reference_config_path)
         # 1. 初始化模型和tokenizer
@@ -1154,8 +1226,15 @@ if __name__ == "__main__":
         # 运行测试
         print("Starting testing...")
 
-        test_path = config.sks_name + "test.json"  # 测试文件路径
-        test_results = test(model, tokenizer, test_path, device)
+        test_path = args.test_json or os.path.join(args.data_root, f"{config.sks_name}test.json")
+        test_results = test(
+            model,
+            tokenizer,
+            test_path,
+            device,
+            config=config,
+            output_dir=args.output_dir,
+        )
     elif args.mode == "test":
         # 仅测试模式
         checkpoint_path = args.checkpoint_path  # 这应该是final_model目录的路径
@@ -1175,7 +1254,7 @@ if __name__ == "__main__":
         )
 
         # 3. Initialize model (using original pretrained model path)
-        config_path = "./Internvideo2_chat_8B_HD_finetune_REMOH"
+        config_path = args.model_path
         model = AutoModel.from_pretrained(
             config_path,  # Use original model path
             config=config,
@@ -1207,5 +1286,12 @@ if __name__ == "__main__":
 
         # 运行测试
         print("Starting testing...")
-        test_path = config.sks_name + "test.json"
-        test_results = test(model, tokenizer, test_path, device)
+        test_path = args.test_json or os.path.join(args.data_root, f"{config.sks_name}test.json")
+        test_results = test(
+            model,
+            tokenizer,
+            test_path,
+            device,
+            config=config,
+            output_dir=args.output_dir,
+        )

@@ -7,7 +7,7 @@ LOCAL_BASE="/root/autodl-tmp/yufei/DeepFaceLab/output"
 REMOTE_BASE="/mnt/hdd1/yufei/img2dataset/tmp_picture"
 
 # the remote server informayion
-REMOTE_USER="yufei"
+REMOTE_USER="xxxx"
 REMOTE_HOST="xxx.xxx.xxx"
 REMOTE_PORT=xxxxx
 

@@ -1,0 +1,26 @@
+# Python / runtime caches
+**/__pycache__/
+**/*.py[cod]
+**/.cache/
+.worktrees/
+.env.local
+
+# Base weights, patched Transformers checkout, datasets and run outputs are
+# downloaded or generated separately and never enter Git.
+Qwen3.5-9B/
+transformers-qwen35/
+models/
+runtime_data/
+outputs/
+PVChat/datasets/
+
+# Training artifacts and model shards.
+**/checkpoint/
+**/checkpoints/
+**/rollouts/
+**/evaluations/
+**/evaluation/
+**/training_stats/
+*.safetensors
+*.incomplete
+*.log

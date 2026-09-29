@@ -5,10 +5,12 @@ import os
 import paramiko
 
 # ============ Configuration area, modify according to the actual situation ============
-HOST = "xxx"
-PORT = 20002
-USERNAME = "xxx"
-PASSWORD = "xxx"
+# Login of the machine that hosts the LAION-face-5B index (build_index.py / clip-retrieval.py).
+# Nothing is configured by default: set the environment variables below (or edit here).
+HOST = os.environ.get("LAION_RETRIEVAL_HOST", "xxx")
+PORT = int(os.environ.get("LAION_RETRIEVAL_PORT", "22"))
+USERNAME = os.environ.get("LAION_RETRIEVAL_USER", "xxx")
+PASSWORD = os.environ.get("LAION_RETRIEVAL_PASSWORD", "xxx")
 
 # Local output directory (the directory where DeepFaceLab's output results are located)
 LOCAL_OUTPUT_DIR = "/root/autodl-tmp/yufei/DeepFaceLab/output"

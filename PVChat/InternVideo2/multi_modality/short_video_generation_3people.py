@@ -94,9 +94,9 @@ def process_videos(input_json_path, sks_name1, sks_name2, sks_name3):
     special_substrings = [
         "wearing in this video?",
         "outfit in this footage?",
-        "What color and style of clothing",
-        "How would you describe",
-        "What notable features can you see"
+        "color and style of clothing",
+        "appearance and attire",
+        "features can you see in"
     ]
 
     for video in videos:

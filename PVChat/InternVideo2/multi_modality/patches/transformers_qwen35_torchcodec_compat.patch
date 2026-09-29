@@ -1,0 +1,37 @@
+diff --git a/src/transformers/video_utils.py b/src/transformers/video_utils.py
+index c9aeae8..20876a4 100644
+--- a/src/transformers/video_utils.py
++++ b/src/transformers/video_utils.py
+@@ -12,6 +12,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
++import inspect
+ import os
+ import warnings
+ from collections.abc import Callable, Iterable, Mapping
+@@ -594,14 +595,17 @@ def read_video_torchcodec(
+ 
+     # VideoDecoder expects a string for device, default to "cpu" if None
+ 
+-    decoder = VideoDecoder(
+-        video_path,
+-        # Interestingly `exact` mode takes less than approximate when we load the whole video
+-        seek_mode="exact",
++    decoder_kwargs = {
++        "dimension_order": "NHWC",
+         # Allow FFmpeg decide on the number of threads for efficiency
+-        num_ffmpeg_threads=0,
+-        device=kwargs.get("device", "cpu"),
+-    )
++        "num_ffmpeg_threads": 0,
++        "device": kwargs.get("device", "cpu"),
++    }
++    # TorchCodec 0.1.x, required by PyTorch 2.5, predates the seek_mode argument.
++    if "seek_mode" in inspect.signature(VideoDecoder).parameters:
++        # Interestingly `exact` mode takes less than approximate when we load the whole video
++        decoder_kwargs["seek_mode"] = "exact"
++    decoder = VideoDecoder(video_path, **decoder_kwargs)
+     total_num_frames = decoder.metadata.num_frames
+     video_fps = decoder.metadata.average_fps
+     metadata = VideoMetadata(

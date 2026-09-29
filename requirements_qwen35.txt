@@ -1,0 +1,6 @@
+# Python 3.11 dependency entrypoint for the Qwen3.5-9B PVChat-R1 stack.
+# Torch, TorchCodec, the pinned Transformers checkout, causal-conv1d and FLA are
+# installed by PVChat/InternVideo2/multi_modality/setup_qwen35_h200.sh because
+# they need CUDA-specific handling.
+-r PVChat/InternVideo2/multi_modality/requirements_qwen35_h200.txt
+pytest>=8.3,<9

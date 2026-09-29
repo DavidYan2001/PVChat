@@ -27,7 +27,7 @@ def upload_faces():
 
         # Create a remote corresponding directory
         remote_dir = f"{remote_base}/{video_dir}/HQ_face"
-        ensure_remote_dir("yufei@gj03.ezfrp.com", remote_dir)
+        ensure_remote_dir("xxx@xxx", remote_dir)  # user@host of the LAION retrieval server
 
         # Create a local "similar laion picture" directory
         similar_dir = os.path.join(base_dir, video_dir, "similar_laion_picture")
